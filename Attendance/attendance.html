@@ -3,32 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Attendance & Points — Ugnayan Gulayan</title>
-<!-- SheetJS for parsing attendance.xlsx -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/xlsx.full.min.js"></script>
-<style>
-:root{
-  --bg:#f4f5f7;--surface:#fff;--surface-2:#fafbfc;--text:#111827;--muted:#6b7280;
-  --faint:#9ca3af;--border:#e5e7eb;--border-strong:#d1d5db;--accent:#2563eb;
-  --accent-soft:#eff4ff;--accent-text:#1d4ed8;--ok:#16a34a;--ok-soft:#ecfdf5;
-  --warn:#d97706;--warn-soft:#fffbeb;--danger:#dc2626;--danger-soft:#fef2f2;
-  --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);
-  --shadow-lg:0 10px 40px rgba(16,24,40,.14);
-  --r:14px;--rs:8px;
-}
-[data-theme="dark"]{
-  --bg:#0f1115;--surface:#171a21;--surface-2:#1d212a;--text:#e8eaed;--muted:#9aa3b2;
-  --faint:#6b7280;--border:#262b36;--border-strong:#333a48;--accent:#60a5fa;
-  --accent-soft:#1a2438;--accent-text:#93c5fd;--ok:#4ade80;--ok-soft:#142a1e;
-  --warn:#fbbf24;--warn-soft:#2a2214;--danger:#f87171;--danger-soft:#3b1111;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.35);
-  --shadow-lg:0 12px 44px rgba(0,0,0,.6);
-}<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Attendance &amp; Points — Ugnayan Gulayan</title>
+<title>Attendance &amp; Points - Ugnayan Gulayan</title>
 <style>
 :root{
   --bg:#f4f5f7;--surface:#fff;--surface-2:#fafbfc;--text:#111827;--muted:#6b7280;
@@ -114,9 +89,9 @@ footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px sol
   <div class="page-header">
     <div>
       <h2>Attendance &amp; Points</h2>
-      <p>Shift log, verified attendance, points calculation, hardship target adjustments, and standing bands for SY 2026&ndash;2027.</p>
+      <p>Shift log, verified attendance, points calculation, hardship target adjustments, and standing bands for SY 2026-2027.</p>
     </div>
-    <span class="badge badge-neutral" id="dataSourceStatus">Starting&hellip;</span>
+    <span class="badge badge-neutral" id="dataSourceStatus">Starting...</span>
   </div>
 
   <div class="notice" id="loadNotice"></div>
@@ -149,7 +124,7 @@ footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px sol
 
     <div class="search-wrap">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-      <input type="search" id="searchInput" placeholder="Search by Household ID, Name, or Adjustment Status&hellip;" autocomplete="off">
+      <input type="search" id="searchInput" placeholder="Search by Household ID, Name, or Adjustment Status..." autocomplete="off">
     </div>
 
     <div class="card" style="padding:0;overflow:hidden">
@@ -167,7 +142,7 @@ footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px sol
             </tr>
           </thead>
           <tbody id="attendanceTableBody">
-            <tr><td colspan="7" style="text-align:center;padding:36px;color:var(--muted)">Loading records&hellip;</td></tr>
+            <tr><td colspan="7" style="text-align:center;padding:36px;color:var(--muted)">Loading records...</td></tr>
           </tbody>
         </table>
       </div>
@@ -177,15 +152,24 @@ footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px sol
 
 <footer>
   <span>Ugnayan Gulayan &middot; Attendance Module</span>
-  <span>SY 2026&ndash;2027</span>
+  <span>SY 2026-2027</span>
 </footer>
 
-<!-- Async SheetJS loader. Blocking script tags stall the whole page
-     when the CDN is slow or blocked; this variant gives up after 6s
-     and lets the app start with the embedded fallback list. -->
+<!-- Async SheetJS loader: 3-CDN chain, non-blocking, 20-second cap.
+     A blocking <script src> stalls the whole page when the CDN is slow
+     or blocked; this variant tries cdnjs, then jsdelivr, then unpkg,
+     and gives up after 20s so the app can start with the embedded
+     fallback list. The 20s cap matters on a cold cache where SheetJS
+     (~500 KB) has to download. Do not shorten below 15s. -->
 <script>
 (function(){
   var done = false;
+  var cdns = [
+    "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js",
+    "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/xlsx.full.min.js",
+    "https://unpkg.com/xlsx@0.18.5/xlsx.full.min.js"
+  ];
+  var idx = 0;
   function finish(ok){
     if (done) return;
     done = true;
@@ -193,18 +177,23 @@ footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px sol
     window.__xlsxOk = ok;
     if (typeof window.__startAttendance === "function") window.__startAttendance();
   }
-  setTimeout(function(){ finish(false); }, 6000);
-  var s = document.createElement("script");
-  s.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
-  s.onload = function(){ finish(true); };
-  s.onerror = function(){ finish(false); };
-  document.head.appendChild(s);
+  function tryNext(){
+    if (done) return;
+    if (idx >= cdns.length){ finish(false); return; }
+    var s = document.createElement("script");
+    s.src = cdns[idx++];
+    s.onload = function(){ finish(true); };
+    s.onerror = function(){ tryNext(); };
+    document.head.appendChild(s);
+  }
+  setTimeout(function(){ finish(false); }, 20000);
+  tryNext();
 })();
 </script>
 
 <script>
 /* ================================================================
-   EMBEDDED FALLBACK — the full 36-household roster, all at zero
+   EMBEDDED FALLBACK - the full 36-household roster, all at zero
    shifts. Used when attendance.xlsx can't be reached (offline, or
    opened by double-click without a local server).
    Format: [Household ID, Representative Name, Shifts, Adjustment]
@@ -237,7 +226,7 @@ var FALLBACK_ATTENDANCE = [
   ["HH-025","ERIC JOSH SANTIAGO GARCIA",0,"Solo Parent"],
   ["HH-026","ANGELU T. NUMERON",0,"Standard"],
   ["HH-027","NASH IVAN RAFALLO PANTOJA",0,"Standard"],
-  ["HH-028","ALLYN BAUSTISTA RONDINA",0,"Standard"],
+  ["HH-028","ALLYN BAUTISTA RONDINA",0,"Standard"],
   ["HH-029","HANNA KIMBERLIE VALERA FERNANDEZ",0,"Standard"],
   ["HH-030","ANYA NATALIE HERNANDEZ DETRUZ",0,"Standard"],
   ["HH-031","RHAINE JANNELLE SUA NACIONALES",0,"Standard"],
@@ -268,7 +257,7 @@ function esc(s){
 }
 
 /* ================================================================
-   PARSING — read a workbook into [HH ID, Name, Shifts, Adjustment]
+   PARSING - read a workbook into [HH ID, Name, Shifts, Adjustment]
    Handles title rows above the header and formula cells that have
    no cached value (returns the fallback 0 for Shifts).
    ================================================================ */
@@ -329,7 +318,7 @@ function parseWorkbook(wb){
 }
 
 /* ================================================================
-   LOAD — try each filename variant, cache-busted, with a timeout.
+   LOAD - try each filename variant, cache-busted, with a timeout.
    ================================================================ */
 function loadAttendanceData(){
   var statusEl = document.getElementById("dataSourceStatus");
@@ -339,7 +328,7 @@ function loadAttendanceData(){
   if (typeof XLSX === "undefined" || typeof fetch !== "function"){
     ATTENDANCE_RECORDS = FALLBACK_ATTENDANCE.slice();
     statusEl.className = "badge badge-warn";
-    statusEl.textContent = "Offline — embedded data";
+    statusEl.textContent = "Offline - embedded data";
     notice.textContent = "The Excel reader didn't load. Showing embedded data " +
       "(36 households, all at zero shifts). Reload when your connection is back.";
     notice.classList.add("show");
@@ -390,7 +379,7 @@ function loadAttendanceData(){
         settled = true;
         ATTENDANCE_RECORDS = rows;
         statusEl.className = "badge badge-ok";
-        statusEl.textContent = "Live · " + name;
+        statusEl.textContent = "Live \u00b7 " + name;
         renderDashboard();
       })
       .catch(function(){ attempt(i + 1); });
@@ -400,9 +389,9 @@ function loadAttendanceData(){
 
 /* ================================================================
    CALCULATIONS
-   Points = shifts × 8.
-   Target = 32 (Standard) · 24 (Solo Parent / OFW).
-   Grant rate = min(100%, points ÷ target).
+   Points = shifts x 8.
+   Target = 32 (Standard) | 24 (Solo Parent / OFW).
+   Grant rate = min(100%, points / target).
    Standing measured as a share of the household's own target, so a
    solo parent hitting 24 points reads as In Good Standing, matching
    the program's own framing.
