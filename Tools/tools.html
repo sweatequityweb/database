@@ -161,6 +161,49 @@ footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px sol
   tbody td{font-size:14px}
   tbody tr{padding:12px;gap:8px 10px}
 }
+
+/* ================================================================
+   "YOUR DETAILS" CARD  (reads the name saved by the hub)
+   ================================================================ */
+.my-card{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px;margin-bottom:28px}
+.my-card::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--accent)}
+.my-card.tone-ok::before{background:var(--ok)}
+.my-card.tone-warn::before{background:var(--warn)}
+.my-card.tone-danger::before{background:var(--danger)}
+.my-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.my-title{font-size:17px;font-weight:700;margin:0;letter-spacing:-.2px}
+.my-sub{font-size:13px;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+.my-hero{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:var(--rs);background:var(--accent-soft);color:var(--accent-text)}
+.my-hero .lbl{font-size:12.5px;font-weight:650}
+.my-hero .val{font-size:28px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.my-card.tone-ok .my-hero{background:var(--ok-soft);color:var(--ok)}
+.my-card.tone-warn .my-hero{background:var(--warn-soft);color:var(--warn)}
+.my-card.tone-danger .my-hero{background:var(--danger-soft);color:var(--danger)}
+.my-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px 20px;margin-top:16px}
+.my-fact .k{font-size:11px;font-weight:650;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.my-fact .v{font-size:15px;font-weight:600;overflow-wrap:anywhere}
+.my-list{margin-top:16px;border-top:1px solid var(--border)}
+.my-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.my-row:last-child{border-bottom:0;padding-bottom:0}
+.my-row .main{min-width:0}
+.my-row .t{font-size:14px;font-weight:600;overflow-wrap:anywhere}
+.my-row .d{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.my-foot{margin-top:14px;font-size:12.5px;color:var(--faint)}
+.my-note{margin:0;color:var(--muted);font-size:14px}
+.my-prompt{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 16px;margin-bottom:24px;background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:var(--rs);color:var(--muted);font-size:13.5px}
+tr.mine td{background:var(--accent-soft)}
+@media (max-width:600px){
+  .my-card{padding:16px;margin-bottom:18px}
+  .my-title{font-size:17px}
+  .my-hero{padding:10px 14px}
+  .my-hero .val{font-size:24px}
+  .my-facts{grid-template-columns:1fr 1fr;gap:12px}
+  .my-fact .v{font-size:15px}
+  .my-row .t,.my-row .d{font-size:14px}
+  .my-prompt{font-size:14px;margin-bottom:18px}
+  tbody tr.mine{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+  tbody tr.mine td{background:none}
+}
 </style>
 </head>
 <body>
@@ -185,6 +228,8 @@ footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px sol
   </div>
 
   <div class="notice" id="loadNotice"></div>
+
+  <div id="myCard"></div>
 
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-val" id="statItems">&mdash;</div><div class="stat-label">Inventory Items</div></div>
@@ -353,6 +398,84 @@ function conditionClass(c){
 function isGood(c){ var t=(c||"").toLowerCase(); return t.indexOf("good") !== -1 || t.indexOf("new") !== -1 || t.indexOf("ok") !== -1 || t.indexOf("excellent") !== -1; }
 function needsRepair(c){ var t=(c||"").toLowerCase(); return t.indexOf("repair") !== -1 || t.indexOf("damage") !== -1 || t.indexOf("broken") !== -1 || t.indexOf("worn") !== -1; }
 
+/* ================================================================
+   YOUR DETAILS CARD - helpers
+   The hub saves the signed-in person in sessionStorage ("ug-current-user").
+   If it's missing (page opened directly), a sign-in prompt is shown.
+   ================================================================ */
+var UG_ROLE_LABELS = {
+  committee:"Program Committee", liaison:"Farm Liaison", coordinator:"Community Lead",
+  documentation:"Documentation Lead", treasurer:"Fund Treasurer",
+  logistics:"Logistics & Tool Master", shift_lead:"Parent Shift Lead",
+  parent:"Parent", student:"Student"
+};
+function ugUser(){
+  try {
+    var s = window.sessionStorage.getItem("ug-current-user");
+    if (!s) return null;
+    var u = JSON.parse(s);
+    return (u && u.name && u.role) ? u : null;
+  } catch(e){ return null; }
+}
+function ugNorm(s){ return String(s === undefined || s === null ? "" : s).toUpperCase().replace(/\s+/g, " ").trim(); }
+function ugKey(s){ return ugNorm(s).replace(/[\s_\-]+/g, ""); }
+function ugSameHH(a, b){ var x = ugKey(a); return !!x && x === ugKey(b); }
+/* A "Recorded By" / "Filed By" cell belongs to the user if it holds their
+   full name (or a longer name that contains it), or their role title. */
+function ugIsMe(field, u){
+  var f = ugNorm(field);
+  if (!f || !u) return false;
+  var n = ugNorm(u.name), r = ugNorm(UG_ROLE_LABELS[u.role]);
+  if (f === n || (n && f.indexOf(n) !== -1)) return true;
+  if (n && f.indexOf(" ") !== -1 && n.indexOf(f) !== -1) return true;
+  return !!r && f === r;
+}
+function ugClip(s, n){ s = String(s || ""); return s.length > n ? s.slice(0, n - 1).trim() + "\u2026" : s; }
+function ugSetCard(html){ var el = document.getElementById("myCard"); if (el) el.innerHTML = html || ""; }
+function ugPrompt(){
+  return '<div class="my-prompt"><span>Sign in from the hub to see your own details here.</span>' +
+         '<a class="btn" href="../index.html">Go to hub</a></div>';
+}
+function ugCard(o){
+  return '<div class="my-card tone-' + (o.tone || "accent") + '">' +
+    '<div class="my-head"><div><h3 class="my-title">' + esc(o.title) + '</h3>' +
+      (o.sub ? '<div class="my-sub">' + esc(o.sub) + '</div>' : '') + '</div>' + (o.badge || '') + '</div>' +
+    (o.note ? '<p class="my-note">' + esc(o.note) + '</p>' : '') +
+    (o.heroLabel ? '<div class="my-hero"><span class="lbl">' + esc(o.heroLabel) + '</span><span class="val">' + o.heroValue + '</span></div>' : '') +
+    ((o.facts && o.facts.length) ? '<div class="my-facts">' + o.facts.map(function(f){
+        return '<div class="my-fact"><div class="k">' + esc(f[0]) + '</div><div class="v">' + f[1] + '</div></div>';
+      }).join("") + '</div>' : '') +
+    (o.listHtml ? '<div class="my-list">' + o.listHtml + '</div>' : '') +
+    (o.foot ? '<div class="my-foot">' + esc(o.foot) + '</div>' : '') +
+  '</div>';
+}
+function ugRow(title, detail, badgeHtml){
+  return '<div class="my-row"><div class="main"><div class="t">' + title + '</div>' +
+         (detail ? '<div class="d">' + detail + '</div>' : '') + '</div>' + (badgeHtml || '') + '</div>';
+}
+
+function renderMyCard(){
+  // Inventory rows have no owner, so this card shows what needs attention for everyone.
+  if (!RECORDS.length){ ugSetCard(""); return; }
+  var bad = RECORDS.filter(function(r){ var c = conditionClass(r.condition); return c === "badge-warn" || c === "badge-danger"; });
+  if (!bad.length){
+    ugSetCard(ugCard({ tone:"ok", title:"Needs attention", sub:"Items to repair or replace",
+      heroLabel:"Items needing attention", heroValue:"0", foot:"Every item is in good shape. The full inventory is below." }));
+    return;
+  }
+  var worst = bad.some(function(r){ return conditionClass(r.condition) === "badge-danger"; });
+  var list = bad.slice(0, 4).map(function(r){
+    var q = (r.quantity % 1 === 0 ? r.quantity : r.quantity.toFixed(2));
+    return ugRow(esc(r.item), esc(q + " " + (r.unit || "")).trim() + (r.location ? " \u00b7 " + esc(r.location) : ""),
+                 '<span class="badge ' + conditionClass(r.condition) + '">' + esc(r.condition || "-") + '</span>');
+  }).join("");
+  ugSetCard(ugCard({
+    tone: worst ? "danger" : "warn", title:"Needs attention", sub:"Items to repair or replace",
+    heroLabel:"Items needing attention", heroValue:String(bad.length), listHtml:list,
+    foot: bad.length > 4 ? ("+" + (bad.length - 4) + " more in the inventory below.") : "The full inventory is below."
+  }));
+}
+
 function render(){
   var q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
   var filtered = q
@@ -368,6 +491,7 @@ function render(){
   document.getElementById("statCategories").textContent = Object.keys(categories).length;
   document.getElementById("tableCount").textContent = filtered.length + (filtered.length === 1 ? " item" : " items");
 
+  renderMyCard();
   var tbody = document.getElementById("toolsTableBody");
   if (!filtered.length){
     tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state">' +
