@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ugnayan Gulayan — Program Hub</title>
+<style>
+:root{
+  --bg:#f4f5f7;--surface:#fff;--surface-2:#fafbfc;--text:#111827;--muted:#6b7280;
+  --faint:#9ca3af;--border:#e5e7eb;--border-strong:#d1d5db;--accent:#2563eb;
+  --accent-soft:#eff4ff;--accent-text:#1d4ed8;--ok:#16a34a;--ok-soft:#ecfdf5;
+  --warn:#d97706;--warn-soft:#fffbeb;--shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);
+  --shadow-lg:0 10px 40px rgba(16,24,40,.14);--r:14px;--rs:8px;
+}
+[data-theme="dark"]{
+  --bg:#0f1115;--surface:#171a21;--surface-2:#1d212a;--text:#e8eaed;--muted:#9aa3b2;
+  --faint:#6b7280;--border:#262b36;--border-strong:#333a48;--accent:#60a5fa;
+  --accent-soft:#1a2438;--accent-text:#93c5fd;--ok:#4ade80;--ok-soft:#142a1e;
+  --warn:#fbbf24;--warn-soft:#2a2214;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.35);
+  --shadow-lg:0 12px 44px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s}
+
+.btn{font-family:inherit;font-size:13px;font-weight:550;border-radius:var(--rs);padding:8px 13px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:background .15s,border-color .15s}
+.btn:hover{background:var(--surface-2);border-color:var(--faint)}
+.btn-ghost{border-color:transparent;background:transparent}
+.btn-ghost:hover{background:var(--surface-2);border-color:var(--border)}
+
+.brand-mark{width:36px;height:36px;border-radius:10px;background:var(--accent);display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;letter-spacing:-.5px;flex:0 0 36px}
+
+/* ---------- LOGIN ---------- */
+.login-view{min-height:100vh;display:grid;place-items:center;padding:24px}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-lg);padding:32px;width:min(520px,100%)}
+.login-brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.brand-name{font-size:15px;font-weight:660;line-height:1.2}
+.brand-sub{font-size:11.5px;color:var(--muted)}
+.login-title{font-size:21px;font-weight:680;letter-spacing:-.4px;margin:0 0 8px}
+.login-desc{font-size:13.5px;color:var(--muted);margin:0 0 22px;line-height:1.6}
+
+.search-wrap{position:relative;margin-bottom:14px}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:var(--faint);fill:none;stroke-width:2}
+input[type="search"]{font-family:inherit;font-size:14px;color:var(--text);background:var(--surface-2);border:1px solid var(--border-strong);border-radius:10px;padding:11px 14px 11px 36px;width:100%;outline:none;transition:border-color .15s,box-shadow .15s}
+input[type="search"]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+.people-list{max-height:360px;overflow-y:auto}
+.person{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:8px;cursor:pointer;text-align:left;font-family:inherit;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:border-color .15s,background .15s}
+.person:hover{border-color:var(--accent);background:var(--accent-soft)}
+.person:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.person-name{font-weight:640;font-size:13px;letter-spacing:.3px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.person-role{font-size:11px;color:var(--muted);background:var(--surface-2);padding:3px 10px;border-radius:100px;border:1px solid var(--border);white-space:nowrap;flex:0 0 auto}
+.person:hover .person-role{background:var(--surface);border-color:transparent}
+
+.people-empty{text-align:center;padding:44px 20px;color:var(--muted);font-size:13.5px;line-height:1.65}
+.people-empty b{display:block;color:var(--text);font-size:14.5px;font-weight:640;margin-bottom:8px}
+.people-empty code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface-2);padding:2px 7px;border-radius:5px;font-size:12.5px;color:var(--accent-text);border:1px solid var(--border)}
+
+.login-foot{margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.data-status{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:100px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.data-status .dot{width:7px;height:7px;border-radius:50%;background:var(--faint);flex:0 0 7px}
+.data-status.live .dot{background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
+.data-status.embedded .dot{background:var(--warn);box-shadow:0 0 0 3px var(--warn-soft)}
+
+/* ---------- HOME ---------- */
+.home-view{min-height:100vh;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-text h1{font-size:15px;margin:0;font-weight:660;letter-spacing:-.2px}
+.brand-text p{margin:0;font-size:11.5px;color:var(--muted)}
+.spacer{flex:1}
+.whoami{display:inline-flex;align-items:baseline;gap:8px;padding:7px 14px;background:var(--accent-soft);border-radius:100px;font-size:12px;max-width:300px}
+.whoami-name{font-weight:680;color:var(--accent-text);letter-spacing:.4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.whoami-role{color:var(--accent-text);opacity:.72;white-space:nowrap;font-size:11px}
+
+main{max-width:1200px;margin:0 auto;padding:40px 24px 60px;flex:1;width:100%}
+
+.welcome{margin-bottom:42px}
+.welcome h2{font-size:32px;font-weight:680;letter-spacing:-.9px;line-height:1.15;margin:0 0 10px}
+.welcome p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.65;max-width:640px}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.meta-chip{font-size:12px;font-weight:600;padding:6px 13px;border-radius:100px;background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+.meta-chip b{color:var(--text);font-weight:650;margin-left:2px}
+
+.section-head{display:flex;align-items:center;gap:12px;margin:0 0 16px}
+.section-head h3{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin:0;flex:0 0 auto}
+.section-head .rule{flex:1;height:1px;background:var(--border)}
+.section-head .count{font-size:11.5px;color:var(--faint);flex:0 0 auto}
+.section-head .btn{flex:0 0 auto;padding:5px 10px;font-size:12px}
+
+section{margin-bottom:40px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:border-color .15s,box-shadow .15s,transform .12s}
+a.card{text-decoration:none;color:inherit;cursor:pointer}
+a.card::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent);opacity:0;transition:opacity .15s}
+a.card:hover{border-color:var(--border-strong);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+a.card:hover::before{opacity:1}
+a.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.card.planned{background:var(--surface-2);box-shadow:none;opacity:.82}
+
+.card-top{display:flex;align-items:flex-start;gap:13px;margin-bottom:13px}
+.card-icon{width:42px;height:42px;flex:0 0 42px;border-radius:11px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-text)}
+.card-icon svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card.planned .card-icon{background:var(--surface);color:var(--faint);border:1px solid var(--border)}
+
+.card-title{font-size:15px;font-weight:640;letter-spacing:-.2px;line-height:1.3;margin:0 0 4px}
+.card-owner{font-size:11.5px;color:var(--faint);line-height:1.4}
+.card-desc{font-size:12.8px;color:var(--muted);line-height:1.55;margin:0 0 16px;flex:1}
+
+.card-foot{display:flex;align-items:center;gap:8px;padding-top:13px;border-top:1px solid var(--border)}
+
+.badge{font-size:10.5px;font-weight:650;letter-spacing:.3px;padding:4px 10px;border-radius:100px;display:inline-flex;align-items:center;gap:5px}
+.badge-live{background:var(--ok-soft);color:var(--ok)}
+.badge-live .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
+.badge-local{background:var(--warn-soft);color:var(--warn)}
+.badge-local .dot{width:6px;height:6px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 3px var(--warn-soft)}
+.badge-planned{background:var(--surface);color:var(--faint);border:1px solid var(--border)}
+
+.open-link{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--accent-text);display:inline-flex;align-items:center;gap:5px}
+.open-link svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+.empty{grid-column:1/-1;text-align:center;padding:52px 20px;color:var(--muted);background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:var(--r);font-size:13.5px;line-height:1.6}
+
+footer{max-width:1200px;margin:0 auto;width:100%;padding:24px 24px 44px;border-top:1px solid var(--border);font-size:12px;color:var(--faint);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+
+@media (max-width:760px){
+  .topbar{padding:12px 16px;gap:8px}
+  .brand-text p,.whoami-role{display:none}
+  .whoami{max-width:160px;padding:6px 10px}
+  main{padding:28px 16px 50px}
+  .welcome h2{font-size:24px}
+  .grid{grid-template-columns:1fr}
+  .login-card{padding:24px}
+  .login-title{font-size:19px}
+  .people-list{max-height:300px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     LOGIN VIEW
+     ============================================================ -->
+<div class="login-view" id="loginView">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="brand-mark">UG</div>
+      <div>
+        <div class="brand-name">Ugnayan Gulayan</div>
+        <div class="brand-sub">Program Hub</div>
+      </div>
+    </div>
+
+    <h1 class="login-title">Who's using the tools today?</h1>
+    <p class="login-desc">
+      Pick your name from the list. You'll stay signed in until you close
+      this browser tab.
+    </p>
+
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="peopleSearch" placeholder="Search your name…" autocomplete="off" autofocus>
+    </div>
+
+    <div class="people-list" id="peopleList"></div>
+
+    <div class="login-foot">
+      <span class="data-status embedded" id="peopleStatus">
+        <span class="dot"></span>
+        <span id="peopleStatusText">Checking for people.xlsx…</span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     HOME / PORTAL VIEW
+     ============================================================ -->
+<div class="home-view" id="homeView" hidden>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">UG</div>
+      <div class="brand-text">
+        <h1>Ugnayan Gulayan</h1>
+        <p>Program Hub</p>
+      </div>
+    </div>
+    <span class="spacer"></span>
+    <span class="whoami" title="Signed in">
+      <span class="whoami-name" id="whoamiName">—</span>
+      <span class="whoami-role" id="whoamiRole">—</span>
+    </span>
+    <button class="btn btn-ghost" id="switchBtn">Switch user</button>
+    <button class="btn btn-ghost" id="themeBtn" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <span id="themeIcon">&#9789;</span>
+    </button>
+  </header>
+
+  <main>
+
+    <div class="welcome">
+      <h2 id="welcomeTitle">Kumusta.</h2>
+      <p id="welcomeSub">Welcome to the Ugnayan Gulayan program hub.</p>
+      <div class="meta-row" id="metaRow"></div>
+    </div>
+
+    <section>
+      <div class="section-head">
+        <h3 id="toolsHead">Your tools</h3>
+        <span class="rule"></span>
+        <span class="count" id="toolsCount"></span>
+        <button class="btn btn-ghost" id="showAllBtn" hidden>Show all</button>
+      </div>
+      <div class="grid" id="toolsGrid"></div>
+    </section>
+
+    <section id="localSection" hidden>
+      <div class="section-head">
+        <h3>Local-only tools</h3>
+        <span class="rule"></span>
+        <span class="count">not published</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="ScholarDatabase/scholar-profiles.html">
+          <div class="card-top">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M22 10L12 5 2 10l10 5 10-5z"/>
+                <path d="M6 12.5V17c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-4.5"/>
+              </svg>
+            </div>
+            <div style="min-width:0">
+              <div class="card-title">Scholar Database</div>
+              <div class="card-owner">Local only</div>
+            </div>
+          </div>
+          <p class="card-desc">
+            Scholar roster with family details and parent skills. Kept off the
+            public site to protect student data — available only on this device.
+          </p>
+          <div class="card-foot">
+            <span class="badge badge-local"><span class="dot"></span>Local</span>
+            <span class="open-link">
+              Open
+              <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>Ugnayan Gulayan · Program Hub</span>
+    <span class="spacer"></span>
+    <span>SY 2026–2027</span>
+  </footer>
+
+</div>
+
+<!-- SheetJS: reads .xlsx / .xls / .csv in the browser -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+        onerror="window.__xlsxLoadFailed = true;"></script>
+
+<script>
+/* ================================================================
+   CONFIG
+   ================================================================ */
+
+var PEOPLE_FILE = "people.xlsx";
+var PEOPLE_SHEETS = ["People", "Staff", "List"];
+
+var ROLE_LABELS = {
+  committee:     "Program Committee",
+  liaison:       "Farm Liaison",
+  coordinator:   "Community Lead",
+  documentation: "Documentation Lead",
+  treasurer:     "Fund Treasurer",
+  logistics:     "Logistics & Tool Master",
+  shift_lead:    "Parent Shift Lead",
+  parent:        "Parent",
+  student:       "Student"
+};
+
+var ROLE_MAP = {
+  "committee":              "committee",
+  "program committee":      "committee",
+  "liaison":                "liaison",
+  "farm liaison":           "liaison",
+  "coordinator":            "coordinator",
+  "community lead":         "coordinator",
+  "scholar coordinator":    "coordinator",
+  "documentation":          "documentation",
+  "documentation lead":     "documentation",
+  "treasurer":              "treasurer",
+  "fund treasurer":         "treasurer",
+  "logistics":              "logistics",
+  "logistics & tool master":"logistics",
+  "logistics and tool master":"logistics",
+  "tool master":            "logistics",
+  "shift lead":             "shift_lead",
+  "parent shift lead":      "shift_lead",
+  "parent":                 "parent",
+  "student":                "student",
+  "scholar":                "student",
+  "household":              "parent"
+};
+
+/* Every tool the program will have. As each one is built, change its
+   status to "live" and set its href. The portal picks this up
+   automatically — the card becomes clickable, the badge flips. */
+var TOOLS = [
+  {
+    id: "attendance",
+    title: "Attendance & Points",
+    owner: "Documentation Lead",
+    desc: "Shift log, sign-in and sign-out, task category, verification, and the points earned by each household.",
+    href: "Attendance/attendance.html",
+    status: "planned",
+    roles: ["committee","liaison","coordinator","documentation","shift_lead","parent","student"]
+  },
+  {
+    id: "farm",
+    title: "Farm Production",
+    owner: "Farming Leads",
+    desc: "What was planted, where, and when. Harvest weights in kilos, split into feeding and surplus portions.",
+    href: "FarmProduction/farm.html",
+    status: "planned",
+    roles: ["committee","liaison","coordinator","documentation","shift_lead","parent","student"]
+  },
+  {
+    id: "fund",
+    title: "Welfare Fund & Money",
+    owner: "Fund Treasurer",
+    desc: "Surplus sales revenue, deposits to the Welfare Fund, disbursements by category, and the running balance.",
+    href: "WelfareFund/fund.html",
+    status: "planned",
+    roles: ["committee","liaison","treasurer"]
+  },
+  {
+    id: "exceptions",
+    title: "Exceptions & Safety",
+    owner: "Farm Liaison",
+    desc: "Buy-out credits, hardship requests, disputes and appeals, safety incidents, and 60-day quiet-household flags.",
+    href: "Exceptions/exceptions.html",
+    status: "planned",
+    roles: ["committee","liaison","coordinator","documentation"]
+  },
+  {
+    id: "tools",
+    title: "Tools & Materials",
+    owner: "Logistics & Tool Master",
+    desc: "Tool inventory and condition, missing or damaged items, seed stock, consumables, and irrigation status.",
+    href: "Tools/tools.html",
+    status: "planned",
+    roles: ["committee","liaison","logistics","shift_lead","documentation"]
+  }
+];
+
+/* Used only when people.xlsx can't be reached at all — offline, or opened
+   by double-clicking with no local server. The page never sits empty. */
+var STARTER_PEOPLE = [
+  { name:"[PROGRAM COMMITTEE]", role:"committee" },
+  { name:"[FARM LIAISON]", role:"liaison" },
+  { name:"[COMMUNITY LEAD]", role:"coordinator" },
+  { name:"[DOCUMENTATION LEAD]", role:"documentation" },
+  { name:"[FUND TREASURER]", role:"treasurer" },
+  { name:"[LOGISTICS MASTER]", role:"logistics" },
+  { name:"[SHIFT LEAD]", role:"shift_lead" },
+  { name:"[STUDENT]", role:"student" },
+  { name:"[PARENT]", role:"parent" }
+];
+
+/* ================================================================
+   STATE
+   ================================================================ */
+var PEOPLE = [];
+var currentUser = null;
+var showAllTools = false;
+var peopleLoaded = false;
+var SESSION_KEY = "ug-current-user";
+
+/* ================================================================
+   STORAGE
+   Session key lives in sessionStorage (clears on browser close).
+   Theme preference uses localStorage (persists).
+   Both wrapped —
