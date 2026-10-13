@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Farm Production - Ugnayan Gulayan</title>
 <style>
 :root{--bg:#f4f5f7;--surface:#fff;--surface-2:#fafbfc;--text:#111827;--muted:#6b7280;--faint:#9ca3af;--border:#e5e7eb;--border-strong:#d1d5db;--accent:#2563eb;--accent-soft:#eff4ff;--accent-text:#1d4ed8;--ok:#16a34a;--ok-soft:#ecfdf5;--warn:#d97706;--warn-soft:#fffbeb;--danger:#dc2626;--danger-soft:#fef2f2;--shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);--r:14px;--rs:8px}
@@ -53,6 +53,114 @@ input[type="search"]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(-
 .empty-state code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface-2);padding:2px 7px;border-radius:5px;font-size:12.5px;color:var(--accent-text);border:1px solid var(--border)}
 footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px solid var(--border);font-size:12px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 @media (max-width:760px){main{padding:26px 16px 50px}.page-header h2{font-size:22px}th,td{padding:10px 12px;font-size:12.5px}}
+
+/* ================================================================
+   PHONE LAYOUT (Phone Design Plan)
+   Table stays in the DOM. At <=600px each row is drawn as a card.
+   Loader, theme tokens, and palette are untouched.
+   ================================================================ */
+.table-card{padding:0;overflow:hidden}
+.table-scroll{overflow-x:auto}
+.m-only,.of-target{display:none}
+
+/* Tablet 600-900: table stays, stat cards stack 2x2 */
+@media (max-width:900px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* Phone <=600: cards */
+@media (max-width:600px){
+  :root{--topbar-h:calc(52px + env(safe-area-inset-top,0px))}
+  html{-webkit-text-size-adjust:100%}
+  body{font-size:15px;
+       padding-left:env(safe-area-inset-left,0px);
+       padding-right:env(safe-area-inset-right,0px);
+       padding-bottom:env(safe-area-inset-bottom,0px)}
+
+  /* Touch: every control >=44x44 */
+  .btn{font-size:14px;padding:12px 16px;min-height:44px;min-width:44px;justify-content:center}
+  #themeBtn{width:44px;padding:0}
+
+  /* Sticky compact topbar: back + brand + theme only */
+  .topbar{height:var(--topbar-h);padding:env(safe-area-inset-top,0px) 10px 0;gap:6px;flex-wrap:nowrap}
+  .topbar .back{order:-1;padding:12px 12px}
+  .back-more,.brand-mark,.brand-text p{display:none}
+  .brand-text h1{font-size:15px;white-space:nowrap}
+
+  main{padding:16px 14px 32px}
+  .page-header{margin-bottom:18px;gap:10px}
+  .page-header h2{font-size:22px}
+  .notice{font-size:13px}
+
+  /* Stats: 2x2, bigger numbers */
+  .stats-grid{gap:10px;margin-bottom:20px}
+  .stat-card{padding:14px}
+  .stat-val{font-size:clamp(24px,8.5vw,32px);line-height:1.15;overflow-wrap:anywhere}
+  .stat-label{font-size:11px}
+
+  /* Sticky search below the topbar */
+  .search-wrap{position:sticky;top:var(--topbar-h);z-index:30;background:var(--bg);
+               margin:0 -14px 10px;padding:8px 14px}
+  .search-wrap svg{left:28px;width:18px;height:18px}
+  input[type="search"]{font-size:16px;min-height:48px;padding:14px 16px 14px 42px}
+
+  .badge{font-size:11.5px;padding:5px 11px}
+
+  /* Table -> cards */
+  .card.table-card{background:none;border:0;box-shadow:none;border-radius:0;margin-bottom:0}
+  .table-scroll{overflow:visible}
+  table,tbody{display:block;width:100%}
+  thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;padding:14px;margin-bottom:10px;
+           background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow)}
+  tbody tr:hover td{background:none}
+  tbody td{display:block;border:0;padding:0;font-size:15px;line-height:1.35;min-width:0;overflow-wrap:anywhere;text-align:left}
+  tbody td.n{text-align:left}
+  tbody td:empty{display:none}
+  tbody td[colspan]{grid-column:1/-1}
+  tbody td[data-label]::before{content:attr(data-label);display:block;margin-bottom:2px;
+           font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+
+  /* Card header */
+  tbody td.c-title{grid-row:1;grid-column:1;font-size:17px;font-weight:700;align-self:center}
+  tbody td.c-title.solo{grid-column:1/-1}
+  tbody td.c-badge{grid-row:1;grid-column:2;justify-self:end;align-self:start}
+  tbody td.c-aside{grid-row:1;grid-column:2;justify-self:end;align-self:center;font-size:13px;color:var(--muted);text-align:right}
+  tbody td.c-sub{grid-column:1/-1;order:-1;color:var(--muted);margin-top:-6px}
+  tbody td.c-sub[data-label]::before{display:inline;margin:0 6px 0 0}
+  tbody td.c-first{order:-1}
+
+  /* Fields */
+  tbody td.c-wide{grid-column:1/-1}
+  tbody td.c-desk{display:none}
+  .m-only{display:inline}
+  .badge.m-only{display:inline-flex;margin-left:6px;font-size:10.5px;padding:2px 8px}
+  .of-target{display:inline;color:var(--muted)}
+
+  /* Hero band (the number people open the tool to see) */
+  tbody td.c-hero{order:5;grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;
+           padding:10px 14px;border-radius:var(--rs);font-size:21px;font-weight:700;
+           font-variant-numeric:tabular-nums;background:var(--accent-soft);color:var(--accent-text)}
+  tbody td.c-hero::before{margin:0;font-size:12px;opacity:.85;color:inherit}
+  tbody td.c-hero .badge{font-size:13px;padding:5px 12px}
+  tbody tr.tone-ok td.c-hero{background:var(--ok-soft);color:var(--ok)}
+  tbody tr.tone-warn td.c-hero{background:var(--warn-soft);color:var(--warn)}
+  tbody tr.tone-danger td.c-hero{background:var(--danger-soft);color:var(--danger)}
+  tbody tr.tone-neutral td.c-hero{background:var(--surface-2);color:var(--text)}
+
+  .empty-state{padding:36px 8px}
+  footer{padding:16px 14px;font-size:12px}
+}
+
+/* Phone tight <360: tighter padding, 14px font floor */
+@media (max-width:359px){
+  body{font-size:14px}
+  main{padding:12px 12px 28px}
+  .search-wrap{margin:0 -12px 10px;padding:8px 12px}
+  .search-wrap svg{left:26px}
+  tbody td{font-size:14px}
+  tbody tr{padding:12px;gap:8px 10px}
+}
 </style>
 </head>
 <body>
@@ -64,7 +172,7 @@ footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px sol
   </a>
   <span class="spacer"></span>
   <button class="btn btn-ghost" id="themeBtn" title="Toggle dark mode"><span id="themeIcon">&#9789;</span></button>
-  <a class="btn" href="../index.html">&larr; Back to Portal</a>
+  <a class="btn back" href="../index.html" aria-label="Back to Portal"><span>&larr; Back<span class="back-more"> to Portal</span></span></a>
 </header>
 
 <main>
@@ -93,10 +201,10 @@ footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px sol
     </div>
     <div class="search-wrap">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-      <input type="search" id="searchInput" placeholder="Search by crop, cycle, date, or type..." autocomplete="off">
+      <input type="search" id="searchInput" enterkeyhint="search" inputmode="search" placeholder="Search by crop, cycle, date, or type..." autocomplete="off">
     </div>
-    <div class="card" style="padding:0;overflow:hidden">
-      <div style="overflow-x:auto">
+    <div class="card table-card">
+      <div class="table-scroll">
         <table>
           <thead>
             <tr>
@@ -268,17 +376,19 @@ function render(){
     return;
   }
   tbody.innerHTML = filtered.map(function(r){
+    // Phone cards: crop + date + cycle on top, Fed / Surplus / Plot / By below,
+    // Kilos Harvested in the hero band.
     return '<tr>' +
-      '<td>' + esc(r.date) + '</td>' +
-      '<td>' + esc(r.cycle) + '</td>' +
-      '<td>' + esc(r.type) + '</td>' +
-      '<td><b>' + esc(r.crop) + '</b></td>' +
-      '<td>' + esc(r.plot) + '</td>' +
-      '<td class="n">' + r.harvested.toFixed(1) + '</td>' +
-      '<td class="n">' + r.fed.toFixed(1) + '</td>' +
-      '<td class="n">' + r.surplus.toFixed(1) + '</td>' +
-      '<td>' + esc(r.by) + '</td>' +
-      '<td>' + esc(r.notes) + '</td>' +
+      '<td class="c-aside">' + esc(r.date) + '</td>' +
+      '<td class="c-sub" data-label="Cycle">' + esc(r.cycle) + '</td>' +
+      '<td data-label="Type">' + esc(r.type) + '</td>' +
+      '<td class="c-title"><b>' + esc(r.crop) + '</b></td>' +
+      '<td data-label="Plot / Bed">' + esc(r.plot) + '</td>' +
+      '<td class="n c-hero" data-label="Kilos Harvested"><span>' + r.harvested.toFixed(1) + '<span class="m-only"> kg</span></span></td>' +
+      '<td class="n" data-label="Fed">' + r.fed.toFixed(1) + '<span class="m-only"> kg</span></td>' +
+      '<td class="n" data-label="Surplus">' + r.surplus.toFixed(1) + '<span class="m-only"> kg</span></td>' +
+      '<td data-label="Recorded By">' + esc(r.by) + '</td>' +
+      '<td class="c-wide" data-label="Notes">' + esc(r.notes) + '</td>' +
     '</tr>';
   }).join("");
 }
