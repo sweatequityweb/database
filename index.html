@@ -246,6 +246,8 @@ var ROLE_MAP = {
   "shift lead":"shift_lead","parent shift lead":"shift_lead",
   "parent":"parent","student":"student","scholar":"student","household":"parent"
 };
+
+/* Future-proof tool definitions across folders */
 var TOOLS = [
   { id:"attendance", title:"Attendance & Points", owner:"Documentation Lead",
     desc:"Shift log, sign-in and sign-out, task category, verification, and the points earned by each household.",
@@ -294,6 +296,32 @@ function roleLabel(r){ return ROLE_LABELS[r] || r; }
 function firstName(full){ return (full || "").split(" ")[0] || full || ""; }
 
 /* ================================================================
+   AUTO-DETECT TOOLS IN SUBFOLDERS (Future-proof)
+   ================================================================ */
+async function detectTools() {
+  await Promise.all(TOOLS.map(async function(t) {
+    try {
+      var res = await fetch(t.href, { method: 'HEAD' });
+      if (res.ok) {
+        t.status = "live";
+      } else {
+        var resGet = await fetch(t.href);
+        if (resGet.ok) t.status = "live";
+      }
+    } catch(e) {
+      // Local file:// protocol CORS fallback check
+      if (window.location.protocol === "file:") {
+        // Automatically mark built tools as live when opened locally via file://
+        if (t.id === "attendance") {
+          t.status = "live";
+        }
+      }
+    }
+  }));
+  if (currentUser) renderTools();
+}
+
+/* ================================================================
    FETCH & PARSE PEOPLE.XLSX
    ================================================================ */
 async function loadPeopleData() {
@@ -315,7 +343,6 @@ async function loadPeopleData() {
       var r = rows[i];
       if (!r || r.length === 0 || !r[0]) continue;
       var col0 = String(r[0]).trim();
-      // Skip header rows if present
       if (i === 0 && (col0.toLowerCase() === 'name' || col0.toLowerCase() === 'full name' || col0.toLowerCase().includes('name'))) {
         continue;
       }
@@ -341,7 +368,6 @@ async function loadPeopleData() {
     statusEl.classList.remove("live");
     statusText.textContent = "people.xlsx offline — using default roster";
     
-    // Fallback parser
     PEOPLE = FALLBACK_PEOPLE_DATA.map(function(row){
       return { name: normName(row[0]), role: normalizeRole(row[1]), hh: row[2], contact: row[3], type: row[4] };
     });
@@ -382,6 +408,7 @@ function signIn(person){
   showAllTools = false;
   sSet(SESSION_KEY, JSON.stringify(person));
   showHome();
+  detectTools(); // Re-check tool availability on sign-in
 }
 
 function signOut(){
@@ -405,7 +432,6 @@ function showLogin(){
 }
 
 function showHome(){
-  // Make login tab disappear completely
   var loginView = document.getElementById("loginView");
   loginView.style.opacity = "0";
   loginView.style.visibility = "hidden";
@@ -563,8 +589,9 @@ function init(){
     setTheme(lGet("scholar-theme") || "light");
     wireUp();
 
-    // Load users from people.xlsx
+    // Load users and trigger tool detection
     loadPeopleData().then(function(){
+      detectTools();
       var saved = sGet(SESSION_KEY);
       if (saved){
         try {
