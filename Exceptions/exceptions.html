@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exceptions &amp; Safety - Ugnayan Gulayan</title>
+<style>
+:root{--bg:#f4f5f7;--surface:#fff;--surface-2:#fafbfc;--text:#111827;--muted:#6b7280;--faint:#9ca3af;--border:#e5e7eb;--border-strong:#d1d5db;--accent:#2563eb;--accent-soft:#eff4ff;--accent-text:#1d4ed8;--ok:#16a34a;--ok-soft:#ecfdf5;--warn:#d97706;--warn-soft:#fffbeb;--danger:#dc2626;--danger-soft:#fef2f2;--shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);--r:14px;--rs:8px}
+[data-theme="dark"]{--bg:#0f1115;--surface:#171a21;--surface-2:#1d212a;--text:#e8eaed;--muted:#9aa3b2;--faint:#6b7280;--border:#262b36;--border-strong:#333a48;--accent:#60a5fa;--accent-soft:#1a2438;--accent-text:#93c5fd;--ok:#4ade80;--ok-soft:#142a1e;--warn:#fbbf24;--warn-soft:#2a2214;--danger:#f87171;--danger-soft:#3b1111;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.35)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s}
+.btn{font-family:inherit;font-size:13px;font-weight:550;border-radius:var(--rs);padding:8px 13px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:background .15s,border-color .15s}
+.btn:hover{background:var(--surface-2);border-color:var(--faint)}
+.btn-ghost{border-color:transparent;background:transparent}
+.btn-ghost:hover{background:var(--surface-2);border-color:var(--border)}
+.brand-mark{width:36px;height:36px;border-radius:10px;background:#d97706;display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;letter-spacing:-.5px;flex:0 0 36px}
+.topbar{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.brand-text h1{font-size:15px;margin:0;font-weight:660;letter-spacing:-.2px}
+.brand-text p{margin:0;font-size:11.5px;color:var(--muted)}
+.spacer{flex:1}
+main{max-width:1200px;margin:0 auto;padding:40px 24px 60px;flex:1;width:100%}
+.page-header{margin-bottom:32px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.page-header h2{font-size:28px;font-weight:680;letter-spacing:-.7px;margin:0 0 6px}
+.page-header p{margin:0;color:var(--muted);font-size:14px;max-width:640px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow)}
+.stat-val{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
+.stat-label{font-size:11px;color:var(--muted);font-weight:650;text-transform:uppercase;letter-spacing:.5px}
+.section-head{display:flex;align-items:center;gap:12px;margin:0 0 16px}
+.section-head h3{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin:0;flex:0 0 auto}
+.section-head .rule{flex:1;height:1px;background:var(--border)}
+.section-head .count{font-size:11.5px;color:var(--faint);flex:0 0 auto}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+table{width:100%;border-collapse:collapse;text-align:left;font-size:13.5px}
+th,td{padding:12px 16px;border-bottom:1px solid var(--border)}
+th{font-weight:650;color:var(--muted);background:var(--surface-2);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px}
+tr:hover td{background:var(--surface-2)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.badge{font-size:10.5px;font-weight:650;letter-spacing:.3px;padding:4px 10px;border-radius:100px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.badge-ok{background:var(--ok-soft);color:var(--ok)}
+.badge-warn{background:var(--warn-soft);color:var(--warn)}
+.badge-danger{background:var(--danger-soft);color:var(--danger)}
+.badge-neutral{background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+.search-wrap{position:relative;margin-bottom:16px}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:var(--faint);fill:none;stroke-width:2}
+input[type="search"]{font-family:inherit;font-size:14px;color:var(--text);background:var(--surface);border:1px solid var(--border-strong);border-radius:10px;padding:10px 14px 10px 36px;width:100%;outline:none;transition:border-color .15s,box-shadow .15s}
+input[type="search"]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.notice{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn);border-radius:var(--rs);padding:11px 15px;font-size:12.5px;margin-bottom:16px;line-height:1.55;display:none}
+.notice.show{display:block}
+.empty-state{text-align:center;padding:56px 24px;color:var(--muted);font-size:13.5px;line-height:1.6}
+.empty-state b{display:block;color:var(--text);font-size:15px;font-weight:650;margin-bottom:8px}
+.empty-state code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface-2);padding:2px 7px;border-radius:5px;font-size:12.5px;color:var(--accent-text);border:1px solid var(--border)}
+footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px solid var(--border);font-size:12px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media (max-width:760px){main{padding:26px 16px 50px}.page-header h2{font-size:22px}th,td{padding:10px 12px;font-size:12.5px}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <div class="brand-mark">UG</div>
+    <div class="brand-text"><h1>Ugnayan Gulayan</h1><p>Program Hub</p></div>
+  </a>
+  <span class="spacer"></span>
+  <button class="btn btn-ghost" id="themeBtn" title="Toggle dark mode"><span id="themeIcon">&#9789;</span></button>
+  <a class="btn" href="../index.html">&larr; Back to Portal</a>
+</header>
+
+<main>
+  <div class="page-header">
+    <div>
+      <h2>Exceptions &amp; Safety</h2>
+      <p>Buy-outs, hardship adjustments, disputes, appeals, safety incidents, and 60-day quiet-household flags. Reads <code>exceptions.xlsx</code>.</p>
+    </div>
+    <span class="badge badge-neutral" id="dataSourceStatus">Starting...</span>
+  </div>
+
+  <div class="notice" id="loadNotice"></div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="statTotal">&mdash;</div><div class="stat-label">Total Cases</div></div>
+    <div class="stat-card"><div class="stat-val" id="statOpen">&mdash;</div><div class="stat-label">Open / Pending</div></div>
+    <div class="stat-card"><div class="stat-val" id="statResolved">&mdash;</div><div class="stat-label">Resolved</div></div>
+    <div class="stat-card"><div class="stat-val" id="statSafety">&mdash;</div><div class="stat-label">Safety Incidents</div></div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h3>Case Log</h3>
+      <span class="rule"></span>
+      <span class="count" id="tableCount">&mdash;</span>
+    </div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="searchInput" placeholder="Search by household, type, status, or description..." autocomplete="off">
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th><th>Household ID</th><th>Type</th><th>Description</th><th>Status</th>
+              <th>Filed By</th><th>Resolved By</th><th>Resolution Date</th>
+            </tr>
+          </thead>
+          <tbody id="exceptionsTableBody">
+            <tr><td colspan="8" style="text-align:center;padding:36px;color:var(--muted)">Loading records...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Ugnayan Gulayan &middot; Exceptions &amp; Safety</span>
+  <span>SY 2026-2027</span>
+</footer>
+
+<script>
+(function(){
+  var done=false, cdns=["https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js","https://cdn.jsdelivr.net/npm/xlsx@0.18.5/xlsx.full.min.js","https://unpkg.com/xlsx@0.18.5/xlsx.full.min.js"], idx=0;
+  function finish(ok){ if(done) return; done=true; window.__xlsxReady=true; window.__xlsxOk=ok; if(typeof window.__startExceptions==="function") window.__startExceptions(); }
+  function tryNext(){ if(done) return; if(idx>=cdns.length){ finish(false); return; } var s=document.createElement("script"); s.src=cdns[idx++]; s.onload=function(){finish(true);}; s.onerror=function(){tryNext();}; document.head.appendChild(s); }
+  setTimeout(function(){finish(false);},20000); tryNext();
+})();
+</script>
+
+<script>
+var FILE_CANDIDATES = ["exceptions.xlsx","Exceptions.xlsx","EXCEPTIONS.xlsx"];
+var SHEET_NAMES = ["Exceptions","Sheet1","Cases"];
+var RECORDS = [];
+
+function lGet(k){ try{ return window.localStorage.getItem(k); }catch(e){ return null; } }
+function lSet(k,v){ try{ window.localStorage.setItem(k,v); }catch(e){} }
+function esc(s){ return (s===undefined||s===null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
+
+function parseWorkbook(wb){
+  var sheets = wb.SheetNames || [];
+  if (!sheets.length) throw new Error("Workbook has no sheets.");
+  var sheetName = null;
+  for (var i=0;i<SHEET_NAMES.length;i++){ if (sheets.indexOf(SHEET_NAMES[i]) !== -1){ sheetName = SHEET_NAMES[i]; break; } }
+  if (!sheetName) sheetName = sheets[0];
+  var rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header:1, defval:"" });
+  if (!rows || rows.length < 1) throw new Error("No rows found in " + sheetName + ".");
+
+  var hIdx = -1, idx = null;
+  for (var k=0;k<Math.min(rows.length,10);k++){
+    var head = rows[k].map(function(h){ return String(h===undefined||h===null?"":h).trim().toLowerCase(); });
+    if (head.indexOf("date") !== -1 && head.indexOf("type") !== -1 && head.indexOf("status") !== -1){
+      hIdx = k;
+      idx = {
+        date: head.indexOf("date"),
+        hh: (head.indexOf("household id") !== -1 ? head.indexOf("household id") : head.indexOf("household")),
+        type: head.indexOf("type"),
+        description: head.indexOf("description"),
+        status: head.indexOf("status"),
+        filedBy: (head.indexOf("filed by") !== -1 ? head.indexOf("filed by") : head.indexOf("filed")),
+        resolvedBy: (head.indexOf("resolved by") !== -1 ? head.indexOf("resolved by") : head.indexOf("resolved")),
+        resolutionDate: (head.indexOf("resolution date") !== -1 ? head.indexOf("resolution date") : head.indexOf("resolved date")),
+        notes: head.indexOf("notes")
+      };
+      break;
+    }
+  }
+  if (hIdx === -1) throw new Error("Couldn't find 'Date', 'Type', and 'Status' columns in " + sheetName + ".");
+
+  var out = [];
+  for (var i=hIdx+1;i<rows.length;i++){
+    var r = rows[i] || [];
+    var date = idx.date !== -1 ? String(r[idx.date]||"").trim() : "";
+    var type = idx.type !== -1 ? String(r[idx.type]||"").trim() : "";
+    var desc = idx.description !== -1 ? String(r[idx.description]||"").trim() : "";
+    if (!date && !type && !desc) continue;
+    out.push({
+      date: date,
+      hh: idx.hh !== -1 ? String(r[idx.hh]||"").trim() : "",
+      type: type,
+      description: desc,
+      status: idx.status !== -1 ? String(r[idx.status]||"").trim() : "",
+      filedBy: idx.filedBy !== -1 ? String(r[idx.filedBy]||"").trim() : "",
+      resolvedBy: idx.resolvedBy !== -1 ? String(r[idx.resolvedBy]||"").trim() : "",
+      resolutionDate: idx.resolutionDate !== -1 ? String(r[idx.resolutionDate]||"").trim() : "",
+      notes: idx.notes !== -1 ? String(r[idx.notes]||"").trim() : ""
+    });
+  }
+  return out;
+}
+
+function loadData(){
+  var statusEl = document.getElementById("dataSourceStatus");
+  var notice = document.getElementById("loadNotice");
+  notice.classList.remove("show");
+
+  if (typeof XLSX === "undefined" || typeof fetch !== "function"){
+    RECORDS = [];
+    statusEl.className = "badge badge-warn";
+    statusEl.textContent = "Offline - no data";
+    notice.textContent = "The Excel reader didn't load. Reload when your connection is back.";
+    notice.classList.add("show");
+    render(); return;
+  }
+
+  var tried = [], settled = false;
+  function giveUp(){
+    if (settled) return; settled = true;
+    RECORDS = [];
+    statusEl.className = "badge badge-warn";
+    statusEl.textContent = "exceptions.xlsx not found";
+    notice.innerHTML = "<b>exceptions.xlsx couldn't be loaded.</b> Tried: <code>" + esc(tried.join(", ")) + "</code>. " +
+      "Put <code>exceptions.xlsx</code> next to <code>exceptions.html</code> and hard-refresh (Ctrl+Shift+R).";
+    notice.classList.add("show");
+    render();
+  }
+  var timer = setTimeout(giveUp, 15000);
+
+  function attempt(i){
+    if (settled) return;
+    if (i >= FILE_CANDIDATES.length){ clearTimeout(timer); return giveUp(); }
+    var name = FILE_CANDIDATES[i];
+    tried.push(name);
+    fetch(name + "?t=" + Date.now(), { cache:"no-store" })
+      .then(function(res){ if (!res.ok) throw new Error("HTTP " + res.status); return res.arrayBuffer(); })
+      .then(function(buf){
+        if (settled) return;
+        var wb = XLSX.read(new Uint8Array(buf), { type:"array" });
+        var rows = parseWorkbook(wb);
+        clearTimeout(timer); settled = true;
+        RECORDS = rows;
+        statusEl.className = "badge badge-ok";
+        statusEl.textContent = "Live \u00b7 " + name;
+        render();
+      })
+      .catch(function(){ attempt(i+1); });
+  }
+  attempt(0);
+}
+
+function statusClass(s){
+  var t = (s||"").toLowerCase();
+  if (t.indexOf("resolv") !== -1 || t.indexOf("closed") !== -1 || t.indexOf("approved") !== -1) return "badge-ok";
+  if (t.indexOf("open") !== -1 || t.indexOf("pending") !== -1 || t.indexOf("review") !== -1) return "badge-warn";
+  if (t.indexOf("denied") !== -1 || t.indexOf("reject") !== -1 || t.indexOf("escal") !== -1) return "badge-danger";
+  return "badge-neutral";
+}
+function isOpen(s){ var t=(s||"").toLowerCase(); return t.indexOf("open") !== -1 || t.indexOf("pending") !== -1 || t.indexOf("review") !== -1; }
+function isResolved(s){ var t=(s||"").toLowerCase(); return t.indexOf("resolv") !== -1 || t.indexOf("closed") !== -1 || t.indexOf("approved") !== -1; }
+function isSafety(t){ return (t||"").toLowerCase().indexOf("safety") !== -1 || (t||"").toLowerCase().indexOf("incident") !== -1; }
+
+function render(){
+  var q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+  var filtered = q
+    ? RECORDS.filter(function(r){ return (r.hh+" "+r.type+" "+r.status+" "+r.description+" "+r.filedBy+" "+r.notes).toLowerCase().indexOf(q) !== -1; })
+    : RECORDS;
+
+  document.getElementById("statTotal").textContent = RECORDS.length;
+  document.getElementById("statOpen").textContent = RECORDS.filter(function(r){ return isOpen(r.status); }).length;
+  document.getElementById("statResolved").textContent = RECORDS.filter(function(r){ return isResolved(r.status); }).length;
+  document.getElementById("statSafety").textContent = RECORDS.filter(function(r){ return isSafety(r.type); }).length;
+  document.getElementById("tableCount").textContent = filtered.length + (filtered.length === 1 ? " case" : " cases");
+
+  var tbody = document.getElementById("exceptionsTableBody");
+  if (!filtered.length){
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state">' +
+      '<b>No exception cases yet.</b>' +
+      'Add rows to <code>exceptions.xlsx</code> (sheet <code>Exceptions</code>) and refresh. ' +
+      'Columns: Date, Household ID, Type, Description, Status, Filed By, Resolved By, Resolution Date, Notes.' +
+      '</div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = filtered.map(function(r){
+    return '<tr>' +
+      '<td>' + esc(r.date) + '</td>' +
+      '<td><b>' + esc(r.hh) + '</b></td>' +
+      '<td>' + esc(r.type) + '</td>' +
+      '<td>' + esc(r.description) + '</td>' +
+      '<td><span class="badge ' + statusClass(r.status) + '">' + esc(r.status || "-") + '</span></td>' +
+      '<td>' + esc(r.filedBy) + '</td>' +
+      '<td>' + esc(r.resolvedBy) + '</td>' +
+      '<td>' + esc(r.resolutionDate) + '</td>' +
+    '</tr>';
+  }).join("");
+}
+
+function setTheme(t){ document.documentElement.setAttribute("data-theme", t); lSet("scholar-theme", t); var i=document.getElementById("themeIcon"); if(i) i.innerHTML = t==="dark"?"&#9788;":"&#9789;"; }
+
+function init(){
+  try {
+    setTheme(lGet("scholar-theme")||"light");
+    document.getElementById("themeBtn").addEventListener("click", function(){
+      var now = document.documentElement.getAttribute("data-theme");
+      setTheme(now==="dark"?"light":"dark");
+    });
+    document.getElementById("searchInput").addEventListener("input", render);
+    loadData();
+  } catch(err){
+    document.body.innerHTML = '<div style="max-width:680px;margin:60px auto;padding:24px;font-family:system-ui,sans-serif">' +
+      '<h1 style="color:#b91c1c;font-size:18px">Exceptions module failed to start</h1>' +
+      '<pre style="background:#f4f4f5;padding:14px;border-radius:8px;font-size:12px;overflow:auto;white-space:pre-wrap">' +
+      String(err && err.stack ? err.stack : err) + '</pre></div>';
+  }
+}
+function boot(){ if (document.readyState==="loading") document.addEventListener("DOMContentLoaded", init); else init(); }
+window.__startExceptions = boot;
+if (window.__xlsxReady) boot();
+</script>
+</body>
+</html>
