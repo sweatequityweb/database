@@ -4,14 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ugnayan Gulayan — Program Hub</title>
-<!-- SheetJS for parsing people.xlsx -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
   --bg:#f8fafc;--surface:#ffffff;--surface-2:#f1f5f9;--text:#0f172a;--muted:#475569;
   --faint:#94a3b8;--border:#e2e8f0;--border-strong:#cbd5e1;--accent:#2563eb;
   --accent-soft:#eff6ff;--accent-text:#1d4ed8;--ok:#16a34a;--ok-soft:#f0fdf4;
-  --warn:#d97706;--warn-soft:#fffbeb;
+  --warn:#d97706;--warn-soft:#fffbeb;--danger:#dc2626;--danger-soft:#fef2f2;
   --shadow:0 1px 3px rgba(15,23,42,.08),0 4px 12px rgba(15,23,42,.04);
   --shadow-lg:0 20px 25px -5px rgba(15,23,42,.1),0 8px 10px -6px rgba(15,23,42,.1);
   --r:16px;--rs:10px;
@@ -20,7 +18,7 @@
   --bg:#090d16;--surface:#111827;--surface-2:#1f2937;--text:#f3f4f6;--muted:#9ca3af;
   --faint:#6b7280;--border:#374151;--border-strong:#4b5563;--accent:#60a5fa;
   --accent-soft:#1e293b;--accent-text:#93c5fd;--ok:#4ade80;--ok-soft:#052e16;
-  --warn:#fbbf24;--warn-soft:#451a03;
+  --warn:#fbbf24;--warn-soft:#451a03;--danger:#f87171;--danger-soft:#3b1111;
   --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.4);
   --shadow-lg:0 20px 30px rgba(0,0,0,.7);
 }
@@ -32,7 +30,6 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,B
 .btn-ghost:hover{background:var(--surface-2);border-color:var(--border)}
 .brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#1d4ed8);display:grid;place-items:center;color:#fff;font-weight:700;font-size:15px;letter-spacing:-.5px;flex:0 0 40px;box-shadow:0 4px 12px rgba(37,99,235,.25)}
 
-/* Login Overlay */
 .login-view{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;padding:24px;transition:opacity .3s ease,visibility .3s ease}
 .login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow-lg);padding:40px;width:min(560px,100%);animation:slideUp .4s cubic-bezier(0.16, 1, 0.3, 1)}
 @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
@@ -54,16 +51,18 @@ input[type="search"]:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(-
 .person-name{font-weight:650;font-size:13.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .person-role{font-size:11.5px;color:var(--muted);background:var(--surface-2);padding:4px 12px;border-radius:100px;border:1px solid var(--border);white-space:nowrap;flex:0 0 auto}
 .person:hover .person-role{background:var(--surface);border-color:transparent;color:var(--accent-text)}
-.people-empty{text-align:center;padding:48px 20px;color:var(--muted);font-size:14px;line-height:1.6}
-.people-empty b{display:block;color:var(--text);font-size:15px;font-weight:650;margin-bottom:6px}
-.login-foot{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.data-status{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted)}
-.data-status .dot{width:8px;height:8px;border-radius:50%;background:var(--faint)}
+.people-empty{text-align:center;padding:48px 20px;color:var(--muted);font-size:13.5px;line-height:1.6}
+.people-empty b{display:block;color:var(--text);font-size:15px;font-weight:650;margin-bottom:8px}
+.people-empty code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface-2);padding:2px 7px;border-radius:5px;font-size:12.5px;color:var(--accent-text);border:1px solid var(--border)}
+.people-empty .detail{margin-top:12px;font-size:11.5px;color:var(--faint);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-all;line-height:1.7}
+.login-foot{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.data-status{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.data-status .dot{width:8px;height:8px;border-radius:50%;background:var(--faint);flex:0 0 8px}
 .data-status.live .dot{background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
+.data-status.warn .dot{background:var(--warn);box-shadow:0 0 0 3px var(--warn-soft)}
 
-/* Home View */
 .home-view{min-height:100vh;display:flex;flex-direction:column}
-.topbar{position:sticky;top:0;z-index:40;background:var(--surface);backdrop-filter:blur(8px);background:rgba(255,255,255,.85);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;gap:16px}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;gap:16px}
 [data-theme="dark"] .topbar{background:rgba(17,24,39,.85)}
 .brand{display:flex;align-items:center;gap:12px}
 .brand-text h1{font-size:16px;margin:0;font-weight:700;letter-spacing:-.2px}
@@ -124,7 +123,6 @@ footer{max-width:1280px;margin:0 auto;width:100%;padding:32px 32px 48px;border-t
 </head>
 <body>
 
-<!-- Login Overlay / Tab -->
 <div class="login-view" id="loginView">
   <div class="login-card">
     <div class="login-brand">
@@ -144,14 +142,13 @@ footer{max-width:1280px;margin:0 auto;width:100%;padding:32px 32px 48px;border-t
     <div class="login-foot">
       <span class="data-status" id="peopleStatus">
         <span class="dot"></span>
-        <span id="peopleStatusText">Loading people.xlsx…</span>
+        <span id="peopleStatusText">Starting…</span>
       </span>
-      <button class="btn btn-ghost" id="reloadExcelBtn" type="button" style="font-size:11.5px;padding:6px 10px">Retry File</button>
+      <button class="btn btn-ghost" id="reloadExcelBtn" type="button" style="font-size:11.5px;padding:6px 10px">Retry</button>
     </div>
   </div>
 </div>
 
-<!-- Rest of the Site (Revealed after login) -->
 <div class="home-view" id="homeView" hidden>
   <header class="topbar">
     <div class="brand">
@@ -219,16 +216,36 @@ footer{max-width:1280px;margin:0 auto;width:100%;padding:32px 32px 48px;border-t
   </footer>
 </div>
 
+<!-- Async SheetJS loader: 6-second cap, non-blocking. Blocking
+     <script src> stalls the page when the CDN is slow or blocked. -->
+<script>
+(function(){
+  var done = false;
+  function finish(ok){
+    if (done) return;
+    done = true;
+    window.__xlsxReady = true;
+    window.__xlsxOk = ok;
+    if (typeof window.__startHub === "function") window.__startHub();
+  }
+  setTimeout(function(){ finish(false); }, 6000);
+  var s = document.createElement("script");
+  s.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+  s.onload = function(){ finish(true); };
+  s.onerror = function(){ finish(false); };
+  document.head.appendChild(s);
+})();
+</script>
+
 <script>
 /* ================================================================
-   CONFIG & FALLBACK DATA (if people.xlsx is offline/unreachable)
+   CONFIG
    ================================================================ */
-var FALLBACK_PEOPLE_DATA = [
-  ["MATEO ASUMEN BOBILES","student","HH-001","9953992863","Scholar"],
-  ["JELSON V. BOBILES","parent","HH-001","9953992863","Father"],
-  ["ANGEL ALLAN CHELAN LEUS","committee","","","Committee"],
-  ["MARIA LUISA CASTRO","committee","","","Committee"]
-];
+
+/* Files tried in order. Case variants matter on GitHub Pages, which
+   serves from a Linux filesystem where filenames are case-sensitive. */
+var FILE_CANDIDATES = ["people.xlsx", "People.xlsx", "PEOPLE.xlsx"];
+var SHEET_NAMES = ["People", "Staff", "List"];
 
 var ROLE_LABELS = {
   committee:"Program Committee", liaison:"Farm Liaison", coordinator:"Community Lead",
@@ -247,7 +264,6 @@ var ROLE_MAP = {
   "parent":"parent","student":"student","scholar":"student","household":"parent"
 };
 
-/* Future-proof tool definitions across folders */
 var TOOLS = [
   { id:"attendance", title:"Attendance & Points", owner:"Documentation Lead",
     desc:"Shift log, sign-in and sign-out, task category, verification, and the points earned by each household.",
@@ -269,6 +285,21 @@ var TOOLS = [
     desc:"Tool inventory and condition, missing or damaged items, seed stock, consumables, and irrigation status.",
     href:"Tools/tools.html", status:"planned",
     roles:["committee","liaison","logistics","shift_lead","documentation"] }
+];
+
+/* Used only when people.xlsx can't be reached. Small on purpose — the
+   real list lives in the spreadsheet. This is what you see when the
+   file is missing or the network is down. */
+var FALLBACK_PEOPLE_DATA = [
+  ["ANGEL ALLAN CHELAN LEUS","committee","","","Committee"],
+  ["MARIA LUISA CASTRO","committee","","","Committee"],
+  ["FARM LIAISON (UNASSIGNED)","liaison","","","Placeholder"],
+  ["COMMUNITY LEAD (UNASSIGNED)","coordinator","","","Placeholder"],
+  ["DOCUMENTATION LEAD (UNASSIGNED)","documentation","","","Placeholder"],
+  ["FUND TREASURER (UNASSIGNED)","treasurer","","","Placeholder"],
+  ["LOGISTICS & TOOL MASTER (UNASSIGNED)","logistics","","","Placeholder"],
+  ["[SAMPLE STUDENT]","student","HH-000","","Scholar"],
+  ["[SAMPLE PARENT]","parent","HH-000","","Father"]
 ];
 
 var PEOPLE = [];
@@ -295,84 +326,189 @@ function normalizeRole(s){
 function roleLabel(r){ return ROLE_LABELS[r] || r; }
 function firstName(full){ return (full || "").split(" ")[0] || full || ""; }
 
-/* ================================================================
-   AUTO-DETECT TOOLS IN SUBFOLDERS (Future-proof)
-   ================================================================ */
-async function detectTools() {
-  await Promise.all(TOOLS.map(async function(t) {
-    try {
-      var res = await fetch(t.href, { method: 'HEAD' });
-      if (res.ok) {
-        t.status = "live";
-      } else {
-        var resGet = await fetch(t.href);
-        if (resGet.ok) t.status = "live";
-      }
-    } catch(e) {
-      // Local file:// protocol CORS fallback check
-      if (window.location.protocol === "file:") {
-        // Automatically mark built tools as live when opened locally via file://
-        if (t.id === "attendance") {
-          t.status = "live";
-        }
-      }
-    }
-  }));
-  if (currentUser) renderTools();
+function fallbackPeople(){
+  return FALLBACK_PEOPLE_DATA.map(function(row){
+    return {
+      name: normName(row[0]),
+      role: normalizeRole(row[1]),
+      hh: String(row[2] || "").trim(),
+      contact: String(row[3] || "").trim(),
+      type: String(row[4] || "").trim()
+    };
+  }).sort(function(a,b){ return a.name.localeCompare(b.name); });
 }
 
 /* ================================================================
-   FETCH & PARSE PEOPLE.XLSX
+   PARSE A WORKBOOK INTO PEOPLE
+   Scans the first 10 rows for the header. Tolerates title rows and
+   blank rows above it. Prefers a sheet named People / Staff / List,
+   otherwise falls back to the first sheet.
    ================================================================ */
-async function loadPeopleData() {
+function parseWorkbook(wb){
+  var sheets = wb.SheetNames || [];
+  if (!sheets.length) throw new Error("Workbook has no sheets.");
+
+  var sheetName = null;
+  for (var i = 0; i < SHEET_NAMES.length; i++){
+    if (sheets.indexOf(SHEET_NAMES[i]) !== -1){ sheetName = SHEET_NAMES[i]; break; }
+  }
+  if (!sheetName) sheetName = sheets[0];
+
+  var rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: 1, defval: "" });
+  if (!rows || rows.length < 2) throw new Error("No rows in " + sheetName + ".");
+
+  var hIdx = -1, idx = null;
+  for (var k = 0; k < Math.min(rows.length, 10); k++){
+    var head = rows[k].map(function(c){ return String(c === undefined || c === null ? "" : c).trim().toLowerCase(); });
+    var n = head.indexOf("full name");
+    if (n === -1) n = head.indexOf("name");
+    if (n !== -1){
+      hIdx = k;
+      idx = {
+        name:    n,
+        role:    head.indexOf("role"),
+        hh:      head.indexOf("household id"),
+        contact: head.indexOf("contact"),
+        type:    head.indexOf("type")
+      };
+      break;
+    }
+  }
+  if (hIdx === -1) throw new Error("No 'Full Name' column found.");
+
+  var out = [];
+  for (var i = hIdx + 1; i < rows.length; i++){
+    var r = rows[i] || [];
+    var name = String(r[idx.name] === undefined ? "" : r[idx.name]).trim();
+    if (!name) continue;
+    out.push({
+      name:    normName(name),
+      role:    normalizeRole(idx.role    !== -1 ? r[idx.role]    : ""),
+      hh:      idx.hh      !== -1 ? String(r[idx.hh]      || "").trim() : "",
+      contact: idx.contact !== -1 ? String(r[idx.contact] || "").trim() : "",
+      type:    idx.type    !== -1 ? String(r[idx.type]    || "").trim() : ""
+    });
+  }
+  if (!out.length) throw new Error("No people rows found.");
+  out.sort(function(a,b){ return a.name.localeCompare(b.name); });
+  return out;
+}
+
+/* ================================================================
+   LOAD PEOPLE.XLSX
+   Tries each filename variant, cache-busted. Overall 15s cap.
+   Falls through to the fallback list with a clear status message.
+   ================================================================ */
+function loadPeopleData(){
   var statusEl = document.getElementById("peopleStatus");
   var statusText = document.getElementById("peopleStatusText");
   statusEl.className = "data-status";
-  statusText.textContent = "Loading people.xlsx…";
+  statusText.textContent = "Looking for people.xlsx…";
 
-  try {
-    var response = await fetch('people.xlsx');
-    if (!response.ok) throw new Error('HTTP ' + response.status);
-    var buffer = await response.arrayBuffer();
-    var workbook = XLSX.read(new Uint8Array(buffer), { type: 'array' });
-    var sheet = workbook.Sheets[workbook.SheetNames[0]];
-    var rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+  if (typeof XLSX === "undefined" || typeof fetch !== "function"){
+    applyFallback("Excel reader unavailable");
+    return;
+  }
 
-    var out = [];
-    for (var i = 0; i < rows.length; i++) {
-      var r = rows[i];
-      if (!r || r.length === 0 || !r[0]) continue;
-      var col0 = String(r[0]).trim();
-      if (i === 0 && (col0.toLowerCase() === 'name' || col0.toLowerCase() === 'full name' || col0.toLowerCase().includes('name'))) {
-        continue;
-      }
-      out.push({
-        name:    normName(r[0]),
-        role:    normalizeRole(r[1]),
-        hh:      String(r[2] || "").trim(),
-        contact: String(r[3] || "").trim(),
-        type:    String(r[4] || "").trim()
-      });
-    }
+  var tried = [];
+  var settled = false;
 
-    if (out.length === 0) throw new Error('No records found in spreadsheet');
-
-    out.sort(function(a,b){ return a.name.localeCompare(b.name); });
-    PEOPLE = out;
-    statusEl.classList.add("live");
-    statusText.textContent = PEOPLE.length + " people loaded from people.xlsx";
+  function applyFallback(reason){
+    if (settled) return;
+    settled = true;
+    PEOPLE = fallbackPeople();
+    statusEl.className = "data-status warn";
+    statusText.textContent = reason;
     renderPeopleList();
+    showLoadError(reason, tried);
+  }
 
-  } catch(err) {
-    console.warn("Could not load people.xlsx directly (using fallback):", err);
-    statusEl.classList.remove("live");
-    statusText.textContent = "people.xlsx offline — using default roster";
-    
-    PEOPLE = FALLBACK_PEOPLE_DATA.map(function(row){
-      return { name: normName(row[0]), role: normalizeRole(row[1]), hh: row[2], contact: row[3], type: row[4] };
-    });
+  function applyLive(people, source){
+    if (settled) return;
+    settled = true;
+    PEOPLE = people;
+    statusEl.className = "data-status live";
+    statusText.textContent = PEOPLE.length + " people · " + source;
     renderPeopleList();
   }
+
+  var overallTimer = setTimeout(function(){ applyFallback("people.xlsx timed out"); }, 15000);
+
+  function attempt(i){
+    if (settled) return;
+    if (i >= FILE_CANDIDATES.length){
+      clearTimeout(overallTimer);
+      applyFallback("people.xlsx not found");
+      return;
+    }
+    var name = FILE_CANDIDATES[i];
+    var url = name + "?t=" + Date.now();
+    tried.push(name);
+
+    fetch(url, { cache: "no-store" })
+      .then(function(res){
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.arrayBuffer();
+      })
+      .then(function(buf){
+        if (settled) return;
+        var wb = XLSX.read(new Uint8Array(buf), { type: "array" });
+        var rows = parseWorkbook(wb);
+        clearTimeout(overallTimer);
+        applyLive(rows, name);
+      })
+      .catch(function(){ attempt(i + 1); });
+  }
+  attempt(0);
+}
+
+/* Show the diagnostic panel in the people list when load fails. */
+function showLoadError(reason, tried){
+  var list = document.getElementById("peopleList");
+  if (!list) return;
+  var detail;
+  if (reason === "people.xlsx timed out"){
+    detail = "The fetch never returned. Hard-refresh with Ctrl+Shift+R and try again.";
+  } else if (reason === "Excel reader unavailable"){
+    detail = "The SheetJS library didn't load from the CDN. Check your internet connection and reload.";
+  } else if (reason === "people.xlsx not found"){
+    detail = "Tried: " + (tried || []).join(", ") +
+             "\nPath: " + location.pathname +
+             "\nPut people.xlsx next to index.html. Linux servers are case-sensitive.";
+  } else {
+    detail = reason;
+  }
+  var banner = document.createElement("div");
+  banner.className = "people-empty";
+  banner.style.background = "var(--warn-soft)";
+  banner.style.border = "1px solid var(--warn)";
+  banner.style.borderRadius = "10px";
+  banner.style.padding = "14px 16px";
+  banner.style.textAlign = "left";
+  banner.style.fontSize = "12.5px";
+  banner.style.marginBottom = "12px";
+  banner.innerHTML = "<b style='color:var(--warn)'>" + esc(reason) + "</b>" +
+    "<div class='detail' style='color:var(--muted)'>" + esc(detail).replace(/\n/g, "<br>") + "</div>";
+  list.insertBefore(banner, list.firstChild);
+}
+
+/* ================================================================
+   TOOL AUTO-DETECTION
+   HEAD-requests each tool's HTML to see if it's been uploaded. If it
+   responds 200, the card flips from Planned to Live automatically.
+   ================================================================ */
+function detectTools(){
+  if (typeof fetch !== "function") return;
+  TOOLS.forEach(function(t){
+    fetch(t.href, { method: "HEAD" })
+      .then(function(res){
+        if (res.ok){
+          t.status = "live";
+          if (currentUser) renderTools();
+        }
+      })
+      .catch(function(){ /* file missing or file:// — stays planned */ });
+  });
 }
 
 /* ================================================================
@@ -383,10 +519,15 @@ function renderPeopleList(){
   var q = normName(document.getElementById("peopleSearch").value);
   var filtered = q ? PEOPLE.filter(function(p){ return p.name.indexOf(q) !== -1; }) : PEOPLE;
 
+  // Wipe any previous error banner before rendering the fresh list.
+  var old = list.querySelector(".people-empty, .people-error");
+  var errorBanner = old && old.classList.contains("people-error") ? old : null;
+  if (errorBanner) list.removeChild(errorBanner);
+
   if (!filtered.length){
     list.innerHTML =
       '<div class="people-empty"><b>No match for &ldquo;' + esc(q) + '&rdquo;.</b>' +
-      'Try a different spelling or clear your search.</div>';
+      'Try a different spelling, or clear the search.</div>';
     return;
   }
 
@@ -408,7 +549,6 @@ function signIn(person){
   showAllTools = false;
   sSet(SESSION_KEY, JSON.stringify(person));
   showHome();
-  detectTools(); // Re-check tool availability on sign-in
 }
 
 function signOut(){
@@ -421,9 +561,10 @@ function signOut(){
 }
 
 function showLogin(){
-  document.getElementById("loginView").hidden = false;
-  document.getElementById("loginView").style.opacity = "1";
-  document.getElementById("loginView").style.visibility = "visible";
+  var lv = document.getElementById("loginView");
+  lv.hidden = false;
+  lv.style.opacity = "1";
+  lv.style.visibility = "visible";
   document.getElementById("homeView").hidden = true;
   setTimeout(function(){
     var s = document.getElementById("peopleSearch");
@@ -432,10 +573,10 @@ function showLogin(){
 }
 
 function showHome(){
-  var loginView = document.getElementById("loginView");
-  loginView.style.opacity = "0";
-  loginView.style.visibility = "hidden";
-  setTimeout(function(){ loginView.hidden = true; }, 300);
+  var lv = document.getElementById("loginView");
+  lv.style.opacity = "0";
+  lv.style.visibility = "hidden";
+  setTimeout(function(){ lv.hidden = true; }, 300);
 
   document.getElementById("homeView").hidden = false;
   document.getElementById("whoamiName").textContent = currentUser.name;
@@ -445,9 +586,6 @@ function showHome(){
   renderLocalSection();
 }
 
-/* ================================================================
-   WELCOME & TOOLS
-   ================================================================ */
 function renderWelcome(){
   var u = currentUser;
   var fn = firstName(u.name);
@@ -561,9 +699,6 @@ function setTheme(t){
   if (icon) icon.innerHTML = t === "dark" ? "&#9788;" : "&#9789;";
 }
 
-/* ================================================================
-   WIRING & INIT
-   ================================================================ */
 function wireUp(){
   document.getElementById("peopleSearch").addEventListener("input", renderPeopleList);
   document.getElementById("peopleSearch").addEventListener("keydown", function(e){
@@ -573,7 +708,9 @@ function wireUp(){
     }
   });
   document.getElementById("switchBtn").addEventListener("click", signOut);
-  document.getElementById("reloadExcelBtn").addEventListener("click", loadPeopleData);
+  document.getElementById("reloadExcelBtn").addEventListener("click", function(){
+    loadPeopleData();
+  });
   document.getElementById("showAllBtn").addEventListener("click", function(){
     showAllTools = !showAllTools;
     renderTools();
@@ -589,22 +726,24 @@ function init(){
     setTheme(lGet("scholar-theme") || "light");
     wireUp();
 
-    // Load users and trigger tool detection
-    loadPeopleData().then(function(){
-      detectTools();
-      var saved = sGet(SESSION_KEY);
-      if (saved){
-        try {
-          var person = JSON.parse(saved);
-          if (person && person.name && person.role){
-            currentUser = person;
-            showHome();
-            return;
-          }
-        } catch(e){ /* ignore */ }
-      }
-      showLogin();
-    });
+    PEOPLE = fallbackPeople();
+    renderPeopleList();
+
+    loadPeopleData();
+    detectTools();
+
+    var saved = sGet(SESSION_KEY);
+    if (saved){
+      try {
+        var person = JSON.parse(saved);
+        if (person && person.name && person.role){
+          currentUser = person;
+          showHome();
+          return;
+        }
+      } catch(e){ /* corrupt entry, ignore */ }
+    }
+    showLogin();
 
   } catch(err){
     document.body.innerHTML =
@@ -616,11 +755,15 @@ function init(){
   }
 }
 
-if (document.readyState === "loading"){
-  document.addEventListener("DOMContentLoaded", init);
-} else {
-  init();
+function boot(){
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 }
+window.__startHub = boot;
+if (window.__xlsxReady) boot();
 </script>
 </body>
 </html>
