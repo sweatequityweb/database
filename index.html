@@ -4,121 +4,127 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ugnayan Gulayan — Program Hub</title>
+<!-- SheetJS for parsing people.xlsx -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
-  --bg:#f4f5f7;--surface:#fff;--surface-2:#fafbfc;--text:#111827;--muted:#6b7280;
-  --faint:#9ca3af;--border:#e5e7eb;--border-strong:#d1d5db;--accent:#2563eb;
-  --accent-soft:#eff4ff;--accent-text:#1d4ed8;--ok:#16a34a;--ok-soft:#ecfdf5;
+  --bg:#f8fafc;--surface:#ffffff;--surface-2:#f1f5f9;--text:#0f172a;--muted:#475569;
+  --faint:#94a3b8;--border:#e2e8f0;--border-strong:#cbd5e1;--accent:#2563eb;
+  --accent-soft:#eff6ff;--accent-text:#1d4ed8;--ok:#16a34a;--ok-soft:#f0fdf4;
   --warn:#d97706;--warn-soft:#fffbeb;
-  --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);
-  --shadow-lg:0 10px 40px rgba(16,24,40,.14);
-  --r:14px;--rs:8px;
+  --shadow:0 1px 3px rgba(15,23,42,.08),0 4px 12px rgba(15,23,42,.04);
+  --shadow-lg:0 20px 25px -5px rgba(15,23,42,.1),0 8px 10px -6px rgba(15,23,42,.1);
+  --r:16px;--rs:10px;
 }
 [data-theme="dark"]{
-  --bg:#0f1115;--surface:#171a21;--surface-2:#1d212a;--text:#e8eaed;--muted:#9aa3b2;
-  --faint:#6b7280;--border:#262b36;--border-strong:#333a48;--accent:#60a5fa;
-  --accent-soft:#1a2438;--accent-text:#93c5fd;--ok:#4ade80;--ok-soft:#142a1e;
-  --warn:#fbbf24;--warn-soft:#2a2214;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.35);
-  --shadow-lg:0 12px 44px rgba(0,0,0,.6);
+  --bg:#090d16;--surface:#111827;--surface-2:#1f2937;--text:#f3f4f6;--muted:#9ca3af;
+  --faint:#6b7280;--border:#374151;--border-strong:#4b5563;--accent:#60a5fa;
+  --accent-soft:#1e293b;--accent-text:#93c5fd;--ok:#4ade80;--ok-soft:#052e16;
+  --warn:#fbbf24;--warn-soft:#451a03;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.4);
+  --shadow-lg:0 20px 30px rgba(0,0,0,.7);
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s}
-.btn{font-family:inherit;font-size:13px;font-weight:550;border-radius:var(--rs);padding:8px 13px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:background .15s,border-color .15s}
-.btn:hover{background:var(--surface-2);border-color:var(--faint)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+.btn{font-family:inherit;font-size:13px;font-weight:600;border-radius:var(--rs);padding:9px 16px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:all .15s ease}
+.btn:hover{background:var(--surface-2);border-color:var(--accent);transform:translateY(-1px)}
 .btn-ghost{border-color:transparent;background:transparent}
 .btn-ghost:hover{background:var(--surface-2);border-color:var(--border)}
-.brand-mark{width:36px;height:36px;border-radius:10px;background:var(--accent);display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;letter-spacing:-.5px;flex:0 0 36px}
-.login-view{min-height:100vh;display:grid;place-items:center;padding:24px}
-.login-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-lg);padding:32px;width:min(520px,100%)}
-.login-brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}
-.brand-name{font-size:15px;font-weight:660;line-height:1.2}
-.brand-sub{font-size:11.5px;color:var(--muted)}
-.login-title{font-size:21px;font-weight:680;letter-spacing:-.4px;margin:0 0 8px}
-.login-desc{font-size:13.5px;color:var(--muted);margin:0 0 22px;line-height:1.6}
-.search-wrap{position:relative;margin-bottom:14px}
-.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:var(--faint);fill:none;stroke-width:2}
-input[type="search"]{font-family:inherit;font-size:14px;color:var(--text);background:var(--surface-2);border:1px solid var(--border-strong);border-radius:10px;padding:11px 14px 11px 36px;width:100%;outline:none;transition:border-color .15s,box-shadow .15s}
-input[type="search"]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.people-list{max-height:360px;overflow-y:auto}
-.person{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:8px;cursor:pointer;text-align:left;font-family:inherit;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:border-color .15s,background .15s}
-.person:hover{border-color:var(--accent);background:var(--accent-soft)}
+.brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#1d4ed8);display:grid;place-items:center;color:#fff;font-weight:700;font-size:15px;letter-spacing:-.5px;flex:0 0 40px;box-shadow:0 4px 12px rgba(37,99,235,.25)}
+
+/* Login Overlay */
+.login-view{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;padding:24px;transition:opacity .3s ease,visibility .3s ease}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow-lg);padding:40px;width:min(560px,100%);animation:slideUp .4s cubic-bezier(0.16, 1, 0.3, 1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.login-brand{display:flex;align-items:center;gap:14px;margin-bottom:32px}
+.brand-name{font-size:16px;font-weight:700;line-height:1.2}
+.brand-sub{font-size:12px;color:var(--muted)}
+.login-title{font-size:24px;font-weight:700;letter-spacing:-.5px;margin:0 0 8px}
+.login-desc{font-size:14px;color:var(--muted);margin:0 0 24px;line-height:1.6}
+.search-wrap{position:relative;margin-bottom:16px}
+.search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--faint);fill:none;stroke-width:2}
+input[type="search"]{font-family:inherit;font-size:14px;color:var(--text);background:var(--surface-2);border:1px solid var(--border-strong);border-radius:12px;padding:12px 16px 12px 42px;width:100%;outline:none;transition:all .2s}
+input[type="search"]:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);background:var(--surface)}
+.people-list{max-height:360px;overflow-y:auto;padding-right:4px}
+.people-list::-webkit-scrollbar{width:6px}
+.people-list::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px}
+.person{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:8px;cursor:pointer;text-align:left;font-family:inherit;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:all .15s}
+.person:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateX(2px)}
 .person:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.person-name{font-weight:640;font-size:13px;letter-spacing:.3px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.person-role{font-size:11px;color:var(--muted);background:var(--surface-2);padding:3px 10px;border-radius:100px;border:1px solid var(--border);white-space:nowrap;flex:0 0 auto}
-.person:hover .person-role{background:var(--surface);border-color:transparent}
-.people-empty{text-align:center;padding:44px 20px;color:var(--muted);font-size:13.5px;line-height:1.65}
-.people-empty b{display:block;color:var(--text);font-size:14.5px;font-weight:640;margin-bottom:8px}
-.people-empty code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface-2);padding:2px 7px;border-radius:5px;font-size:12.5px;color:var(--accent-text);border:1px solid var(--border)}
-.people-empty .detail{margin-top:12px;font-size:11.5px;color:var(--faint);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-all}
-.login-foot{margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
-.data-status{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:100px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);white-space:nowrap}
-.data-status .dot{width:7px;height:7px;border-radius:50%;background:var(--faint);flex:0 0 7px}
+.person-name{font-weight:650;font-size:13.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.person-role{font-size:11.5px;color:var(--muted);background:var(--surface-2);padding:4px 12px;border-radius:100px;border:1px solid var(--border);white-space:nowrap;flex:0 0 auto}
+.person:hover .person-role{background:var(--surface);border-color:transparent;color:var(--accent-text)}
+.people-empty{text-align:center;padding:48px 20px;color:var(--muted);font-size:14px;line-height:1.6}
+.people-empty b{display:block;color:var(--text);font-size:15px;font-weight:650;margin-bottom:6px}
+.login-foot{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.data-status{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted)}
+.data-status .dot{width:8px;height:8px;border-radius:50%;background:var(--faint)}
 .data-status.live .dot{background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
-.data-status.embedded .dot{background:var(--warn);box-shadow:0 0 0 3px var(--warn-soft)}
+
+/* Home View */
 .home-view{min-height:100vh;display:flex;flex-direction:column}
-.topbar{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:10px}
-.brand-text h1{font-size:15px;margin:0;font-weight:660;letter-spacing:-.2px}
-.brand-text p{margin:0;font-size:11.5px;color:var(--muted)}
+.topbar{position:sticky;top:0;z-index:40;background:var(--surface);backdrop-filter:blur(8px);background:rgba(255,255,255,.85);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;gap:16px}
+[data-theme="dark"] .topbar{background:rgba(17,24,39,.85)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-text h1{font-size:16px;margin:0;font-weight:700;letter-spacing:-.2px}
+.brand-text p{margin:0;font-size:12px;color:var(--muted)}
 .spacer{flex:1}
-.whoami{display:inline-flex;align-items:baseline;gap:8px;padding:7px 14px;background:var(--accent-soft);border-radius:100px;font-size:12px;max-width:300px}
-.whoami-name{font-weight:680;color:var(--accent-text);letter-spacing:.4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.whoami-role{color:var(--accent-text);opacity:.72;white-space:nowrap;font-size:11px}
-main{max-width:1200px;margin:0 auto;padding:40px 24px 60px;flex:1;width:100%}
-.welcome{margin-bottom:42px}
-.welcome h2{font-size:32px;font-weight:680;letter-spacing:-.9px;line-height:1.15;margin:0 0 10px}
-.welcome p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.65;max-width:640px}
-.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.meta-chip{font-size:12px;font-weight:600;padding:6px 13px;border-radius:100px;background:var(--surface);border:1px solid var(--border);color:var(--muted)}
-.meta-chip b{color:var(--text);font-weight:650;margin-left:2px}
-.section-head{display:flex;align-items:center;gap:12px;margin:0 0 16px}
-.section-head h3{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin:0;flex:0 0 auto}
+.whoami{display:inline-flex;align-items:center;gap:10px;padding:6px 16px;background:var(--accent-soft);border:1px solid var(--border);border-radius:100px;font-size:13px;max-width:320px}
+.whoami-name{font-weight:700;color:var(--accent-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.whoami-role{color:var(--muted);white-space:nowrap;font-size:11.5px;background:var(--surface);padding:2px 8px;border-radius:6px}
+main{max-width:1280px;margin:0 auto;padding:48px 32px 64px;flex:1;width:100%}
+.welcome{margin-bottom:48px}
+.welcome h2{font-size:36px;font-weight:750;letter-spacing:-1px;line-height:1.15;margin:0 0 12px}
+.welcome p{margin:0;color:var(--muted);font-size:15px;line-height:1.65;max-width:680px}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.meta-chip{font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:100px;background:var(--surface);border:1px solid var(--border);color:var(--muted);box-shadow:var(--shadow)}
+.meta-chip b{color:var(--text);font-weight:700;margin-left:4px}
+.section-head{display:flex;align-items:center;gap:14px;margin:0 0 20px}
+.section-head h3{font-size:12px;font-weight:750;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:0;flex:0 0 auto}
 .section-head .rule{flex:1;height:1px;background:var(--border)}
-.section-head .count{font-size:11.5px;color:var(--faint);flex:0 0 auto}
-.section-head .btn{flex:0 0 auto;padding:5px 10px;font-size:12px}
-section{margin-bottom:40px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:border-color .15s,box-shadow .15s,transform .12s}
+.section-head .count{font-size:12px;color:var(--faint);flex:0 0 auto}
+section{margin-bottom:48px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:all .2s ease}
 a.card{text-decoration:none;color:inherit;cursor:pointer}
-a.card::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent);opacity:0;transition:opacity .15s}
-a.card:hover{border-color:var(--border-strong);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+a.card::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--accent);opacity:0;transition:opacity .2s}
+a.card:hover{border-color:var(--border-strong);box-shadow:var(--shadow-lg);transform:translateY(-3px)}
 a.card:hover::before{opacity:1}
 a.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.card.planned{background:var(--surface-2);box-shadow:none;opacity:.82}
-.card-top{display:flex;align-items:flex-start;gap:13px;margin-bottom:13px}
-.card-icon{width:42px;height:42px;flex:0 0 42px;border-radius:11px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-text)}
-.card-icon svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card.planned{background:var(--surface-2);box-shadow:none;opacity:.8}
+.card-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
+.card-icon{width:46px;height:46px;flex:0 0 46px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-text)}
+.card-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .card.planned .card-icon{background:var(--surface);color:var(--faint);border:1px solid var(--border)}
-.card-title{font-size:15px;font-weight:640;letter-spacing:-.2px;line-height:1.3;margin:0 0 4px}
-.card-owner{font-size:11.5px;color:var(--faint);line-height:1.4}
-.card-desc{font-size:12.8px;color:var(--muted);line-height:1.55;margin:0 0 16px;flex:1}
-.card-foot{display:flex;align-items:center;gap:8px;padding-top:13px;border-top:1px solid var(--border)}
-.badge{font-size:10.5px;font-weight:650;letter-spacing:.3px;padding:4px 10px;border-radius:100px;display:inline-flex;align-items:center;gap:5px}
+.card-title{font-size:16px;font-weight:700;letter-spacing:-.2px;line-height:1.3;margin:0 0 4px}
+.card-owner{font-size:12px;color:var(--faint);line-height:1.4}
+.card-desc{font-size:13.5px;color:var(--muted);line-height:1.6;margin:0 0 20px;flex:1}
+.card-foot{display:flex;align-items:center;gap:10px;padding-top:16px;border-top:1px solid var(--border)}
+.badge{font-size:11px;font-weight:700;letter-spacing:.3px;padding:4px 12px;border-radius:100px;display:inline-flex;align-items:center;gap:6px}
 .badge-live{background:var(--ok-soft);color:var(--ok)}
 .badge-live .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
 .badge-local{background:var(--warn-soft);color:var(--warn)}
 .badge-local .dot{width:6px;height:6px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 3px var(--warn-soft)}
 .badge-planned{background:var(--surface);color:var(--faint);border:1px solid var(--border)}
-.open-link{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--accent-text);display:inline-flex;align-items:center;gap:5px}
-.open-link svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.empty{grid-column:1/-1;text-align:center;padding:52px 20px;color:var(--muted);background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:var(--r);font-size:13.5px;line-height:1.6}
-footer{max-width:1200px;margin:0 auto;width:100%;padding:24px 24px 44px;border-top:1px solid var(--border);font-size:12px;color:var(--faint);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.open-link{margin-left:auto;font-size:13px;font-weight:650;color:var(--accent-text);display:inline-flex;align-items:center;gap:6px}
+.open-link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);background:var(--surface-2);border:2px dashed var(--border-strong);border-radius:var(--r);font-size:14px;line-height:1.6}
+footer{max-width:1280px;margin:0 auto;width:100%;padding:32px 32px 48px;border-top:1px solid var(--border);font-size:12.5px;color:var(--faint);display:flex;gap:16px;flex-wrap:wrap;align-items:center}
 @media (max-width:760px){
-  .topbar{padding:12px 16px;gap:8px}
+  .topbar{padding:12px 16px}
   .brand-text p,.whoami-role{display:none}
-  .whoami{max-width:160px;padding:6px 10px}
-  main{padding:28px 16px 50px}
-  .welcome h2{font-size:24px}
+  .whoami{max-width:160px;padding:6px 12px}
+  main{padding:32px 16px}
+  .welcome h2{font-size:26px}
   .grid{grid-template-columns:1fr}
   .login-card{padding:24px}
-  .login-title{font-size:19px}
-  .people-list{max-height:300px}
+  .login-title{font-size:20px}
 }
 </style>
 </head>
 <body>
 
+<!-- Login Overlay / Tab -->
 <div class="login-view" id="loginView">
   <div class="login-card">
     <div class="login-brand">
@@ -129,21 +135,23 @@ footer{max-width:1200px;margin:0 auto;width:100%;padding:24px 24px 44px;border-t
       </div>
     </div>
     <h1 class="login-title">Who's using the tools today?</h1>
-    <p class="login-desc">Pick your name from the list. You'll stay signed in until you close this browser tab.</p>
+    <p class="login-desc">Select your name from the directory loaded from <b>people.xlsx</b>. You'll stay signed in until you switch users.</p>
     <div class="search-wrap">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
       <input type="search" id="peopleSearch" placeholder="Search your name…" autocomplete="off" autofocus>
     </div>
     <div class="people-list" id="peopleList"></div>
     <div class="login-foot">
-      <span class="data-status embedded" id="peopleStatus">
+      <span class="data-status" id="peopleStatus">
         <span class="dot"></span>
-        <span id="peopleStatusText">Starting…</span>
+        <span id="peopleStatusText">Loading people.xlsx…</span>
       </span>
+      <button class="btn btn-ghost" id="reloadExcelBtn" type="button" style="font-size:11.5px;padding:6px 10px">Retry File</button>
     </div>
   </div>
 </div>
 
+<!-- Rest of the Site (Revealed after login) -->
 <div class="home-view" id="homeView" hidden>
   <header class="topbar">
     <div class="brand">
@@ -212,34 +220,15 @@ footer{max-width:1200px;margin:0 auto;width:100%;padding:24px 24px 44px;border-t
 </div>
 
 <script>
-(function(){
-  var done = false;
-  function finish(ok){
-    if (done) return;
-    done = true;
-    window.__xlsxReady = true;
-    window.__xlsxOk = ok;
-    if (typeof window.__startHub === "function") window.__startHub();
-  }
-  setTimeout(function(){ finish(false); }, 6000);
-  var s = document.createElement("script");
-  s.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
-  s.onload = function(){ finish(true); };
-  s.onerror = function(){ finish(false); };
-  document.head.appendChild(s);
-})();
-</script>
-
-<script>
 /* ================================================================
-   CONFIG
+   CONFIG & FALLBACK DATA (if people.xlsx is offline/unreachable)
    ================================================================ */
-
-/* Files tried in order, from the same folder as this page.
-   Case variants cover Linux-hosted servers (GitHub Pages) where
-   "people.xlsx" and "People.xlsx" are different files. */
-var PEOPLE_CANDIDATES = ["people.xlsx", "People.xlsx", "PEOPLE.xlsx"];
-var PEOPLE_SHEETS = ["People", "Staff", "List"];
+var FALLBACK_PEOPLE_DATA = [
+  ["MATEO ASUMEN BOBILES","student","HH-001","9953992863","Scholar"],
+  ["JELSON V. BOBILES","parent","HH-001","9953992863","Father"],
+  ["ANGEL ALLAN CHELAN LEUS","committee","","","Committee"],
+  ["MARIA LUISA CASTRO","committee","","","Committee"]
+];
 
 var ROLE_LABELS = {
   committee:"Program Committee", liaison:"Farm Liaison", coordinator:"Community Lead",
@@ -247,18 +236,16 @@ var ROLE_LABELS = {
   logistics:"Logistics & Tool Master", shift_lead:"Parent Shift Lead",
   parent:"Parent", student:"Student"
 };
-
 var ROLE_MAP = {
   "committee":"committee","program committee":"committee",
   "liaison":"liaison","farm liaison":"liaison",
   "coordinator":"coordinator","community lead":"coordinator","scholar coordinator":"coordinator",
   "documentation":"documentation","documentation lead":"documentation",
   "treasurer":"treasurer","fund treasurer":"treasurer",
-  "logistics":"logistics","logistics & tool master":"logistics","logistics and tool master":"logistics","tool master":"logistics",
+  "logistics":"logistics","logistics & tool master":"logistics","tool master":"logistics",
   "shift lead":"shift_lead","parent shift lead":"shift_lead",
   "parent":"parent","student":"student","scholar":"student","household":"parent"
 };
-
 var TOOLS = [
   { id:"attendance", title:"Attendance & Points", owner:"Documentation Lead",
     desc:"Shift log, sign-in and sign-out, task category, verification, and the points earned by each household.",
@@ -282,25 +269,9 @@ var TOOLS = [
     roles:["committee","liaison","logistics","shift_lead","documentation"] }
 ];
 
-var STARTER_PEOPLE = [
-  { name:"[PROGRAM COMMITTEE]", role:"committee" },
-  { name:"[FARM LIAISON]", role:"liaison" },
-  { name:"[COMMUNITY LEAD]", role:"coordinator" },
-  { name:"[DOCUMENTATION LEAD]", role:"documentation" },
-  { name:"[FUND TREASURER]", role:"treasurer" },
-  { name:"[LOGISTICS MASTER]", role:"logistics" },
-  { name:"[SHIFT LEAD]", role:"shift_lead" },
-  { name:"[STUDENT]", role:"student" },
-  { name:"[PARENT]", role:"parent" }
-];
-
-/* ================================================================
-   STATE
-   ================================================================ */
 var PEOPLE = [];
 var currentUser = null;
 var showAllTools = false;
-var peopleLoaded = false;
 var SESSION_KEY = "ug-current-user";
 
 function sGet(k){ try { return window.sessionStorage.getItem(k); } catch(e){ return null; } }
@@ -309,9 +280,6 @@ function sClear(k){ try { window.sessionStorage.removeItem(k); } catch(e){} }
 function lGet(k){ try { return window.localStorage.getItem(k); } catch(e){ return null; } }
 function lSet(k,v){ try { window.localStorage.setItem(k,v); } catch(e){} }
 
-/* ================================================================
-   HELPERS
-   ================================================================ */
 function esc(s){
   return (s === undefined || s === null ? "" : String(s))
     .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
@@ -326,128 +294,73 @@ function roleLabel(r){ return ROLE_LABELS[r] || r; }
 function firstName(full){ return (full || "").split(" ")[0] || full || ""; }
 
 /* ================================================================
-   PEOPLE — parsing
+   FETCH & PARSE PEOPLE.XLSX
    ================================================================ */
-function rowsToPeople(rows){
-  if (!rows || rows.length < 2) throw new Error("The list has no people in it.");
-  var hIdx = -1, idx = null;
-  for (var k = 0; k < Math.min(rows.length, 5); k++){
-    var head = rows[k].map(function(h){ return String(h === undefined || h === null ? "" : h).trim().toLowerCase(); });
-    var n = head.indexOf("full name");
-    if (n === -1) n = head.indexOf("name");
-    if (n !== -1){
-      hIdx = k;
-      idx = {
-        name: n, role: head.indexOf("role"), pod: head.indexOf("pod"),
-        contact: head.indexOf("contact"), type: head.indexOf("type"),
-        hh: head.indexOf("household id")
-      };
-      break;
-    }
-  }
-  if (hIdx === -1) throw new Error("Couldn't find a 'Full Name' column in people.xlsx.");
-  var out = [];
-  for (var i = hIdx + 1; i < rows.length; i++){
-    var r = rows[i];
-    var name = normName(r[idx.name]);
-    if (!name) continue;
-    out.push({
-      name: name,
-      role:    idx.role    !== -1 ? normalizeRole(r[idx.role])          : "parent",
-      pod:     idx.pod     !== -1 ? String(r[idx.pod]     || "").trim() : "",
-      contact: idx.contact !== -1 ? String(r[idx.contact] || "").trim() : "",
-      type:    idx.type    !== -1 ? String(r[idx.type]    || "").trim() : "",
-      hh:      idx.hh      !== -1 ? String(r[idx.hh]      || "").trim() : ""
-    });
-  }
-  if (!out.length) throw new Error("No people found under the header row.");
-  out.sort(function(a,b){ return a.name.localeCompare(b.name); });
-  return out;
-}
+async function loadPeopleData() {
+  var statusEl = document.getElementById("peopleStatus");
+  var statusText = document.getElementById("peopleStatusText");
+  statusEl.className = "data-status";
+  statusText.textContent = "Loading people.xlsx…";
 
-function workbookToPeople(wb){
-  var sheets = wb.SheetNames || [];
-  if (!sheets.length) throw new Error("The workbook has no sheets.");
-  var sheet = null;
-  for (var i = 0; i < PEOPLE_SHEETS.length; i++){
-    if (sheets.indexOf(PEOPLE_SHEETS[i]) !== -1){ sheet = PEOPLE_SHEETS[i]; break; }
-  }
-  if (!sheet) sheet = sheets[0];
-  var rows = XLSX.utils.sheet_to_json(wb.Sheets[sheet], { header: 1, defval: "" });
-  return rowsToPeople(rows);
-}
+  try {
+    var response = await fetch('people.xlsx');
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    var buffer = await response.arrayBuffer();
+    var workbook = XLSX.read(new Uint8Array(buffer), { type: 'array' });
+    var sheet = workbook.Sheets[workbook.SheetNames[0]];
+    var rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-/* Try each filename variant in order. Cache-bust with a query string
-   so a stale 404 from an earlier deploy doesn't stick. */
-function loadPeople(){
-  return new Promise(function(resolve){
-    var settled = false;
-    function done(r){ if (settled) return; settled = true; resolve(r); }
-
-    var timer = setTimeout(function(){ done({ ok:false, reason:"timeout" }); }, 12000);
-
-    if (location.protocol === "file:"){
-      clearTimeout(timer);
-      return done({ ok:false, reason:"file-protocol" });
-    }
-    if (typeof XLSX === "undefined" || typeof fetch !== "function"){
-      clearTimeout(timer);
-      return done({ ok:false, reason:"no-xlsx" });
-    }
-
-    var tried = [];
-    function attempt(i){
-      if (i >= PEOPLE_CANDIDATES.length){
-        clearTimeout(timer);
-        return done({ ok:false, reason:"not-found", tried: tried.join(", ") });
+    var out = [];
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      if (!r || r.length === 0 || !r[0]) continue;
+      var col0 = String(r[0]).trim();
+      // Skip header rows if present
+      if (i === 0 && (col0.toLowerCase() === 'name' || col0.toLowerCase() === 'full name' || col0.toLowerCase().includes('name'))) {
+        continue;
       }
-      var name = PEOPLE_CANDIDATES[i];
-      var url = name + "?t=" + Date.now();
-      tried.push(name);
-      fetch(url, { cache: "no-store" })
-        .then(function(res){
-          if (!res.ok) throw new Error("HTTP " + res.status);
-          return res.arrayBuffer();
-        })
-        .then(function(buf){
-          var wb = XLSX.read(new Uint8Array(buf), { type: "array" });
-          clearTimeout(timer);
-          done({ ok:true, people: workbookToPeople(wb), source: name });
-        })
-        .catch(function(){ attempt(i + 1); });
+      out.push({
+        name:    normName(r[0]),
+        role:    normalizeRole(r[1]),
+        hh:      String(r[2] || "").trim(),
+        contact: String(r[3] || "").trim(),
+        type:    String(r[4] || "").trim()
+      });
     }
-    attempt(0);
-  });
+
+    if (out.length === 0) throw new Error('No records found in spreadsheet');
+
+    out.sort(function(a,b){ return a.name.localeCompare(b.name); });
+    PEOPLE = out;
+    statusEl.classList.add("live");
+    statusText.textContent = PEOPLE.length + " people loaded from people.xlsx";
+    renderPeopleList();
+
+  } catch(err) {
+    console.warn("Could not load people.xlsx directly (using fallback):", err);
+    statusEl.classList.remove("live");
+    statusText.textContent = "people.xlsx offline — using default roster";
+    
+    // Fallback parser
+    PEOPLE = FALLBACK_PEOPLE_DATA.map(function(row){
+      return { name: normName(row[0]), role: normalizeRole(row[1]), hh: row[2], contact: row[3], type: row[4] };
+    });
+    renderPeopleList();
+  }
 }
 
 /* ================================================================
-   LOGIN — render
+   LOGIN UI & SIGN IN / OUT
    ================================================================ */
 function renderPeopleList(){
   var list = document.getElementById("peopleList");
   var q = normName(document.getElementById("peopleSearch").value);
-
-  if (!peopleLoaded){
-    list.innerHTML =
-      '<div class="people-empty">' +
-      '<b>Looking for people.xlsx…</b>' +
-      'If this stays on screen, the file isn\'t in the same folder as this page.' +
-      '</div>';
-    return;
-  }
-
   var filtered = q ? PEOPLE.filter(function(p){ return p.name.indexOf(q) !== -1; }) : PEOPLE;
 
-  if (!PEOPLE.length){
-    list.innerHTML =
-      '<div class="people-empty"><b>people.xlsx is empty.</b>' +
-      'Add rows with a <code>Full Name</code> and <code>Role</code> column, then refresh.</div>';
-    return;
-  }
   if (!filtered.length){
     list.innerHTML =
       '<div class="people-empty"><b>No match for &ldquo;' + esc(q) + '&rdquo;.</b>' +
-      'Try a different spelling, or clear the search.</div>';
+      'Try a different spelling or clear your search.</div>';
     return;
   }
 
@@ -464,58 +377,13 @@ function renderPeopleList(){
   });
 }
 
-/* Shown after a failed load. Includes the URLs that were tried
-   so the failure is diagnosable instead of a mystery. */
-function renderLoadFailure(result){
-  var list = document.getElementById("peopleList");
-  var msg, detail;
-
-  if (result.reason === "file-protocol"){
-    msg = "Local file access is blocked by your browser.";
-    detail = "This page was opened by double-clicking (file://). Browsers " +
-             "forbid a local page from reading sibling files. Open it through " +
-             "a local server instead — start-viewer.bat on Windows.";
-  } else if (result.reason === "no-xlsx"){
-    msg = "The Excel reader didn't load.";
-    detail = "The SheetJS library couldn't be fetched. Check your internet " +
-             "connection and reload.";
-  } else if (result.reason === "timeout"){
-    msg = "people.xlsx timed out.";
-    detail = "The fetch never returned. Check the file is present and try a " +
-             "hard refresh (Ctrl+Shift+R).";
-  } else if (result.reason === "not-found"){
-    msg = "people.xlsx not found in this folder.";
-    detail = "Tried: " + (result.tried || "people.xlsx") +
-             "\nCurrent URL path: " + location.pathname +
-             "\nMake sure the file sits next to index.html, and check the " +
-             "filename case matches exactly (Linux servers are case-sensitive).";
-  } else {
-    msg = "Couldn't load people.xlsx.";
-    detail = "Reason: " + (result.reason || "unknown");
-  }
-
-  list.innerHTML =
-    '<div class="people-empty"><b>' + esc(msg) + '</b>' +
-    '<span class="detail">' + esc(detail).replace(/\n/g, "<br>") + '</span></div>';
-}
-
-function setPeopleStatus(kind, text){
-  var w = document.getElementById("peopleStatus");
-  var t = document.getElementById("peopleStatusText");
-  if (!w || !t) return;
-  w.className = "data-status " + kind;
-  t.textContent = text;
-}
-
-/* ================================================================
-   SIGN IN / OUT
-   ================================================================ */
 function signIn(person){
   currentUser = person;
   showAllTools = false;
   sSet(SESSION_KEY, JSON.stringify(person));
   showHome();
 }
+
 function signOut(){
   currentUser = null;
   showAllTools = false;
@@ -525,19 +393,24 @@ function signOut(){
   showLogin();
 }
 
-/* ================================================================
-   VIEWS
-   ================================================================ */
 function showLogin(){
   document.getElementById("loginView").hidden = false;
+  document.getElementById("loginView").style.opacity = "1";
+  document.getElementById("loginView").style.visibility = "visible";
   document.getElementById("homeView").hidden = true;
   setTimeout(function(){
     var s = document.getElementById("peopleSearch");
     if (s) s.focus();
-  }, 40);
+  }, 50);
 }
+
 function showHome(){
-  document.getElementById("loginView").hidden = true;
+  // Make login tab disappear completely
+  var loginView = document.getElementById("loginView");
+  loginView.style.opacity = "0";
+  loginView.style.visibility = "hidden";
+  setTimeout(function(){ loginView.hidden = true; }, 300);
+
   document.getElementById("homeView").hidden = false;
   document.getElementById("whoamiName").textContent = currentUser.name;
   document.getElementById("whoamiRole").textContent = roleLabel(currentUser.role);
@@ -547,7 +420,7 @@ function showHome(){
 }
 
 /* ================================================================
-   WELCOME
+   WELCOME & TOOLS
    ================================================================ */
 function renderWelcome(){
   var u = currentUser;
@@ -559,7 +432,6 @@ function renderWelcome(){
     sub = "Welcome to the Ugnayan Gulayan program hub. Your household information and tools are below.";
     chips.push('<span class="meta-chip">Role <b>Student</b></span>');
     if (u.hh)      chips.push('<span class="meta-chip">Household <b>' + esc(u.hh) + '</b></span>');
-    if (u.pod)     chips.push('<span class="meta-chip">Pod <b>' + esc(u.pod) + '</b></span>');
     if (u.contact) chips.push('<span class="meta-chip">Contact <b>' + esc(u.contact) + '</b></span>');
   } else if (u.role === "parent"){
     title = "Kumusta, " + fn + ".";
@@ -567,7 +439,6 @@ function renderWelcome(){
     chips.push('<span class="meta-chip">Role <b>Parent</b></span>');
     if (u.type)    chips.push('<span class="meta-chip">Relation <b>' + esc(u.type) + '</b></span>');
     if (u.hh)      chips.push('<span class="meta-chip">Household <b>' + esc(u.hh) + '</b></span>');
-    if (u.pod)     chips.push('<span class="meta-chip">Pod <b>' + esc(u.pod) + '</b></span>');
     if (u.contact) chips.push('<span class="meta-chip">Contact <b>' + esc(u.contact) + '</b></span>');
   } else {
     title = "Welcome, " + fn + ".";
@@ -580,24 +451,16 @@ function renderWelcome(){
   document.getElementById("metaRow").innerHTML = chips.join("");
 }
 
-/* ================================================================
-   TOOL CARDS
-   ================================================================ */
 function iconFor(id){
   switch (id){
     case "attendance":
-      return '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/>' +
-        '<path d="M8 2v4M16 2v4M3 10h18"/><path d="M9 15l2 2 4-4"/></svg>';
+      return '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="M9 15l2 2 4-4"/></svg>';
     case "farm":
-      return '<svg viewBox="0 0 24 24"><path d="M12 21V9"/>' +
-        '<path d="M12 9c0-3 2-5 5-5 0 3-2 5-5 5z"/>' +
-        '<path d="M12 13c0-3-2-5-5-5 0 3 2 5 5 5z"/></svg>';
+      return '<svg viewBox="0 0 24 24"><path d="M12 21V9"/><path d="M12 9c0-3 2-5 5-5 0 3-2 5-5 5z"/><path d="M12 13c0-3-2-5-5-5 0 3 2 5 5 5z"/></svg>';
     case "fund":
-      return '<svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/>' +
-        '<path d="M2 10h20"/><circle cx="12" cy="14.5" r="2.5"/></svg>';
+      return '<svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/><circle cx="12" cy="14.5" r="2.5"/></svg>';
     case "exceptions":
-      return '<svg viewBox="0 0 24 24"><path d="M12 3l9.5 16.5H2.5L12 3z"/>' +
-        '<path d="M12 10v4M12 17.5v.5"/></svg>';
+      return '<svg viewBox="0 0 24 24"><path d="M12 3l9.5 16.5H2.5L12 3z"/><path d="M12 10v4M12 17.5v.5"/></svg>';
     case "tools":
       return '<svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 01-5.4 5.4l-6 6a1.4 1.4 0 002 2l6-6a4 4 0 015.4-5.4l-2.6 2.6 1.6 1.6 2.6-2.6z"/></svg>';
     default:
@@ -657,7 +520,6 @@ function renderTools(){
   grid.innerHTML = visible.map(toolCard).join("");
 }
 
-/* Scholar Database stays local — hidden on public hostnames. */
 function renderLocalSection(){
   var h = location.hostname;
   var isLocal =
@@ -666,9 +528,6 @@ function renderLocalSection(){
   document.getElementById("localSection").hidden = !isLocal;
 }
 
-/* ================================================================
-   THEME
-   ================================================================ */
 function setTheme(t){
   document.documentElement.setAttribute("data-theme", t);
   lSet("scholar-theme", t);
@@ -677,7 +536,7 @@ function setTheme(t){
 }
 
 /* ================================================================
-   WIRING
+   WIRING & INIT
    ================================================================ */
 function wireUp(){
   document.getElementById("peopleSearch").addEventListener("input", renderPeopleList);
@@ -688,6 +547,7 @@ function wireUp(){
     }
   });
   document.getElementById("switchBtn").addEventListener("click", signOut);
+  document.getElementById("reloadExcelBtn").addEventListener("click", loadPeopleData);
   document.getElementById("showAllBtn").addEventListener("click", function(){
     showAllTools = !showAllTools;
     renderTools();
@@ -698,87 +558,42 @@ function wireUp(){
   });
 }
 
-/* ================================================================
-   INIT
-   ================================================================ */
 function init(){
   try {
     setTheme(lGet("scholar-theme") || "light");
     wireUp();
-    renderPeopleList();
 
-    if (!window.__xlsxOk){
-      PEOPLE = STARTER_PEOPLE.slice();
-      peopleLoaded = true;
-      setPeopleStatus("embedded", "Offline — Excel reader unavailable");
-      renderPeopleList();
-      showLogin();
-      return;
-    }
-
-    setPeopleStatus("embedded", "Looking for people.xlsx…");
-
-    var saved = sGet(SESSION_KEY);
-    if (saved){
-      try {
-        var person = JSON.parse(saved);
-        if (person && person.name && person.role){
-          currentUser = person;
-          showHome();
-        }
-      } catch(e){ /* corrupt entry, ignore */ }
-    } else {
-      showLogin();
-    }
-
-    loadPeople().then(function(result){
-      if (result.ok){
-        PEOPLE = result.people;
-        peopleLoaded = true;
-        setPeopleStatus("live", "Live · " + result.source);
-        renderPeopleList();
-
-        if (currentUser){
-          var match = null;
-          for (var i = 0; i < PEOPLE.length; i++){
-            if (PEOPLE[i].name === currentUser.name){ match = PEOPLE[i]; break; }
+    // Load users from people.xlsx
+    loadPeopleData().then(function(){
+      var saved = sGet(SESSION_KEY);
+      if (saved){
+        try {
+          var person = JSON.parse(saved);
+          if (person && person.name && person.role){
+            currentUser = person;
+            showHome();
+            return;
           }
-          if (match){ currentUser = match; showHome(); }
-        }
-      } else {
-        PEOPLE = STARTER_PEOPLE.slice();
-        peopleLoaded = true;
-        var short;
-        if (result.reason === "file-protocol")     short = "Open via local server";
-        else if (result.reason === "timeout")       short = "people.xlsx timed out";
-        else if (result.reason === "no-xlsx")       short = "Excel reader unavailable";
-        else if (result.reason === "not-found")     short = "people.xlsx not found";
-        else                                        short = "people.xlsx not loaded";
-        setPeopleStatus("embedded", short);
-        renderLoadFailure(result);
+        } catch(e){ /* ignore */ }
       }
+      showLogin();
     });
 
   } catch(err){
     document.body.innerHTML =
       '<div style="max-width:680px;margin:60px auto;padding:24px;font-family:system-ui,sans-serif">' +
       '<h1 style="color:#b91c1c;font-size:18px;margin:0 0 8px">Something went wrong while starting the hub</h1>' +
-      '<p style="color:#555;font-size:14px;margin:0 0 12px">Copy the message below and send it back:</p>' +
       '<pre style="background:#f4f4f5;padding:14px;border-radius:8px;font-size:12px;overflow:auto;white-space:pre-wrap">' +
       String(err && err.stack ? err.stack : err) +
       '</pre></div>';
   }
 }
 
-function boot(){
-  if (document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
+if (document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
 }
-window.__startHub = boot;
-if (window.__xlsxReady) boot();
 </script>
 </body>
 </html>
