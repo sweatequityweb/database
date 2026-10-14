@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Attendance &amp; Points - Ugnayan Gulayan</title>
+<title>Farm Points - Ugnayan Gulayan</title>
 <style>
 :root{
   --bg:#f4f5f7;--surface:#fff;--surface-2:#fafbfc;--text:#111827;--muted:#6b7280;
@@ -239,8 +239,8 @@ tr.mine td{background:var(--accent-soft)}
 <main>
   <div class="page-header">
     <div>
-      <h2>Attendance &amp; Points</h2>
-      <p>Shift log, verified attendance, points calculation, hardship target adjustments, and standing bands for SY 2026-2027.</p>
+      <h2>Farm Points</h2>
+      <p id="pageDesc">Shifts completed, points earned, and shifts remaining toward each household's yearly farm target for SY 2026-2027.</p>
     </div>
     <span class="badge badge-neutral" id="dataSourceStatus">Starting...</span>
   </div>
@@ -256,7 +256,7 @@ tr.mine td{background:var(--accent-soft)}
     </div>
     <div class="stat-card">
       <div class="stat-val" id="statGoodStanding">&mdash;</div>
-      <div class="stat-label">In Good Standing</div>
+      <div class="stat-label" id="lblGood">In Good Standing</div>
     </div>
     <div class="stat-card">
       <div class="stat-val" id="statTotalShifts">&mdash;</div>
@@ -264,7 +264,7 @@ tr.mine td{background:var(--accent-soft)}
     </div>
     <div class="stat-card">
       <div class="stat-val" id="statNeedsCheck">&mdash;</div>
-      <div class="stat-label">Needs Check-in</div>
+      <div class="stat-label" id="lblNeeds">Needs Check-in</div>
     </div>
   </div>
 
@@ -284,14 +284,13 @@ tr.mine td{background:var(--accent-soft)}
       <div class="table-scroll">
         <table>
           <thead>
-            <tr>
+            <tr id="attHead">
               <th>Household ID</th>
               <th>Primary Scholar / Representative</th>
               <th class="n">Shifts</th>
               <th class="n">Points</th>
               <th class="n">Target</th>
-              <th class="n">Grant Rate</th>
-              <th>Standing Band</th>
+              <th>Progress</th>
             </tr>
           </thead>
           <tbody id="attendanceTableBody">
@@ -304,7 +303,7 @@ tr.mine td{background:var(--accent-soft)}
 </main>
 
 <footer>
-  <span>Ugnayan Gulayan &middot; Attendance Module</span>
+  <span>Ugnayan Gulayan &middot; Farm Points Module</span>
   <span>SY 2026-2027</span>
 </footer>
 
@@ -624,6 +623,22 @@ function ugRow(title, detail, badgeHtml){
          (detail ? '<div class="d">' + detail + '</div>' : '') + '</div>' + (badgeHtml || '') + '</div>';
 }
 
+function ugIsCommittee(){ var u = ugUser(); return !!(u && u.role === "committee"); }
+
+/* Farm Points progress (household-facing): points as a fraction of the
+   household's target, plus shifts still needed. No grant rate, no standing band. */
+function farmProgress(r){
+  var togo = Math.max(0, Math.ceil((r.target - r.points) / 8));
+  var reached = togo === 0;
+  return {
+    togo: togo,
+    reached: reached,
+    badge: reached
+      ? '<span class="badge badge-ok">Target reached</span>'
+      : '<span class="badge badge-neutral">' + togo + (togo === 1 ? ' shift' : ' shifts') + ' to go</span>'
+  };
+}
+
 function renderMyCard(computed){
   var u = ugUser();
   if (!u){ ugSetCard(ugPrompt()); return; }
@@ -631,29 +646,27 @@ function renderMyCard(computed){
   var me = computed.filter(function(r){ return ugSameHH(r.id, u.hh); })[0];
   if (!me){
     ugSetCard(ugCard({ tone:"neutral", title:"Your household", sub:u.hh,
-      note:"No attendance record was found for " + u.hh + ". Ask the Documentation Lead to check the Household ID in attendance.xlsx." }));
+      note:"No farm points record was found for " + u.hh + ". Ask the Documentation Lead to check the Household ID in attendance.xlsx." }));
     return;
   }
-  var badgeClass = me.band === "Needs Intervention" ? "badge-danger"
-                 : me.band === "Needs Support" ? "badge-warn" : "badge-ok";
-  var left = Math.max(0, Math.ceil((me.target - me.points) / 8));
+  var p = farmProgress(me);
   var facts = [
     ["Shifts completed", String(me.shifts)],
-    ["Points / Target", '<b>' + me.points + '</b> / ' + me.target],
-    ["Shifts to reach target", left === 0 ? "Target reached" : String(left)]
+    ["Shifts to target", p.reached ? "Target reached" : String(p.togo)]
   ];
   if (me.adj && me.adj.toLowerCase() !== "standard") facts.push(["Adjustment", esc(me.adj)]);
   ugSetCard(ugCard({
-    tone: badgeClass.replace("badge-", ""),
-    title: "Your household \u00b7 " + me.id, sub: me.name,
-    badge: '<span class="badge ' + badgeClass + '">' + esc(me.band) + '</span>',
-    heroLabel: "Grant Rate", heroValue: me.rate + "%",
+    tone: p.reached ? "ok" : "accent",
+    title: "Your household", sub: me.id + " \u00b7 " + me.name,
+    badge: p.badge,
+    heroLabel: "Farm Points", heroValue: me.points + " / " + me.target,
     facts: facts, foot: "The full household list is below."
   }));
 }
 
 function renderDashboard(){
   var q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+  var isCom = ugIsCommittee();   // CEM grant rate + standing bands: Program Committee only
 
   var computed = ATTENDANCE_RECORDS.map(function(r){
     var m = computeMetrics(r[2], r[3]);
@@ -669,13 +682,32 @@ function renderDashboard(){
     : computed;
 
   renderMyCard(computed);
+
   document.getElementById("statHouseholds").textContent  = computed.length;
-  document.getElementById("statGoodStanding").textContent =
-    computed.filter(function(r){ return r.band === "In Good Standing"; }).length;
   document.getElementById("statTotalShifts").textContent =
     computed.reduce(function(a, r){ return a + r.shifts; }, 0);
-  document.getElementById("statNeedsCheck").textContent =
-    computed.filter(function(r){ return r.band === "Needs Support" || r.band === "Needs Intervention"; }).length;
+  if (isCom){
+    document.getElementById("lblGood").textContent  = "In Good Standing";
+    document.getElementById("lblNeeds").textContent = "Needs Check-in";
+    document.getElementById("statGoodStanding").textContent =
+      computed.filter(function(r){ return r.band === "In Good Standing"; }).length;
+    document.getElementById("statNeedsCheck").textContent =
+      computed.filter(function(r){ return r.band === "Needs Support" || r.band === "Needs Intervention"; }).length;
+    document.getElementById("pageDesc").textContent =
+      "Committee view: shift log, points, hardship target adjustments, CEM grant rate and standing bands for SY 2026-2027.";
+  } else {
+    var reachedCount = computed.filter(function(r){ return farmProgress(r).reached; }).length;
+    document.getElementById("lblGood").textContent  = "Reached Target";
+    document.getElementById("lblNeeds").textContent = "Still To Reach Target";
+    document.getElementById("statGoodStanding").textContent = reachedCount;
+    document.getElementById("statNeedsCheck").textContent   = computed.length - reachedCount;
+  }
+
+  document.getElementById("attHead").innerHTML = isCom
+    ? '<th>Household ID</th><th>Primary Scholar / Representative</th><th class="n">Shifts</th>' +
+      '<th class="n">Points</th><th class="n">Target</th><th class="n">Grant Rate</th><th>Standing Band</th>'
+    : '<th>Household ID</th><th>Primary Scholar / Representative</th><th class="n">Shifts</th>' +
+      '<th class="n">Points</th><th class="n">Target</th><th>Progress</th>';
 
   document.getElementById("tableCount").textContent =
     filtered.length + (filtered.length === 1 ? " household" : " households");
@@ -688,30 +720,39 @@ function renderDashboard(){
 
   var _u = ugUser();
   tbody.innerHTML = filtered.map(function(r){
-    var badgeClass = "badge-neutral";
-    if (r.band === "In Good Standing" || r.band === "On Track") badgeClass = "badge-ok";
-    else if (r.band === "Needs Support") badgeClass = "badge-warn";
-    else if (r.band === "Needs Intervention") badgeClass = "badge-danger";
-
+    var mine = (_u && _u.hh && ugSameHH(r.id, _u.hh)) ? ' mine' : '';
     var adjChip = (r.adj && r.adj.toLowerCase() !== "standard")
       ? ' <span class="badge badge-neutral" style="font-size:9.5px;padding:2px 7px">' + esc(r.adj) + '</span>'
       : '';
-
     var adjChipM = (r.adj && r.adj.toLowerCase() !== "standard")
       ? '<span class="badge badge-neutral m-only">' + esc(r.adj) + '</span>'
       : '';
 
-    // Phone cards: ID + name + standing on top, Shifts and Points / Target
-    // in the middle, Grant Rate in the colored hero band. Desktop table is
-    // unchanged (target column stays; it is hidden on phone, merged into Points).
-    return '<tr class="tone-' + badgeClass.replace("badge-", "") + ((_u && _u.hh && ugSameHH(r.id, _u.hh)) ? ' mine' : '') + '">' +
+    if (isCom){
+      var badgeClass = "badge-neutral";
+      if (r.band === "In Good Standing" || r.band === "On Track") badgeClass = "badge-ok";
+      else if (r.band === "Needs Support") badgeClass = "badge-warn";
+      else if (r.band === "Needs Intervention") badgeClass = "badge-danger";
+      return '<tr class="tone-' + badgeClass.replace("badge-", "") + mine + '">' +
+        '<td class="c-title"><b>' + esc(r.id) + '</b></td>' +
+        '<td class="c-sub">' + esc(r.name) + adjChipM + '</td>' +
+        '<td class="n" data-label="Shifts">' + r.shifts + '</td>' +
+        '<td class="n" data-label="Points / Target"><b>' + r.points + '</b><span class="of-target"> / ' + r.target + '</span></td>' +
+        '<td class="n c-desk">' + r.target + adjChip + '</td>' +
+        '<td class="n c-hero" data-label="Grant Rate">' + r.rate + '%</td>' +
+        '<td class="c-badge"><span class="badge ' + badgeClass + '">' + esc(r.band) + '</span></td>' +
+      '</tr>';
+    }
+
+    // Household view: points as a progress fraction + shifts to go (no grant rate, no band)
+    var p = farmProgress(r);
+    return '<tr class="tone-' + (p.reached ? 'ok' : 'accent') + mine + '">' +
       '<td class="c-title"><b>' + esc(r.id) + '</b></td>' +
       '<td class="c-sub">' + esc(r.name) + adjChipM + '</td>' +
       '<td class="n" data-label="Shifts">' + r.shifts + '</td>' +
-      '<td class="n" data-label="Points / Target"><b>' + r.points + '</b><span class="of-target"> / ' + r.target + '</span></td>' +
+      '<td class="n c-hero" data-label="Farm Points"><span>' + r.points + '<span class="of-target"> / ' + r.target + '</span></span></td>' +
       '<td class="n c-desk">' + r.target + adjChip + '</td>' +
-      '<td class="n c-hero" data-label="Grant Rate">' + r.rate + '%</td>' +
-      '<td class="c-badge"><span class="badge ' + badgeClass + '">' + esc(r.band) + '</span></td>' +
+      '<td class="c-badge">' + p.badge + '</td>' +
     '</tr>';
   }).join("");
 }
@@ -738,7 +779,7 @@ function init(){
   } catch(err){
     document.body.innerHTML =
       '<div style="max-width:680px;margin:60px auto;padding:24px;font-family:system-ui,sans-serif">' +
-      '<h1 style="color:#b91c1c;font-size:18px;margin:0 0 8px">Something went wrong while starting the attendance module</h1>' +
+      '<h1 style="color:#b91c1c;font-size:18px;margin:0 0 8px">Something went wrong while starting the Farm Points module</h1>' +
       '<pre style="background:#f4f4f5;padding:14px;border-radius:8px;font-size:12px;overflow:auto;white-space:pre-wrap">' +
       String(err && err.stack ? err.stack : err) +
       '</pre></div>';
