@@ -241,7 +241,7 @@ tr.mine td{background:var(--accent-soft)}
   <div class="page-header">
     <div>
       <h2>Sweat Equity Journal</h2>
-      <p id="pageDesc">Scholar contributions across five dimensions, total points, and Scholar Level for SY 2026-2027. Reads <code>scholar-journal.xlsx</code>.</p>
+      <p id="pageDesc">Sweat Equity points by dimension, each scholar&rsquo;s total, and Scholar Level for SY 2026-2027. Reads <code>scholar-journal.xlsx</code>.</p>
     </div>
     <span class="badge badge-neutral" id="dataSourceStatus">Starting...</span>
   </div>
@@ -256,7 +256,7 @@ tr.mine td{background:var(--accent-soft)}
       <div class="stat-card"><div class="stat-val" id="statScholars">&mdash;</div><div class="stat-label">Scholars</div></div>
       <div class="stat-card"><div class="stat-val" id="statLevel2">&mdash;</div><div class="stat-label">Level 2 or Higher</div></div>
       <div class="stat-card"><div class="stat-val" id="statAvg">&mdash;</div><div class="stat-label">Average Points</div></div>
-      <div class="stat-card"><div class="stat-val" id="statEntries">&mdash;</div><div class="stat-label">Activities Logged</div></div>
+      <div class="stat-card"><div class="stat-val" id="statNotStarted">&mdash;</div><div class="stat-label">Not Started Yet</div></div>
     </div>
 
     <section>
@@ -289,27 +289,6 @@ tr.mine td{background:var(--accent-soft)}
     </section>
   </div>
 
-  <!-- Student / parent: their scholar's activity -->
-  <section id="logView" hidden>
-    <div class="section-head">
-      <h3>Activity Log</h3>
-      <span class="rule"></span>
-      <span class="count" id="logCount">&mdash;</span>
-    </div>
-    <div class="card table-card">
-      <div class="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th><th>Dimension</th><th>Activity</th><th>Description</th>
-              <th class="n">Points</th><th>Attested By</th>
-            </tr>
-          </thead>
-          <tbody id="logBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </section>
 </main>
 
 <footer>
@@ -386,7 +365,7 @@ function ugRow(title, detail, badgeHtml){
 </script>
 
 <script>
-var FILE_CANDIDATES = ["scholar-journal.xlsx","Scholar-Journal.xlsx","SweatEquityJournal.xlsx"];
+var FILE_CANDIDATES = ["scholar-journal.xlsx","Scholar-Journal.xlsx","SCHOLAR-JOURNAL.xlsx"];
 
 /* The five dimensions (targets from the Rules sheet). Totals are summed per
    scholar exactly like the Roster sheet's SUMIF formulas (no per-dimension cap). */
@@ -402,7 +381,6 @@ var LEVELS = [ {n:4,min:201,tier:"100%"}, {n:3,min:151,tier:"75%"}, {n:2,min:101
 var STAFF_ROLES = ["committee","liaison","coordinator","documentation"];
 
 var SCHOLARS = [];
-var UNMATCHED = 0;
 var WARNINGS = [];
 var LOADED = false;
 
@@ -415,12 +393,6 @@ function num(v){
   return isNaN(n) ? 0 : n;
 }
 function cell(v){ return String(v===undefined||v===null?"":v).trim(); }
-/* Excel stores real dates as serial numbers; show them as YYYY-MM-DD. */
-function fmtDate(v){
-  if (v instanceof Date && !isNaN(v)) return v.toISOString().slice(0,10);
-  if (typeof v === "number" && v > 20000 && v < 80000) return new Date(Math.round((v - 25569) * 86400000)).toISOString().slice(0,10);
-  return cell(v);
-}
 function fmtPts(n){ return (Math.round(n * 10) / 10).toString(); }
 
 function levelFor(total){
@@ -448,124 +420,65 @@ function nextHint(total){
   return need + " more point" + (need === 1 ? "" : "s") + " to Level " + next.n + " (" + next.tier + " tier). Levels are reviewed every April.";
 }
 
-/* ---------------- reading the workbook ---------------- */
+/* ---------------- reading the workbook ----------------
+   scholar-journal.xlsx holds ONE summary sheet: a row per scholar with the five
+   dimension totals typed in from that scholar's own journal workbook.
+   The site works out the Total and the Level itself (any Total / Level columns
+   in the sheet are ignored, so they can never disagree with the page). */
 function findSheet(wb, names){
   var list = wb.SheetNames || [];
-  for (var i = 0; i < list.length; i++){
-    if (names.indexOf(String(list[i]).trim().toLowerCase()) !== -1) return wb.Sheets[list[i]];
-  }
+  for (var n = 0; n < names.length; n++)
+    for (var i = 0; i < list.length; i++)
+      if (String(list[i]).trim().toLowerCase() === names[n]) return wb.Sheets[list[i]];
   return null;
 }
-function rowsOf(ws){ return XLSX.utils.sheet_to_json(ws, { header:1, defval:"" }); }
 function headIndex(head, starts){
-  for (var i = 0; i < head.length; i++){
+  for (var i = 0; i < head.length; i++)
     for (var j = 0; j < starts.length; j++) if (head[i].indexOf(starts[j]) === 0) return i;
-  }
   return -1;
 }
+var DIM_HEAD = { academic:["academic"], community:["community"], leadership:["leadership"], skills:["skill"], parental:["parental"] };
 
-function parseEntries(wb){
-  var out = [], found = 0;
+function parseWorkbook(wb){
   WARNINGS = [];
-  DIMS.forEach(function(dim){
-    var ws = findSheet(wb, dim.sheets);
-    if (!ws){ WARNINGS.push("Sheet '" + dim.label + "' not found."); return; }
-    var rows = rowsOf(ws), hIdx = -1, idx = null;
-    for (var k = 0; k < Math.min(rows.length, 30); k++){
-      var head = rows[k].map(function(h){ return cell(h).toLowerCase(); });
-      if (head.indexOf("points earned") !== -1){
-        hIdx = k;
-        idx = {
-          scholar: headIndex(head, ["scholar"]),
-          hh: headIndex(head, ["household"]),
-          date: headIndex(head, ["date"]),
-          activity: headIndex(head, ["activity"]),
-          desc: headIndex(head, ["description"]),
-          pts: head.indexOf("points earned"),
-          ev: headIndex(head, ["evidence"]),
-          by: headIndex(head, ["attested"])
-        };
-        break;
-      }
+  var sheets = wb.SheetNames || [];
+  if (!sheets.length) throw new Error("Workbook has no sheets.");
+  var ws = findSheet(wb, ["roster","summary","scholar journal","sweat equity","sheet1"]) || wb.Sheets[sheets[0]];
+  var rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:"" });
+
+  var hIdx = -1, iH = -1, iN = -1, cols = null;
+  for (var k = 0; k < Math.min(rows.length, 15); k++){
+    var head = rows[k].map(function(h){ return cell(h).toLowerCase(); });
+    var h = headIndex(head, ["household"]), n = headIndex(head, ["scholar"]);
+    if (h !== -1 && n !== -1){
+      hIdx = k; iH = h; iN = n; cols = {};
+      DIMS.forEach(function(d){ cols[d.key] = headIndex(head, DIM_HEAD[d.key]); });
+      break;
     }
-    if (hIdx === -1){ WARNINGS.push("'Points Earned' column not found in " + dim.label + "."); return; }
-    found++;
-    for (var i = hIdx + 1; i < rows.length; i++){
-      var r = rows[i] || [];
-      var name = idx.scholar !== -1 ? cell(r[idx.scholar]) : "";
-      var hh = idx.hh !== -1 ? cell(r[idx.hh]) : "";
-      var pts = idx.pts !== -1 ? num(r[idx.pts]) : 0;
-      var activity = idx.activity !== -1 ? cell(r[idx.activity]) : "";
-      if (!name && !hh) continue;
-      if (!pts && !activity) continue;
-      out.push({
-        dim: dim.key, dimLabel: dim.label, name: name, hh: hh,
-        date: idx.date !== -1 ? fmtDate(r[idx.date]) : "",
-        activity: activity,
-        desc: idx.desc !== -1 ? cell(r[idx.desc]) : "",
-        points: pts,
-        by: idx.by !== -1 ? cell(r[idx.by]) : ""
-      });
-    }
-  });
-  if (!found) throw new Error("Couldn't find the Academic, Community, Leadership, Skills or Parental sheets in the workbook.");
+  }
+  if (hIdx === -1) throw new Error("Couldn't find 'Household ID' and 'Scholar' columns.");
+  DIMS.forEach(function(d){ if (cols[d.key] === -1) WARNINGS.push("Column '" + d.label + "' not found; counted as 0."); });
+
+  var out = [], seen = {};
+  for (var i = hIdx + 1; i < rows.length; i++){
+    var r = rows[i] || [];
+    var hh = cell(r[iH]), nm = cell(r[iN]);
+    if (!hh || !nm || /^total/i.test(hh)) continue;
+    var key = ugKey(hh);
+    if (seen[key]) WARNINGS.push("Household ID " + hh + " appears more than once.");
+    seen[key] = true;
+    var dims = {}, total = 0;
+    DIMS.forEach(function(d){
+      var v = cols[d.key] === -1 ? 0 : Math.max(0, num(r[cols[d.key]]));
+      dims[d.key] = v; total += v;
+    });
+    out.push({ hh: hh, name: nm, dims: dims, total: total });
+  }
   return out;
 }
 
-function parseRoster(wb, entries){
-  var roster = [], ws = findSheet(wb, ["roster"]);
-  if (ws){
-    var rows = rowsOf(ws);
-    var hIdx = -1, iH = -1, iN = -1;
-    for (var k = 0; k < Math.min(rows.length, 10); k++){
-      var head = rows[k].map(function(h){ return cell(h).toLowerCase(); });
-      var h = headIndex(head, ["household"]), n = headIndex(head, ["scholar"]);
-      if (h !== -1 && n !== -1){ hIdx = k; iH = h; iN = n; break; }
-    }
-    if (hIdx !== -1){
-      for (var i = hIdx + 1; i < rows.length; i++){
-        var hh = cell((rows[i] || [])[iH]), nm = cell((rows[i] || [])[iN]);
-        if (hh && nm) roster.push({ hh: hh, name: nm });
-      }
-    }
-  }
-  if (!roster.length){
-    // No usable Roster sheet: build the list from whoever appears in the entries.
-    var seen = {};
-    entries.forEach(function(e){
-      var key = ugNorm(e.name) || ugKey(e.hh);
-      if (key && !seen[key]){ seen[key] = true; roster.push({ hh: e.hh, name: e.name }); }
-    });
-    WARNINGS.push("No Roster sheet found; showing only scholars who have entries.");
-  }
-  return roster;
-}
-
-function buildScholars(roster, entries){
-  var list = roster.map(function(r){
-    var dims = {}; DIMS.forEach(function(d){ dims[d.key] = 0; });
-    return { hh: r.hh, name: r.name, dims: dims, total: 0, entries: [] };
-  });
-  UNMATCHED = 0;
-  entries.forEach(function(e){
-    var s = null, nm = ugNorm(e.name);
-    for (var i = 0; i < list.length && !s; i++) if (nm && ugNorm(list[i].name) === nm) s = list[i];
-    for (var j = 0; j < list.length && !s; j++) if (e.hh && ugSameHH(list[j].hh, e.hh)) s = list[j];
-    if (!s){ UNMATCHED++; return; }
-    s.dims[e.dim] += e.points;
-    s.total += e.points;
-    s.entries.push(e);
-  });
-  list.forEach(function(s){
-    s.entries.sort(function(a, b){ return String(b.date).localeCompare(String(a.date)); });
-  });
-  return list;
-}
-
 function applyWorkbook(wb){
-  var entries = parseEntries(wb);
-  var roster = parseRoster(wb, entries);
-  SCHOLARS = buildScholars(roster, entries);
+  SCHOLARS = parseWorkbook(wb);
   LOADED = true;
   render();
 }
@@ -617,11 +530,8 @@ function loadData(){
         statusEl.className = "badge badge-ok";
         statusEl.textContent = "Live \u00b7 " + name;
         var u = ugUser();
-        var msgs = WARNINGS.slice();
-        if (u && STAFF_ROLES.indexOf(u.role) !== -1 && UNMATCHED)
-          msgs.push(UNMATCHED + " entr" + (UNMATCHED === 1 ? "y doesn't" : "ies don't") + " match any scholar on the Roster (check the names or Household IDs).");
-        if (u && STAFF_ROLES.indexOf(u.role) !== -1 && msgs.length){
-          notice.innerHTML = msgs.map(esc).join("<br>");
+        if (u && STAFF_ROLES.indexOf(u.role) !== -1 && WARNINGS.length){
+          notice.innerHTML = WARNINGS.map(esc).join("<br>");
           notice.classList.add("show");
         }
       })
@@ -656,12 +566,10 @@ function scholarCard(s, u){
 }
 
 function renderFamily(u){
-  var staff = document.getElementById("staffView"), log = document.getElementById("logView");
-  staff.hidden = true;
+  document.getElementById("staffView").hidden = true;
   var s = null;
   for (var i = 0; i < SCHOLARS.length && !s; i++) if (u.hh && ugSameHH(SCHOLARS[i].hh, u.hh)) s = SCHOLARS[i];
   if (!s){
-    log.hidden = true;
     ugSetCard(ugCard({ tone:"neutral", title:"Sweat Equity Journal", sub: u.hh || "",
       note: !LOADED ? "Loading your records..." :
         (u.hh ? "No scholar was found for " + u.hh + ". Ask the Documentation Lead to check the Household ID in scholar-journal.xlsx."
@@ -669,27 +577,9 @@ function renderFamily(u){
     return;
   }
   ugSetCard(scholarCard(s, u));
-  log.hidden = false;
-  document.getElementById("logCount").textContent = s.entries.length + (s.entries.length === 1 ? " activity" : " activities");
-  var tbody = document.getElementById("logBody");
-  if (!s.entries.length){
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:36px;color:var(--muted)">No activities have been logged yet.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = s.entries.map(function(e){
-    return '<tr class="tone-ok">' +
-      '<td class="c-sub">' + esc(e.date) + '</td>' +
-      '<td class="c-badge"><span class="badge badge-neutral">' + esc(e.dimLabel) + '</span></td>' +
-      '<td class="c-title">' + esc(e.activity || "-") + '</td>' +
-      '<td class="c-wide" data-label="Description">' + esc(e.desc) + '</td>' +
-      '<td class="n c-hero" data-label="Points"><span>+' + fmtPts(e.points) + '</span></td>' +
-      '<td data-label="Attested By">' + esc(e.by) + '</td>' +
-    '</tr>';
-  }).join("");
 }
 
 function renderStaff(){
-  document.getElementById("logView").hidden = true;
   document.getElementById("staffView").hidden = false;
   ugSetCard("");
 
@@ -697,11 +587,11 @@ function renderStaff(){
   var total = SCHOLARS.length;
   var l2 = SCHOLARS.filter(function(s){ return levelFor(s.total).n >= 2; }).length;
   var sum = SCHOLARS.reduce(function(a, s){ return a + s.total; }, 0);
-  var acts = SCHOLARS.reduce(function(a, s){ return a + s.entries.length; }, 0);
+  var notStarted = SCHOLARS.filter(function(s){ return levelFor(s.total).n === 0; }).length;
   document.getElementById("statScholars").textContent = total;
   document.getElementById("statLevel2").textContent = l2;
   document.getElementById("statAvg").textContent = total ? fmtPts(sum / total) : "0";
-  document.getElementById("statEntries").textContent = acts;
+  document.getElementById("statNotStarted").textContent = notStarted;
 
   var rows = q ? SCHOLARS.filter(function(s){
     return s.hh.toLowerCase().indexOf(q) !== -1 || s.name.toLowerCase().indexOf(q) !== -1 ||
@@ -730,15 +620,15 @@ function renderStaff(){
 
 function render(){
   var u = ugUser();
-  var staff = document.getElementById("staffView"), log = document.getElementById("logView");
+  var staff = document.getElementById("staffView");
   if (!u){
-    staff.hidden = true; log.hidden = true;
+    staff.hidden = true;
     ugSetCard(ugPrompt());
     return;
   }
   if (STAFF_ROLES.indexOf(u.role) !== -1){ renderStaff(); return; }
   if (u.role === "parent" || u.role === "student"){ renderFamily(u); return; }
-  staff.hidden = true; log.hidden = true;
+  staff.hidden = true;
   ugSetCard(ugCard({ tone:"neutral", title:"Sweat Equity Journal",
     note:"This page is for scholars, their parents, and program staff. Your role doesn\u2019t have access to it." }));
 }
