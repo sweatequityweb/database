@@ -361,6 +361,10 @@ var ROLE_MAP = {
 };
 
 var TOOLS = [
+  { id:"sweat", title:"Sweat Equity Journal", owner:"Program Committee",
+    desc:"Each scholar's contributions across five dimensions, total Sweat Equity points, and Scholar Level for the April scholarship review.",
+    href:"SweatEquity/sweat-equity.html", status:"planned",
+    roles:["committee","liaison","coordinator","documentation","parent","student"] },
   { id:"attendance", title:"Farm Points", owner:"Documentation Lead",
     desc:"Shift log, sign-in and sign-out, task category, verification, and each household's farm points and shifts to target.",
     href:"Attendance/attendance.html", status:"planned",
@@ -718,6 +722,8 @@ function renderWelcome(){
 
 function iconFor(id){
   switch (id){
+    case "sweat":
+      return '<svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z"/></svg>';
     case "attendance":
       return '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="M9 15l2 2 4-4"/></svg>';
     case "farm":

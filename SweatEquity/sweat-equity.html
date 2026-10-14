@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sweat Equity Journal - Ugnayan Gulayan</title>
+<style>
+:root{--bg:#f4f5f7;--surface:#fff;--surface-2:#fafbfc;--text:#111827;--muted:#6b7280;--faint:#9ca3af;--border:#e5e7eb;--border-strong:#d1d5db;--accent:#2563eb;--accent-soft:#eff4ff;--accent-text:#1d4ed8;--ok:#16a34a;--ok-soft:#ecfdf5;--warn:#d97706;--warn-soft:#fffbeb;--danger:#dc2626;--danger-soft:#fef2f2;--shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);--r:14px;--rs:8px}
+[data-theme="dark"]{--bg:#0f1115;--surface:#171a21;--surface-2:#1d212a;--text:#e8eaed;--muted:#9aa3b2;--faint:#6b7280;--border:#262b36;--border-strong:#333a48;--accent:#60a5fa;--accent-soft:#1a2438;--accent-text:#93c5fd;--ok:#4ade80;--ok-soft:#142a1e;--warn:#fbbf24;--warn-soft:#2a2214;--danger:#f87171;--danger-soft:#3b1111;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.35)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s}
+.btn{font-family:inherit;font-size:13px;font-weight:550;border-radius:var(--rs);padding:8px 13px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:background .15s,border-color .15s}
+.btn:hover{background:var(--surface-2);border-color:var(--faint)}
+.btn-ghost{border-color:transparent;background:transparent}
+.btn-ghost:hover{background:var(--surface-2);border-color:var(--border)}
+.brand-mark{width:36px;height:36px;border-radius:10px;background:#d97706;display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;letter-spacing:-.5px;flex:0 0 36px}
+.topbar{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.brand-text h1{font-size:15px;margin:0;font-weight:660;letter-spacing:-.2px}
+.brand-text p{margin:0;font-size:11.5px;color:var(--muted)}
+.spacer{flex:1}
+main{max-width:1200px;margin:0 auto;padding:40px 24px 60px;flex:1;width:100%}
+.page-header{margin-bottom:32px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.page-header h2{font-size:28px;font-weight:680;letter-spacing:-.7px;margin:0 0 6px}
+.page-header p{margin:0;color:var(--muted);font-size:14px;max-width:640px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow)}
+.stat-val{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
+.stat-val.income{color:var(--ok)}
+.stat-val.expense{color:var(--danger)}
+.stat-label{font-size:11px;color:var(--muted);font-weight:650;text-transform:uppercase;letter-spacing:.5px}
+.section-head{display:flex;align-items:center;gap:12px;margin:0 0 16px}
+.section-head h3{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin:0;flex:0 0 auto}
+.section-head .rule{flex:1;height:1px;background:var(--border)}
+.section-head .count{font-size:11.5px;color:var(--faint);flex:0 0 auto}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+table{width:100%;border-collapse:collapse;text-align:left;font-size:13.5px}
+th,td{padding:12px 16px;border-bottom:1px solid var(--border)}
+th{font-weight:650;color:var(--muted);background:var(--surface-2);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px}
+tr:hover td{background:var(--surface-2)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.badge{font-size:10.5px;font-weight:650;letter-spacing:.3px;padding:4px 10px;border-radius:100px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.badge-ok{background:var(--ok-soft);color:var(--ok)}
+.badge-danger{background:var(--danger-soft);color:var(--danger)}
+.badge-neutral{background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+.search-wrap{position:relative;margin-bottom:16px}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:var(--faint);fill:none;stroke-width:2}
+input[type="search"]{font-family:inherit;font-size:14px;color:var(--text);background:var(--surface);border:1px solid var(--border-strong);border-radius:10px;padding:10px 14px 10px 36px;width:100%;outline:none;transition:border-color .15s,box-shadow .15s}
+input[type="search"]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.notice{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn);border-radius:var(--rs);padding:11px 15px;font-size:12.5px;margin-bottom:16px;line-height:1.55;display:none}
+.notice.show{display:block}
+.empty-state{text-align:center;padding:56px 24px;color:var(--muted);font-size:13.5px;line-height:1.6}
+.empty-state b{display:block;color:var(--text);font-size:15px;font-weight:650;margin-bottom:8px}
+.empty-state code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface-2);padding:2px 7px;border-radius:5px;font-size:12.5px;color:var(--accent-text);border:1px solid var(--border)}
+footer{max-width:1200px;margin:0 auto;width:100%;padding:24px;border-top:1px solid var(--border);font-size:12px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media (max-width:760px){main{padding:26px 16px 50px}.page-header h2{font-size:22px}th,td{padding:10px 12px;font-size:12.5px}}
+
+/* ================================================================
+   PHONE LAYOUT (Phone Design Plan)
+   Table stays in the DOM. At <=600px each row is drawn as a card.
+   Loader, theme tokens, and palette are untouched.
+   ================================================================ */
+.table-card{padding:0;overflow:hidden}
+.table-scroll{overflow-x:auto}
+.m-only,.of-target{display:none}
+
+/* Tablet 600-900: table stays, stat cards stack 2x2 */
+@media (max-width:900px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* Phone <=600: cards */
+@media (max-width:600px){
+  :root{--topbar-h:calc(52px + env(safe-area-inset-top,0px))}
+  html{-webkit-text-size-adjust:100%}
+  body{font-size:15px;
+       padding-left:env(safe-area-inset-left,0px);
+       padding-right:env(safe-area-inset-right,0px);
+       padding-bottom:env(safe-area-inset-bottom,0px)}
+
+  /* Touch: every control >=44x44 */
+  .btn{font-size:14px;padding:12px 16px;min-height:44px;min-width:44px;justify-content:center}
+  #themeBtn{width:44px;padding:0}
+
+  /* Sticky compact topbar: back + brand + theme only */
+  .topbar{height:var(--topbar-h);padding:env(safe-area-inset-top,0px) 10px 0;gap:6px;flex-wrap:nowrap}
+  .topbar .back{order:-1;padding:12px 12px}
+  .back-more,.brand-mark,.brand-text p{display:none}
+  .brand-text h1{font-size:15px;white-space:nowrap}
+
+  main{padding:16px 14px 32px}
+  .page-header{margin-bottom:18px;gap:10px}
+  .page-header h2{font-size:22px}
+  .notice{font-size:13px}
+
+  /* Stats: 2x2, bigger numbers */
+  .stats-grid{gap:10px;margin-bottom:20px}
+  .stat-card{padding:14px}
+  .stat-val{font-size:clamp(24px,8.5vw,32px);line-height:1.15;overflow-wrap:anywhere}
+  .stat-label{font-size:11px}
+
+  /* Sticky search below the topbar */
+  .search-wrap{position:sticky;top:var(--topbar-h);z-index:30;background:var(--bg);
+               margin:0 -14px 10px;padding:8px 14px}
+  .search-wrap svg{left:28px;width:18px;height:18px}
+  input[type="search"]{font-size:16px;min-height:48px;padding:14px 16px 14px 42px}
+
+  .badge{font-size:11.5px;padding:5px 11px}
+
+  /* Table -> cards */
+  .card.table-card{background:none;border:0;box-shadow:none;border-radius:0;margin-bottom:0}
+  .table-scroll{overflow:visible}
+  table,tbody{display:block;width:100%}
+  thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;padding:14px;margin-bottom:10px;
+           background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow)}
+  tbody tr:hover td{background:none}
+  tbody td{display:block;border:0;padding:0;font-size:15px;line-height:1.35;min-width:0;overflow-wrap:anywhere;text-align:left}
+  tbody td.n{text-align:left}
+  tbody td:empty{display:none}
+  tbody td[colspan]{grid-column:1/-1}
+  tbody td[data-label]::before{content:attr(data-label);display:block;margin-bottom:2px;
+           font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+
+  /* Card header */
+  tbody td.c-title{grid-row:1;grid-column:1;font-size:17px;font-weight:700;align-self:center}
+  tbody td.c-title.solo{grid-column:1/-1}
+  tbody td.c-badge{grid-row:1;grid-column:2;justify-self:end;align-self:start}
+  tbody td.c-aside{grid-row:1;grid-column:2;justify-self:end;align-self:center;font-size:13px;color:var(--muted);text-align:right}
+  tbody td.c-sub{grid-column:1/-1;order:-1;color:var(--muted);margin-top:-6px}
+  tbody td.c-sub[data-label]::before{display:inline;margin:0 6px 0 0}
+  tbody td.c-first{order:-1}
+
+  /* Fields */
+  tbody td.c-wide{grid-column:1/-1}
+  tbody td.c-desk{display:none}
+  .m-only{display:inline}
+  .badge.m-only{display:inline-flex;margin-left:6px;font-size:10.5px;padding:2px 8px}
+  .of-target{display:inline;color:var(--muted)}
+
+  /* Hero band (the number people open the tool to see) */
+  tbody td.c-hero{order:5;grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;
+           padding:10px 14px;border-radius:var(--rs);font-size:21px;font-weight:700;
+           font-variant-numeric:tabular-nums;background:var(--accent-soft);color:var(--accent-text)}
+  tbody td.c-hero::before{margin:0;font-size:12px;opacity:.85;color:inherit}
+  tbody td.c-hero .badge{font-size:13px;padding:5px 12px}
+  tbody tr.tone-ok td.c-hero{background:var(--ok-soft);color:var(--ok)}
+  tbody tr.tone-warn td.c-hero{background:var(--warn-soft);color:var(--warn)}
+  tbody tr.tone-danger td.c-hero{background:var(--danger-soft);color:var(--danger)}
+  tbody tr.tone-neutral td.c-hero{background:var(--surface-2);color:var(--text)}
+
+  .empty-state{padding:36px 8px}
+  footer{padding:16px 14px;font-size:12px}
+}
+
+/* Phone tight <360: tighter padding, 14px font floor */
+@media (max-width:359px){
+  body{font-size:14px}
+  main{padding:12px 12px 28px}
+  .search-wrap{margin:0 -12px 10px;padding:8px 12px}
+  .search-wrap svg{left:26px}
+  tbody td{font-size:14px}
+  tbody tr{padding:12px;gap:8px 10px}
+}
+
+/* ================================================================
+   "YOUR DETAILS" CARD  (reads the name saved by the hub)
+   ================================================================ */
+.my-card{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px;margin-bottom:28px}
+.my-card::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--accent)}
+.my-card.tone-ok::before{background:var(--ok)}
+.my-card.tone-warn::before{background:var(--warn)}
+.my-card.tone-danger::before{background:var(--danger)}
+.my-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.my-title{font-size:17px;font-weight:700;margin:0;letter-spacing:-.2px}
+.my-sub{font-size:13px;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+.my-hero{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:var(--rs);background:var(--accent-soft);color:var(--accent-text)}
+.my-hero .lbl{font-size:12.5px;font-weight:650}
+.my-hero .val{font-size:28px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.my-card.tone-ok .my-hero{background:var(--ok-soft);color:var(--ok)}
+.my-card.tone-warn .my-hero{background:var(--warn-soft);color:var(--warn)}
+.my-card.tone-danger .my-hero{background:var(--danger-soft);color:var(--danger)}
+.my-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px 20px;margin-top:16px}
+.my-fact .k{font-size:11px;font-weight:650;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.my-fact .v{font-size:15px;font-weight:600;overflow-wrap:anywhere}
+.my-list{margin-top:16px;border-top:1px solid var(--border)}
+.my-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.my-row:last-child{border-bottom:0;padding-bottom:0}
+.my-row .main{min-width:0}
+.my-row .t{font-size:14px;font-weight:600;overflow-wrap:anywhere}
+.my-row .d{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.my-foot{margin-top:14px;font-size:12.5px;color:var(--faint)}
+.my-note{margin:0;color:var(--muted);font-size:14px}
+.my-prompt{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 16px;margin-bottom:24px;background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:var(--rs);color:var(--muted);font-size:13.5px}
+tr.mine td{background:var(--accent-soft)}
+@media (max-width:600px){
+  .my-card{padding:16px;margin-bottom:18px}
+  .my-title{font-size:17px}
+  .my-hero{padding:10px 14px}
+  .my-hero .val{font-size:24px}
+  .my-facts{grid-template-columns:1fr 1fr;gap:12px}
+  .my-fact .v{font-size:15px}
+  .my-row .t,.my-row .d{font-size:14px}
+  .my-prompt{font-size:14px;margin-bottom:18px}
+  tbody tr.mine{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+  tbody tr.mine td{background:none}
+}
+
+/* ===== Sweat Equity Journal ===== */
+[hidden]{display:none!important}
+.dim{padding:10px 0}
+.dim + .dim{border-top:1px dashed var(--border)}
+.dim-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
+.dim-name{font-size:14px;font-weight:600}
+.dim-pts{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.dim-pts b{color:var(--text);font-size:15px}
+.bar{height:8px;border-radius:99px;background:var(--surface-2);border:1px solid var(--border);overflow:hidden}
+.bar>span{display:block;height:100%;border-radius:99px;background:var(--accent)}
+.bar.full>span{background:var(--ok)}
+.of-total{font-size:.6em;font-weight:600;opacity:.7}
+@media (max-width:600px){
+  .dim-name{font-size:15px}
+  .bar{height:10px}
+}
+
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <div class="brand-mark">UG</div>
+    <div class="brand-text"><h1>Ugnayan Gulayan</h1><p>Program Hub</p></div>
+  </a>
+  <span class="spacer"></span>
+  <button class="btn btn-ghost" id="themeBtn" title="Toggle dark mode"><span id="themeIcon">&#9789;</span></button>
+  <a class="btn back" href="../index.html" aria-label="Back to Portal"><span>&larr; Back<span class="back-more"> to Portal</span></span></a>
+</header>
+
+<main>
+  <div class="page-header">
+    <div>
+      <h2>Sweat Equity Journal</h2>
+      <p id="pageDesc">Scholar contributions across five dimensions, total points, and Scholar Level for SY 2026-2027. Reads <code>scholar-journal.xlsx</code>.</p>
+    </div>
+    <span class="badge badge-neutral" id="dataSourceStatus">Starting...</span>
+  </div>
+
+  <div class="notice" id="loadNotice"></div>
+
+  <div id="myCard"></div>
+
+  <!-- Program staff: whole roster -->
+  <div id="staffView" hidden>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-val" id="statScholars">&mdash;</div><div class="stat-label">Scholars</div></div>
+      <div class="stat-card"><div class="stat-val" id="statLevel2">&mdash;</div><div class="stat-label">Level 2 or Higher</div></div>
+      <div class="stat-card"><div class="stat-val" id="statAvg">&mdash;</div><div class="stat-label">Average Points</div></div>
+      <div class="stat-card"><div class="stat-val" id="statEntries">&mdash;</div><div class="stat-label">Activities Logged</div></div>
+    </div>
+
+    <section>
+      <div class="section-head">
+        <h3>Scholar Roster</h3>
+        <span class="rule"></span>
+        <span class="count" id="rosterCount">&mdash;</span>
+      </div>
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="searchInput" enterkeyhint="search" inputmode="search" placeholder="Search by household, scholar, or level..." autocomplete="off">
+      </div>
+      <div class="card table-card">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Household ID</th><th>Scholar</th>
+                <th class="n">Academic</th><th class="n">Community</th><th class="n">Leadership</th>
+                <th class="n">Skills</th><th class="n">Parental</th>
+                <th class="n">Total</th><th>Level</th>
+              </tr>
+            </thead>
+            <tbody id="rosterBody">
+              <tr><td colspan="9" style="text-align:center;padding:36px;color:var(--muted)">Loading records...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Student / parent: their scholar's activity -->
+  <section id="logView" hidden>
+    <div class="section-head">
+      <h3>Activity Log</h3>
+      <span class="rule"></span>
+      <span class="count" id="logCount">&mdash;</span>
+    </div>
+    <div class="card table-card">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th><th>Dimension</th><th>Activity</th><th>Description</th>
+              <th class="n">Points</th><th>Attested By</th>
+            </tr>
+          </thead>
+          <tbody id="logBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Ugnayan Gulayan &middot; Sweat Equity Journal</span>
+  <span>SY 2026-2027</span>
+</footer>
+
+<script>
+(function(){
+  var done=false, cdns=["https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js","https://cdn.jsdelivr.net/npm/xlsx@0.18.5/xlsx.full.min.js","https://unpkg.com/xlsx@0.18.5/xlsx.full.min.js"], idx=0;
+  function finish(ok){ if(done) return; done=true; window.__xlsxReady=true; window.__xlsxOk=ok; if(typeof window.__startSweat==="function") window.__startSweat(); }
+  function tryNext(){ if(done) return; if(idx>=cdns.length){ finish(false); return; } var s=document.createElement("script"); s.src=cdns[idx++]; s.onload=function(){finish(true);}; s.onerror=function(){tryNext();}; document.head.appendChild(s); }
+  setTimeout(function(){finish(false);},20000); tryNext();
+})();
+</script>
+
+<script>
+/* ================================================================
+   YOUR DETAILS CARD - helpers
+   The hub saves the signed-in person in sessionStorage ("ug-current-user").
+   If it's missing (page opened directly), a sign-in prompt is shown.
+   ================================================================ */
+var UG_ROLE_LABELS = {
+  committee:"Program Committee", liaison:"Farm Liaison", coordinator:"Community Lead",
+  documentation:"Documentation Lead", treasurer:"Fund Treasurer",
+  logistics:"Logistics & Tool Master", shift_lead:"Parent Shift Lead",
+  parent:"Parent", student:"Student"
+};
+function ugUser(){
+  try {
+    var s = window.sessionStorage.getItem("ug-current-user");
+    if (!s) return null;
+    var u = JSON.parse(s);
+    return (u && u.name && u.role) ? u : null;
+  } catch(e){ return null; }
+}
+function ugNorm(s){ return String(s === undefined || s === null ? "" : s).toUpperCase().replace(/\s+/g, " ").trim(); }
+function ugKey(s){ return ugNorm(s).replace(/[\s_\-]+/g, ""); }
+function ugSameHH(a, b){ var x = ugKey(a); return !!x && x === ugKey(b); }
+/* A "Recorded By" / "Filed By" cell belongs to the user if it holds their
+   full name (or a longer name that contains it), or their role title. */
+function ugIsMe(field, u){
+  var f = ugNorm(field);
+  if (!f || !u) return false;
+  var n = ugNorm(u.name), r = ugNorm(UG_ROLE_LABELS[u.role]);
+  if (f === n || (n && f.indexOf(n) !== -1)) return true;
+  if (n && f.indexOf(" ") !== -1 && n.indexOf(f) !== -1) return true;
+  return !!r && f === r;
+}
+function ugClip(s, n){ s = String(s || ""); return s.length > n ? s.slice(0, n - 1).trim() + "\u2026" : s; }
+function ugSetCard(html){ var el = document.getElementById("myCard"); if (el) el.innerHTML = html || ""; }
+function ugPrompt(){
+  return '<div class="my-prompt"><span>Sign in from the hub to see your own details here.</span>' +
+         '<a class="btn" href="../index.html">Go to hub</a></div>';
+}
+function ugCard(o){
+  return '<div class="my-card tone-' + (o.tone || "accent") + '">' +
+    '<div class="my-head"><div><h3 class="my-title">' + esc(o.title) + '</h3>' +
+      (o.sub ? '<div class="my-sub">' + esc(o.sub) + '</div>' : '') + '</div>' + (o.badge || '') + '</div>' +
+    (o.note ? '<p class="my-note">' + esc(o.note) + '</p>' : '') +
+    (o.heroLabel ? '<div class="my-hero"><span class="lbl">' + esc(o.heroLabel) + '</span><span class="val">' + o.heroValue + '</span></div>' : '') +
+    ((o.facts && o.facts.length) ? '<div class="my-facts">' + o.facts.map(function(f){
+        return '<div class="my-fact"><div class="k">' + esc(f[0]) + '</div><div class="v">' + f[1] + '</div></div>';
+      }).join("") + '</div>' : '') +
+    (o.listHtml ? '<div class="my-list">' + o.listHtml + '</div>' : '') +
+    (o.foot ? '<div class="my-foot">' + esc(o.foot) + '</div>' : '') +
+  '</div>';
+}
+function ugRow(title, detail, badgeHtml){
+  return '<div class="my-row"><div class="main"><div class="t">' + title + '</div>' +
+         (detail ? '<div class="d">' + detail + '</div>' : '') + '</div>' + (badgeHtml || '') + '</div>';
+}
+
+</script>
+
+<script>
+var FILE_CANDIDATES = ["scholar-journal.xlsx","Scholar-Journal.xlsx","SweatEquityJournal.xlsx"];
+
+/* The five dimensions (targets from the Rules sheet). Totals are summed per
+   scholar exactly like the Roster sheet's SUMIF formulas (no per-dimension cap). */
+var DIMS = [
+  { key:"academic",   label:"Academic",   full:"Academic Contributions", target:100, sheets:["academic","academic contributions"] },
+  { key:"community",  label:"Community",  full:"Community Engagement",   target:50,  sheets:["community","community engagement"] },
+  { key:"leadership", label:"Leadership", full:"Leadership Activities",  target:50,  sheets:["leadership","leadership activities"] },
+  { key:"skills",     label:"Skills",     full:"Skill Development",      target:30,  sheets:["skills","skill development"] },
+  { key:"parental",   label:"Parental",   full:"Parental Involvement",   target:40,  sheets:["parental","parental involvement"] }
+];
+var TOTAL_POSSIBLE = 270;
+var LEVELS = [ {n:4,min:201,tier:"100%"}, {n:3,min:151,tier:"75%"}, {n:2,min:101,tier:"50%"}, {n:1,min:1,tier:"25%"} ];
+var STAFF_ROLES = ["committee","liaison","coordinator","documentation"];
+
+var SCHOLARS = [];
+var UNMATCHED = 0;
+var WARNINGS = [];
+var LOADED = false;
+
+function lGet(k){ try{ return window.localStorage.getItem(k); }catch(e){ return null; } }
+function lSet(k,v){ try{ window.localStorage.setItem(k,v); }catch(e){} }
+function esc(s){ return (s===undefined||s===null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
+function num(v){
+  if (typeof v === "number") return v;
+  var n = parseFloat(String(v===undefined||v===null?"":v).replace(/[^0-9.\-]/g,""));
+  return isNaN(n) ? 0 : n;
+}
+function cell(v){ return String(v===undefined||v===null?"":v).trim(); }
+/* Excel stores real dates as serial numbers; show them as YYYY-MM-DD. */
+function fmtDate(v){
+  if (v instanceof Date && !isNaN(v)) return v.toISOString().slice(0,10);
+  if (typeof v === "number" && v > 20000 && v < 80000) return new Date(Math.round((v - 25569) * 86400000)).toISOString().slice(0,10);
+  return cell(v);
+}
+function fmtPts(n){ return (Math.round(n * 10) / 10).toString(); }
+
+function levelFor(total){
+  for (var i = 0; i < LEVELS.length; i++) if (total >= LEVELS[i].min) return LEVELS[i];
+  return { n:0, min:0, tier:"" };
+}
+function levelText(total){
+  var lv = levelFor(total);
+  return lv.n === 0 ? "Not started" : "Level " + lv.n + " \u00b7 " + lv.tier + " tier";
+}
+function levelBadge(total){
+  var lv = levelFor(total);
+  return '<span class="badge ' + (lv.n >= 3 ? "badge-ok" : "badge-neutral") + '">' + esc(levelText(total)) + '</span>';
+}
+function levelTone(total){
+  var lv = levelFor(total);
+  return lv.n >= 3 ? "ok" : (lv.n === 2 ? "accent" : "neutral");
+}
+function nextHint(total){
+  var lv = levelFor(total);
+  if (lv.n === 4) return "Level 4 reached. Levels are reviewed every April.";
+  var next = null;
+  for (var i = 0; i < LEVELS.length; i++) if (LEVELS[i].n === lv.n + 1) next = LEVELS[i];
+  var need = Math.ceil(next.min - total);
+  return need + " more point" + (need === 1 ? "" : "s") + " to Level " + next.n + " (" + next.tier + " tier). Levels are reviewed every April.";
+}
+
+/* ---------------- reading the workbook ---------------- */
+function findSheet(wb, names){
+  var list = wb.SheetNames || [];
+  for (var i = 0; i < list.length; i++){
+    if (names.indexOf(String(list[i]).trim().toLowerCase()) !== -1) return wb.Sheets[list[i]];
+  }
+  return null;
+}
+function rowsOf(ws){ return XLSX.utils.sheet_to_json(ws, { header:1, defval:"" }); }
+function headIndex(head, starts){
+  for (var i = 0; i < head.length; i++){
+    for (var j = 0; j < starts.length; j++) if (head[i].indexOf(starts[j]) === 0) return i;
+  }
+  return -1;
+}
+
+function parseEntries(wb){
+  var out = [], found = 0;
+  WARNINGS = [];
+  DIMS.forEach(function(dim){
+    var ws = findSheet(wb, dim.sheets);
+    if (!ws){ WARNINGS.push("Sheet '" + dim.label + "' not found."); return; }
+    var rows = rowsOf(ws), hIdx = -1, idx = null;
+    for (var k = 0; k < Math.min(rows.length, 30); k++){
+      var head = rows[k].map(function(h){ return cell(h).toLowerCase(); });
+      if (head.indexOf("points earned") !== -1){
+        hIdx = k;
+        idx = {
+          scholar: headIndex(head, ["scholar"]),
+          hh: headIndex(head, ["household"]),
+          date: headIndex(head, ["date"]),
+          activity: headIndex(head, ["activity"]),
+          desc: headIndex(head, ["description"]),
+          pts: head.indexOf("points earned"),
+          ev: headIndex(head, ["evidence"]),
+          by: headIndex(head, ["attested"])
+        };
+        break;
+      }
+    }
+    if (hIdx === -1){ WARNINGS.push("'Points Earned' column not found in " + dim.label + "."); return; }
+    found++;
+    for (var i = hIdx + 1; i < rows.length; i++){
+      var r = rows[i] || [];
+      var name = idx.scholar !== -1 ? cell(r[idx.scholar]) : "";
+      var hh = idx.hh !== -1 ? cell(r[idx.hh]) : "";
+      var pts = idx.pts !== -1 ? num(r[idx.pts]) : 0;
+      var activity = idx.activity !== -1 ? cell(r[idx.activity]) : "";
+      if (!name && !hh) continue;
+      if (!pts && !activity) continue;
+      out.push({
+        dim: dim.key, dimLabel: dim.label, name: name, hh: hh,
+        date: idx.date !== -1 ? fmtDate(r[idx.date]) : "",
+        activity: activity,
+        desc: idx.desc !== -1 ? cell(r[idx.desc]) : "",
+        points: pts,
+        by: idx.by !== -1 ? cell(r[idx.by]) : ""
+      });
+    }
+  });
+  if (!found) throw new Error("Couldn't find the Academic, Community, Leadership, Skills or Parental sheets in the workbook.");
+  return out;
+}
+
+function parseRoster(wb, entries){
+  var roster = [], ws = findSheet(wb, ["roster"]);
+  if (ws){
+    var rows = rowsOf(ws);
+    var hIdx = -1, iH = -1, iN = -1;
+    for (var k = 0; k < Math.min(rows.length, 10); k++){
+      var head = rows[k].map(function(h){ return cell(h).toLowerCase(); });
+      var h = headIndex(head, ["household"]), n = headIndex(head, ["scholar"]);
+      if (h !== -1 && n !== -1){ hIdx = k; iH = h; iN = n; break; }
+    }
+    if (hIdx !== -1){
+      for (var i = hIdx + 1; i < rows.length; i++){
+        var hh = cell((rows[i] || [])[iH]), nm = cell((rows[i] || [])[iN]);
+        if (hh && nm) roster.push({ hh: hh, name: nm });
+      }
+    }
+  }
+  if (!roster.length){
+    // No usable Roster sheet: build the list from whoever appears in the entries.
+    var seen = {};
+    entries.forEach(function(e){
+      var key = ugNorm(e.name) || ugKey(e.hh);
+      if (key && !seen[key]){ seen[key] = true; roster.push({ hh: e.hh, name: e.name }); }
+    });
+    WARNINGS.push("No Roster sheet found; showing only scholars who have entries.");
+  }
+  return roster;
+}
+
+function buildScholars(roster, entries){
+  var list = roster.map(function(r){
+    var dims = {}; DIMS.forEach(function(d){ dims[d.key] = 0; });
+    return { hh: r.hh, name: r.name, dims: dims, total: 0, entries: [] };
+  });
+  UNMATCHED = 0;
+  entries.forEach(function(e){
+    var s = null, nm = ugNorm(e.name);
+    for (var i = 0; i < list.length && !s; i++) if (nm && ugNorm(list[i].name) === nm) s = list[i];
+    for (var j = 0; j < list.length && !s; j++) if (e.hh && ugSameHH(list[j].hh, e.hh)) s = list[j];
+    if (!s){ UNMATCHED++; return; }
+    s.dims[e.dim] += e.points;
+    s.total += e.points;
+    s.entries.push(e);
+  });
+  list.forEach(function(s){
+    s.entries.sort(function(a, b){ return String(b.date).localeCompare(String(a.date)); });
+  });
+  return list;
+}
+
+function applyWorkbook(wb){
+  var entries = parseEntries(wb);
+  var roster = parseRoster(wb, entries);
+  SCHOLARS = buildScholars(roster, entries);
+  LOADED = true;
+  render();
+}
+
+function loadData(){
+  var statusEl = document.getElementById("dataSourceStatus");
+  var notice = document.getElementById("loadNotice");
+  notice.classList.remove("show");
+
+  if (typeof XLSX === "undefined" || typeof fetch !== "function"){
+    SCHOLARS = [];
+    statusEl.className = "badge badge-warn";
+    statusEl.textContent = "Offline - no data";
+    notice.textContent = "The Excel reader didn't load. Reload when your connection is back.";
+    notice.classList.add("show");
+    render(); return;
+  }
+
+  var tried = [], settled = false;
+  function giveUp(msg){
+    if (settled) return; settled = true;
+    SCHOLARS = [];
+    statusEl.className = "badge badge-warn";
+    statusEl.textContent = "scholar-journal.xlsx not found";
+    notice.innerHTML = msg || ("<b>scholar-journal.xlsx couldn't be loaded.</b> Tried: <code>" + esc(tried.join(", ")) + "</code>. " +
+      "Put <code>scholar-journal.xlsx</code> next to <code>sweat-equity.html</code> and hard-refresh (Ctrl+Shift+R).");
+    notice.classList.add("show");
+    render();
+  }
+  var timer = setTimeout(function(){ giveUp(); }, 15000);
+
+  function attempt(i){
+    if (settled) return;
+    if (i >= FILE_CANDIDATES.length){ clearTimeout(timer); return giveUp(); }
+    var name = FILE_CANDIDATES[i];
+    tried.push(name);
+    fetch(name + "?t=" + Date.now(), { cache:"no-store" })
+      .then(function(res){ if (!res.ok) throw new Error("HTTP " + res.status); return res.arrayBuffer(); })
+      .then(function(buf){
+        if (settled) return;
+        var wb = XLSX.read(new Uint8Array(buf), { type:"array" });
+        try {
+          applyWorkbook(wb);
+        } catch(err){
+          clearTimeout(timer);
+          return giveUp("<b>" + esc(name) + " was found but couldn't be read.</b> " + esc(err && err.message ? err.message : err));
+        }
+        clearTimeout(timer); settled = true;
+        statusEl.className = "badge badge-ok";
+        statusEl.textContent = "Live \u00b7 " + name;
+        var u = ugUser();
+        var msgs = WARNINGS.slice();
+        if (u && STAFF_ROLES.indexOf(u.role) !== -1 && UNMATCHED)
+          msgs.push(UNMATCHED + " entr" + (UNMATCHED === 1 ? "y doesn't" : "ies don't") + " match any scholar on the Roster (check the names or Household IDs).");
+        if (u && STAFF_ROLES.indexOf(u.role) !== -1 && msgs.length){
+          notice.innerHTML = msgs.map(esc).join("<br>");
+          notice.classList.add("show");
+        }
+      })
+      .catch(function(){ attempt(i+1); });
+  }
+  attempt(0);
+}
+
+
+/* ---------------- rendering ---------------- */
+function dimRows(s){
+  return DIMS.map(function(d){
+    var v = s.dims[d.key], pct = Math.max(0, Math.min(100, Math.round(v / d.target * 100)));
+    return '<div class="dim"><div class="dim-top"><span class="dim-name">' + esc(d.full) + '</span>' +
+           '<span class="dim-pts"><b>' + fmtPts(v) + '</b> / ' + d.target + '</span></div>' +
+           '<div class="bar' + (v >= d.target ? ' full' : '') + '"><span style="width:' + pct + '%"></span></div></div>';
+  }).join("");
+}
+
+function scholarCard(s, u){
+  var isStudent = u.role === "student";
+  return ugCard({
+    tone: levelTone(s.total),
+    title: isStudent ? "Your Sweat Equity" : "Your scholar\u2019s Sweat Equity",
+    sub: isStudent ? (s.hh + " \u00b7 " + s.name) : (s.name + " \u00b7 " + s.hh),
+    badge: levelBadge(s.total),
+    heroLabel: "Total Sweat Equity",
+    heroValue: '<span>' + fmtPts(s.total) + '<span class="of-total"> / ' + TOTAL_POSSIBLE + '</span></span>',
+    listHtml: dimRows(s),
+    foot: nextHint(s.total)
+  });
+}
+
+function renderFamily(u){
+  var staff = document.getElementById("staffView"), log = document.getElementById("logView");
+  staff.hidden = true;
+  var s = null;
+  for (var i = 0; i < SCHOLARS.length && !s; i++) if (u.hh && ugSameHH(SCHOLARS[i].hh, u.hh)) s = SCHOLARS[i];
+  if (!s){
+    log.hidden = true;
+    ugSetCard(ugCard({ tone:"neutral", title:"Sweat Equity Journal", sub: u.hh || "",
+      note: !LOADED ? "Loading your records..." :
+        (u.hh ? "No scholar was found for " + u.hh + ". Ask the Documentation Lead to check the Household ID in scholar-journal.xlsx."
+              : "Your name isn't linked to a Household ID yet, so no scholar can be shown.") }));
+    return;
+  }
+  ugSetCard(scholarCard(s, u));
+  log.hidden = false;
+  document.getElementById("logCount").textContent = s.entries.length + (s.entries.length === 1 ? " activity" : " activities");
+  var tbody = document.getElementById("logBody");
+  if (!s.entries.length){
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:36px;color:var(--muted)">No activities have been logged yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = s.entries.map(function(e){
+    return '<tr class="tone-ok">' +
+      '<td class="c-sub">' + esc(e.date) + '</td>' +
+      '<td class="c-badge"><span class="badge badge-neutral">' + esc(e.dimLabel) + '</span></td>' +
+      '<td class="c-title">' + esc(e.activity || "-") + '</td>' +
+      '<td class="c-wide" data-label="Description">' + esc(e.desc) + '</td>' +
+      '<td class="n c-hero" data-label="Points"><span>+' + fmtPts(e.points) + '</span></td>' +
+      '<td data-label="Attested By">' + esc(e.by) + '</td>' +
+    '</tr>';
+  }).join("");
+}
+
+function renderStaff(){
+  document.getElementById("logView").hidden = true;
+  document.getElementById("staffView").hidden = false;
+  ugSetCard("");
+
+  var q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+  var total = SCHOLARS.length;
+  var l2 = SCHOLARS.filter(function(s){ return levelFor(s.total).n >= 2; }).length;
+  var sum = SCHOLARS.reduce(function(a, s){ return a + s.total; }, 0);
+  var acts = SCHOLARS.reduce(function(a, s){ return a + s.entries.length; }, 0);
+  document.getElementById("statScholars").textContent = total;
+  document.getElementById("statLevel2").textContent = l2;
+  document.getElementById("statAvg").textContent = total ? fmtPts(sum / total) : "0";
+  document.getElementById("statEntries").textContent = acts;
+
+  var rows = q ? SCHOLARS.filter(function(s){
+    return s.hh.toLowerCase().indexOf(q) !== -1 || s.name.toLowerCase().indexOf(q) !== -1 ||
+           levelText(s.total).toLowerCase().indexOf(q) !== -1;
+  }) : SCHOLARS;
+  document.getElementById("rosterCount").textContent = rows.length + (rows.length === 1 ? " scholar" : " scholars");
+
+  var tbody = document.getElementById("rosterBody");
+  if (!rows.length){
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:36px;color:var(--muted)">' +
+      (LOADED ? "No matching scholars found." : "No records loaded.") + '</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(function(s){
+    return '<tr class="tone-' + levelTone(s.total) + '">' +
+      '<td class="c-title"><b>' + esc(s.hh) + '</b></td>' +
+      '<td class="c-sub">' + esc(s.name) + '</td>' +
+      DIMS.map(function(d){
+        return '<td class="n" data-label="' + esc(d.label) + ' / ' + d.target + '">' + fmtPts(s.dims[d.key]) + '</td>';
+      }).join("") +
+      '<td class="n c-hero" data-label="Total"><span>' + fmtPts(s.total) + '<span class="of-target"> / ' + TOTAL_POSSIBLE + '</span></span></td>' +
+      '<td class="c-badge">' + levelBadge(s.total) + '</td>' +
+    '</tr>';
+  }).join("");
+}
+
+function render(){
+  var u = ugUser();
+  var staff = document.getElementById("staffView"), log = document.getElementById("logView");
+  if (!u){
+    staff.hidden = true; log.hidden = true;
+    ugSetCard(ugPrompt());
+    return;
+  }
+  if (STAFF_ROLES.indexOf(u.role) !== -1){ renderStaff(); return; }
+  if (u.role === "parent" || u.role === "student"){ renderFamily(u); return; }
+  staff.hidden = true; log.hidden = true;
+  ugSetCard(ugCard({ tone:"neutral", title:"Sweat Equity Journal",
+    note:"This page is for scholars, their parents, and program staff. Your role doesn\u2019t have access to it." }));
+}
+
+function setTheme(t){ document.documentElement.setAttribute("data-theme", t); lSet("scholar-theme", t); var i=document.getElementById("themeIcon"); if(i) i.innerHTML = t==="dark"?"&#9788;":"&#9789;"; }
+
+function init(){
+  try {
+    setTheme(lGet("scholar-theme")||"light");
+    document.getElementById("themeBtn").addEventListener("click", function(){
+      var now = document.documentElement.getAttribute("data-theme");
+      setTheme(now==="dark"?"light":"dark");
+    });
+    document.getElementById("searchInput").addEventListener("input", render);
+    render();
+    loadData();
+  } catch(err){
+    document.body.innerHTML = '<div style="max-width:680px;margin:60px auto;padding:24px;font-family:system-ui,sans-serif">' +
+      '<h1 style="color:#b91c1c;font-size:18px">Sweat Equity module failed to start</h1>' +
+      '<pre style="background:#f4f4f5;padding:14px;border-radius:8px;font-size:12px;overflow:auto;white-space:pre-wrap">' +
+      String(err && err.stack ? err.stack : err) + '</pre></div>';
+  }
+}
+function boot(){ if (document.readyState==="loading") document.addEventListener("DOMContentLoaded", init); else init(); }
+window.__startSweat = boot;
+if (window.__xlsxReady) boot();
+</script>
+</body>
+</html>
