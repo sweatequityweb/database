@@ -276,34 +276,6 @@ footer{max-width:1280px;margin:0 auto;width:100%;padding:32px 32px 48px;border-t
       </div>
       <div class="grid" id="toolsGrid"></div>
     </section>
-    <section id="localSection" hidden>
-      <div class="section-head">
-        <h3>Local-only tools</h3>
-        <span class="rule"></span>
-        <span class="count">not published</span>
-      </div>
-      <div class="grid">
-        <a class="card" href="ScholarDatabase/scholar-profiles.html">
-          <div class="card-top">
-            <div class="card-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M22 10L12 5 2 10l10 5 10-5z"/>
-                <path d="M6 12.5V17c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-4.5"/>
-              </svg>
-            </div>
-            <div style="min-width:0">
-              <div class="card-title">Scholar Database</div>
-              <div class="card-owner">Local only</div>
-            </div>
-          </div>
-          <p class="card-desc">Scholar roster with family details and parent skills. Kept off the public site to protect student data — available only on this device.</p>
-          <div class="card-foot">
-            <span class="badge badge-local"><span class="dot"></span>Local</span>
-            <span class="open-link">Open <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-      </div>
-    </section>
   </main>
   <footer>
     <span>Ugnayan Gulayan · Program Hub</span>
@@ -365,6 +337,10 @@ var TOOLS = [
     desc:"Each scholar's contributions across five dimensions, total Sweat Equity points, and Scholar Level for the April scholarship review.",
     href:"SweatEquity/sweat-equity.html", status:"planned",
     roles:["committee","liaison","coordinator","documentation","parent","student"] },
+  { id:"households", title:"Household Directory", owner:"Documentation Lead",
+    desc:"Every household unit, shown by the scholar's last name and Household ID, with the members of each household.",
+    href:"HouseholdDirectory/households.html", status:"planned",
+    roles:["committee","liaison","coordinator","documentation"] },
   { id:"attendance", title:"Farm Points", owner:"Documentation Lead",
     desc:"Shift log, sign-in and sign-out, task category, verification, and each household's farm points and shifts to target.",
     href:"Attendance/attendance.html", status:"planned",
@@ -688,7 +664,6 @@ function showHome(){
   document.getElementById("whoamiRole").textContent = roleLabel(currentUser.role);
   renderWelcome();
   renderTools();
-  renderLocalSection();
 }
 
 function renderWelcome(){
@@ -722,6 +697,8 @@ function renderWelcome(){
 
 function iconFor(id){
   switch (id){
+    case "households":
+      return '<svg viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg>';
     case "sweat":
       return '<svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z"/></svg>';
     case "attendance":
@@ -789,14 +766,6 @@ function renderTools(){
     return;
   }
   grid.innerHTML = visible.map(toolCard).join("");
-}
-
-function renderLocalSection(){
-  var h = location.hostname;
-  var isLocal =
-    location.protocol === "file:" ||
-    h === "localhost" || h === "127.0.0.1" || h === "" || h === "[::1]";
-  document.getElementById("localSection").hidden = !isLocal;
 }
 
 function setTheme(t){
