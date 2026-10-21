@@ -2,875 +2,280 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-<title>Ugnayan Gulayan — Program Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Program Hub — Ugnayan Gulayan</title>
+<script>try{var t=localStorage.getItem('ug-theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <style>
-:root{
-  --bg:#f8fafc;--surface:#ffffff;--surface-2:#f1f5f9;--text:#0f172a;--muted:#475569;
-  --faint:#94a3b8;--border:#e2e8f0;--border-strong:#cbd5e1;--accent:#2563eb;
-  --accent-soft:#eff6ff;--accent-text:#1d4ed8;--ok:#16a34a;--ok-soft:#f0fdf4;
-  --warn:#d97706;--warn-soft:#fffbeb;--danger:#dc2626;--danger-soft:#fef2f2;
-  --shadow:0 1px 3px rgba(15,23,42,.08),0 4px 12px rgba(15,23,42,.04);
-  --shadow-lg:0 20px 25px -5px rgba(15,23,42,.1),0 8px 10px -6px rgba(15,23,42,.1);
-  --r:16px;--rs:10px;
-}
-[data-theme="dark"]{
-  --bg:#090d16;--surface:#111827;--surface-2:#1f2937;--text:#f3f4f6;--muted:#9ca3af;
-  --faint:#6b7280;--border:#374151;--border-strong:#4b5563;--accent:#60a5fa;
-  --accent-soft:#1e293b;--accent-text:#93c5fd;--ok:#4ade80;--ok-soft:#052e16;
-  --warn:#fbbf24;--warn-soft:#451a03;--danger:#f87171;--danger-soft:#3b1111;
-  --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.4);
-  --shadow-lg:0 20px 30px rgba(0,0,0,.7);
-}
+:root{--bg:#f4f5f7;--surface:#ffffff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--accent:#2563eb;--ok:#16a34a;--warn:#d97706;--danger:#dc2626;
+--shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);
+--ok-bg:#f0fdf4;--warn-bg:#fffbeb;--danger-bg:#fef2f2;--accent-bg:#eff6ff;--soft:#f9fafb}
+[data-theme="dark"]{--bg:#0f1115;--surface:#171a21;--text:#e8eaed;--muted:#9aa3b2;--border:#262b36;--accent:#60a5fa;--ok:#4ade80;--warn:#fbbf24;--danger:#f87171;
+--ok-bg:#10281a;--warn-bg:#33270b;--danger-bg:#331616;--accent-bg:#172338;--soft:#1c2029;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.4)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
-.btn{font-family:inherit;font-size:13px;font-weight:600;border-radius:var(--rs);padding:9px 16px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:all .15s ease}
-.btn:hover{background:var(--surface-2);border-color:var(--accent);transform:translateY(-1px)}
-.btn-ghost{border-color:transparent;background:transparent}
-.btn-ghost:hover{background:var(--surface-2);border-color:var(--border)}
-.brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#1d4ed8);display:grid;place-items:center;color:#fff;font-weight:700;font-size:15px;letter-spacing:-.5px;flex:0 0 40px;box-shadow:0 4px 12px rgba(37,99,235,.25)}
-
-.login-view{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;padding:24px;transition:opacity .3s ease,visibility .3s ease}
-.login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow-lg);padding:40px;width:min(560px,100%);animation:slideUp .4s cubic-bezier(0.16, 1, 0.3, 1)}
-@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.login-brand{display:flex;align-items:center;gap:14px;margin-bottom:32px}
-.brand-name{font-size:16px;font-weight:700;line-height:1.2}
-.brand-sub{font-size:12px;color:var(--muted)}
-.login-title{font-size:24px;font-weight:700;letter-spacing:-.5px;margin:0 0 8px}
-.login-desc{font-size:14px;color:var(--muted);margin:0 0 24px;line-height:1.6}
-.search-wrap{position:relative;margin-bottom:16px}
-.search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--faint);fill:none;stroke-width:2}
-input[type="search"]{font-family:inherit;font-size:14px;color:var(--text);background:var(--surface-2);border:1px solid var(--border-strong);border-radius:12px;padding:12px 16px 12px 42px;width:100%;outline:none;transition:all .2s}
-input[type="search"]:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);background:var(--surface)}
-.people-list{max-height:360px;overflow-y:auto;padding-right:4px}
-.people-list::-webkit-scrollbar{width:6px}
-.people-list::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px}
-.person{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:8px;cursor:pointer;text-align:left;font-family:inherit;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:all .15s}
-.person:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateX(2px)}
-.person:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.person-name{font-weight:650;font-size:13.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.person-role{font-size:11.5px;color:var(--muted);background:var(--surface-2);padding:4px 12px;border-radius:100px;border:1px solid var(--border);white-space:nowrap;flex:0 0 auto}
-.person:hover .person-role{background:var(--surface);border-color:transparent;color:var(--accent-text)}
-.people-empty{text-align:center;padding:48px 20px;color:var(--muted);font-size:13.5px;line-height:1.6}
-.people-empty b{display:block;color:var(--text);font-size:15px;font-weight:650;margin-bottom:8px}
-.people-empty code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface-2);padding:2px 7px;border-radius:5px;font-size:12.5px;color:var(--accent-text);border:1px solid var(--border)}
-.people-empty .detail{margin-top:12px;font-size:11.5px;color:var(--faint);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-all;line-height:1.7}
-.login-foot{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
-.data-status{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.data-status .dot{width:8px;height:8px;border-radius:50%;background:var(--faint);flex:0 0 8px}
-.data-status.live .dot{background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
-.data-status.warn .dot{background:var(--warn);box-shadow:0 0 0 3px var(--warn-soft)}
-
-.home-view{min-height:100vh;display:flex;flex-direction:column}
-.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;gap:16px}
-[data-theme="dark"] .topbar{background:rgba(17,24,39,.85)}
-.brand{display:flex;align-items:center;gap:12px}
-.brand-text h1{font-size:16px;margin:0;font-weight:700;letter-spacing:-.2px}
-.brand-text p{margin:0;font-size:12px;color:var(--muted)}
-.spacer{flex:1}
-.whoami{display:inline-flex;align-items:center;gap:10px;padding:6px 16px;background:var(--accent-soft);border:1px solid var(--border);border-radius:100px;font-size:13px;max-width:320px}
-.whoami-name{font-weight:700;color:var(--accent-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.whoami-role{color:var(--muted);white-space:nowrap;font-size:11.5px;background:var(--surface);padding:2px 8px;border-radius:6px}
-main{max-width:1280px;margin:0 auto;padding:48px 32px 64px;flex:1;width:100%}
-.welcome{margin-bottom:48px}
-.welcome h2{font-size:36px;font-weight:750;letter-spacing:-1px;line-height:1.15;margin:0 0 12px}
-.welcome p{margin:0;color:var(--muted);font-size:15px;line-height:1.65;max-width:680px}
-.meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-.meta-chip{font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:100px;background:var(--surface);border:1px solid var(--border);color:var(--muted);box-shadow:var(--shadow)}
-.meta-chip b{color:var(--text);font-weight:700;margin-left:4px}
-.section-head{display:flex;align-items:center;gap:14px;margin:0 0 20px}
-.section-head h3{font-size:12px;font-weight:750;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:0;flex:0 0 auto}
-.section-head .rule{flex:1;height:1px;background:var(--border)}
-.section-head .count{font-size:12px;color:var(--faint);flex:0 0 auto}
-section{margin-bottom:48px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:all .2s ease}
-a.card{text-decoration:none;color:inherit;cursor:pointer}
-a.card::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--accent);opacity:0;transition:opacity .2s}
-a.card:hover{border-color:var(--border-strong);box-shadow:var(--shadow-lg);transform:translateY(-3px)}
-a.card:hover::before{opacity:1}
-a.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.card.planned{background:var(--surface-2);box-shadow:none;opacity:.8}
-.card-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
-.card-icon{width:46px;height:46px;flex:0 0 46px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-text)}
-.card-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.card.planned .card-icon{background:var(--surface);color:var(--faint);border:1px solid var(--border)}
-.card-title{font-size:16px;font-weight:700;letter-spacing:-.2px;line-height:1.3;margin:0 0 4px}
-.card-owner{font-size:12px;color:var(--faint);line-height:1.4}
-.card-desc{font-size:13.5px;color:var(--muted);line-height:1.6;margin:0 0 20px;flex:1}
-.card-foot{display:flex;align-items:center;gap:10px;padding-top:16px;border-top:1px solid var(--border)}
-.badge{font-size:11px;font-weight:700;letter-spacing:.3px;padding:4px 12px;border-radius:100px;display:inline-flex;align-items:center;gap:6px}
-.badge-live{background:var(--ok-soft);color:var(--ok)}
-.badge-live .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
-.badge-local{background:var(--warn-soft);color:var(--warn)}
-.badge-local .dot{width:6px;height:6px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 3px var(--warn-soft)}
-.badge-planned{background:var(--surface);color:var(--faint);border:1px solid var(--border)}
-.open-link{margin-left:auto;font-size:13px;font-weight:650;color:var(--accent-text);display:inline-flex;align-items:center;gap:6px}
-.open-link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);background:var(--surface-2);border:2px dashed var(--border-strong);border-radius:var(--r);font-size:14px;line-height:1.6}
-footer{max-width:1280px;margin:0 auto;width:100%;padding:32px 32px 48px;border-top:1px solid var(--border);font-size:12.5px;color:var(--faint);display:flex;gap:16px;flex-wrap:wrap;align-items:center}
-@media (max-width:760px){
-  .topbar{padding:12px 16px}
-  .brand-text p,.whoami-role{display:none}
-  .whoami{max-width:160px;padding:6px 12px}
-  main{padding:32px 16px}
-  .welcome h2{font-size:26px}
-  .grid{grid-template-columns:1fr}
-  .login-card{padding:24px}
-  .login-title{font-size:20px}
-}
-
-/* ================================================================
-   PHONE LAYOUT (Phone Design Plan, applied to the hub)
-   Loader, theme tokens, and palette are untouched.
-   ================================================================ */
-.retry-btn{font-size:11.5px;padding:6px 10px}
-.home-view{min-height:100vh;min-height:100dvh}
-.meta-chip{max-width:100%;overflow-wrap:anywhere}
-
-/* Touch screens: no sticky hover shifts; give taps a pressed state */
-@media (hover:none){
-  .btn:hover,a.card:hover,.person:hover{transform:none}
-  a.card:active{transform:scale(.99);border-color:var(--border-strong)}
-  .person:active{border-color:var(--accent);background:var(--accent-soft)}
-}
-
-/* Tablet 600-900 */
-@media (max-width:900px){
-  .grid{grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr))}
-}
-
-/* Phone <=600 */
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border)}
+.tb-in{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.tb-link{text-decoration:none;font-weight:600;white-space:nowrap}
+.tb-title{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-right{display:flex;align-items:center;gap:8px}
+.chip{font-size:12px;color:var(--muted);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:3px 10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn{font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:4px 0 12px}
+.muted{color:var(--muted)}
+.banner{background:var(--warn-bg);border:1px solid var(--warn);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-weight:600}
+.banner small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
+.card h2{font-size:12px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat{background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.stat .l{font-size:11px;font-weight:650;color:var(--muted);text-transform:uppercase}
+.stat .v{font-size:22px;font-weight:700;line-height:1.2}
+.stat .s{font-size:12px;color:var(--muted)}
+.stat.ok .v{color:var(--ok)}.stat.warn .v{color:var(--warn)}.stat.danger .v{color:var(--danger)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.badge{display:inline-block;font-size:12px;font-weight:650;border-radius:99px;padding:2px 10px;border:1px solid var(--border);background:var(--soft);color:var(--muted);white-space:nowrap}
+.badge.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.badge.warn{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
+.badge.danger{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
+.badge.info{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+.bar-row{margin:8px 0}
+.bar-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+.bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--accent);border-radius:99px}
+.bar.ok span{background:var(--ok)}
+.toolbar{display:flex;gap:10px;margin-bottom:12px}
+input[type=search],input[type=text]{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;width:100%}
+input:focus{outline:2px solid var(--accent);outline-offset:0}
+.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tr.hl-warn{background:var(--warn-bg)}tr.hl-ok{background:var(--ok-bg)}
+.num{font-variant-numeric:tabular-nums}
+.pos{color:var(--ok);font-weight:650}.neg{color:var(--danger);font-weight:650}
+.empty{text-align:center;color:var(--muted);padding:28px 12px}
+.section-title{font-size:15px;font-weight:700;margin:20px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.tile{display:block;text-decoration:none;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px}
+.tile:hover{border-color:var(--accent)}
+.tile b{display:block;font-size:15px}.tile span{color:var(--muted);font-size:13px}
+.people{max-height:50vh;overflow-y:auto;margin-top:10px}
+.person{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;cursor:pointer}
+.person:hover{border-color:var(--accent);background:var(--accent-bg)}
+.login{max-width:560px;margin:24px auto}
 @media (max-width:600px){
-  :root{--topbar-h:calc(52px + env(safe-area-inset-top,0px))}
-  html{-webkit-text-size-adjust:100%}
-  body{font-size:15px}
-
-  /* Touch: every control >=44x44 */
-  .btn{font-size:14px;padding:12px 16px;min-height:44px;min-width:44px;justify-content:center}
-  #themeBtn{width:44px;padding:0}
-  .retry-btn{font-size:14px;padding:12px 16px}
-
-  /* ---- Login: card fits the screen, only the name list scrolls ---- */
-  .login-view{display:flex;align-items:center;justify-content:center;
-              padding:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px))
-                      max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
-  .login-card{display:flex;flex-direction:column;max-height:100%;min-height:0;padding:20px}
-  .login-brand{margin-bottom:18px}
-  .login-title{font-size:21px}
-  .login-desc{font-size:15px;margin-bottom:16px}
-  .search-wrap{flex:0 0 auto;margin-bottom:12px}
-  .search-wrap svg{left:16px;width:18px;height:18px}
-  input[type="search"]{font-size:16px;min-height:48px;padding:14px 16px 14px 44px}
-  .people-list{flex:1 1 auto;min-height:120px;max-height:none;padding-right:0;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-  .person{min-height:52px;padding:12px 14px;margin-bottom:8px}
-  .person-name{font-size:15px;white-space:normal;overflow-wrap:anywhere;line-height:1.3}
-  .person-role{font-size:12px;padding:4px 10px}
-  .people-empty{padding:32px 8px;font-size:15px}
-  .login-foot{flex:0 0 auto;margin-top:14px;padding-top:14px}
-  .data-status{min-width:0;flex:1 1 auto;max-width:none;font-size:12.5px}
-
-  /* ---- Home: compact sticky topbar ---- */
-  .topbar{height:var(--topbar-h);padding:env(safe-area-inset-top,0px) max(10px,env(safe-area-inset-right,0px)) 0 max(10px,env(safe-area-inset-left,0px));gap:6px}
-  .brand-text,.whoami-role,.sw-more{display:none}
-  .brand-mark{width:36px;height:36px;flex:0 0 36px;border-radius:10px;font-size:14px}
-  .spacer{display:none}
-  .whoami{flex:1 1 auto;min-width:0;max-width:none;padding:6px 12px;font-size:14px}
-  .whoami-name{min-width:0}
-
-  main{padding:20px 14px calc(28px + env(safe-area-inset-bottom,0px))}
-  .welcome{margin-bottom:28px}
-  .welcome h2{font-size:28px;letter-spacing:-.6px}
-  .welcome p{font-size:15px}
-  .meta-row{gap:8px;margin-top:16px}
-  .meta-chip{font-size:13px;padding:6px 12px}
-  section{margin-bottom:32px}
-
-  .section-head{flex-wrap:wrap;gap:8px 12px;margin-bottom:14px}
-  .section-head h3{font-size:12px}
-  .section-head .rule{min-width:24px}
-  .section-head .count{font-size:12.5px}
-
-  /* Tool cards: one per row, whole card is the tap target */
-  .grid{grid-template-columns:minmax(0,1fr);gap:12px}
-  .card{padding:18px}
-  .card-top{gap:14px;margin-bottom:12px}
-  .card-title{font-size:17px}
-  .card-owner{font-size:13px}
-  .card-desc{font-size:14.5px;margin-bottom:16px}
-  .card-foot{padding-top:14px;min-height:44px}
-  .badge{font-size:12px}
-  .open-link{font-size:14px}
-  .empty{padding:36px 16px;font-size:15px}
-
-  footer{padding:20px 14px calc(24px + env(safe-area-inset-bottom,0px));font-size:12.5px;gap:8px 16px}
-}
-
-/* Phone tight <360 */
-@media (max-width:359px){
-  body{font-size:14px}
-  .login-card{padding:16px}
-  main{padding:16px 12px 24px}
-  .welcome h2{font-size:24px}
-  .card{padding:16px}
-  .card-desc,.person-name{font-size:14px}
+  .tb-link{font-size:13px}
+  table,tbody{display:block;width:100%}
+  thead{display:none}
+  .table-wrap{background:none;border:0;box-shadow:none}
+  tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+  tbody td{display:block;border:0;padding:0}
+  tbody td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase}
+  tbody td.c-wide{grid-column:1 / -1}
+  tbody tr.hl-warn{background:var(--warn-bg)}tbody tr.hl-ok{background:var(--ok-bg)}
 }
 </style>
 </head>
 <body>
-
-<div class="login-view" id="loginView">
-  <div class="login-card">
-    <div class="login-brand">
-      <div class="brand-mark">UG</div>
-      <div>
-        <div class="brand-name">Ugnayan Gulayan</div>
-        <div class="brand-sub">Program Hub</div>
-      </div>
-    </div>
-    <h1 class="login-title">Who's using the tools today?</h1>
-    <p class="login-desc">Select your name from the directory loaded from <b>people.xlsx</b>. You'll stay signed in until you switch users.</p>
-    <div class="search-wrap">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-      <input type="search" id="peopleSearch" placeholder="Search your name…" autocomplete="off" enterkeyhint="search" inputmode="search">
-    </div>
-    <div class="people-list" id="peopleList"></div>
-    <div class="login-foot">
-      <span class="data-status" id="peopleStatus">
-        <span class="dot"></span>
-        <span id="peopleStatusText">Starting…</span>
-      </span>
-      <button class="btn btn-ghost retry-btn" id="reloadExcelBtn" type="button">Retry</button>
-    </div>
-  </div>
-</div>
-
-<div class="home-view" id="homeView" hidden>
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark">UG</div>
-      <div class="brand-text"><h1>Ugnayan Gulayan</h1><p>Program Hub</p></div>
-    </div>
-    <span class="spacer"></span>
-    <span class="whoami" title="Signed in">
-      <span class="whoami-name" id="whoamiName">—</span>
-      <span class="whoami-role" id="whoamiRole">—</span>
-    </span>
-    <button class="btn btn-ghost" id="switchBtn">Switch<span class="sw-more"> user</span></button>
-    <button class="btn btn-ghost" id="themeBtn" title="Toggle dark mode" aria-label="Toggle dark mode">
-      <span id="themeIcon">&#9789;</span>
-    </button>
-  </header>
-  <main>
-    <div class="welcome">
-      <h2 id="welcomeTitle">Kumusta.</h2>
-      <p id="welcomeSub">Welcome to the Ugnayan Gulayan program hub.</p>
-      <div class="meta-row" id="metaRow"></div>
-    </div>
-    <section>
-      <div class="section-head">
-        <h3 id="toolsHead">Your tools</h3>
-        <span class="rule"></span>
-        <span class="count" id="toolsCount"></span>
-        <button class="btn btn-ghost" id="showAllBtn" hidden>Show all</button>
-      </div>
-      <div class="grid" id="toolsGrid"></div>
-    </section>
-    <section id="localSection" hidden>
-      <div class="section-head">
-        <h3>Local-only tools</h3>
-        <span class="rule"></span>
-        <span class="count">not published</span>
-      </div>
-      <div class="grid">
-        <a class="card" href="ScholarDatabase/scholar-profiles.html">
-          <div class="card-top">
-            <div class="card-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M22 10L12 5 2 10l10 5 10-5z"/>
-                <path d="M6 12.5V17c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-4.5"/>
-              </svg>
-            </div>
-            <div style="min-width:0">
-              <div class="card-title">Scholar Database</div>
-              <div class="card-owner">Local only</div>
-            </div>
-          </div>
-          <p class="card-desc">Scholar roster with family details and parent skills. Kept off the public site to protect student data — available only on this device.</p>
-          <div class="card-foot">
-            <span class="badge badge-local"><span class="dot"></span>Local</span>
-            <span class="open-link">Open <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
-          </div>
-        </a>
-      </div>
-    </section>
-  </main>
-  <footer>
-    <span>Ugnayan Gulayan · Program Hub</span>
-    <span class="spacer"></span>
-    <span>SY 2026–2027</span>
-  </footer>
-</div>
-
-<!-- Async SheetJS loader: 6-second cap, non-blocking. Blocking
-     <script src> stalls the page when the CDN is slow or blocked. -->
+<header class="topbar" id="topbar"></header>
+<main class="wrap" id="app">
+<h1 id="h1">Program Hub</h1><div id="banner"></div><div id="mycard"></div><div id="content"><p class="muted">Loading…</p></div>
+</main>
 <script>
-(function(){
-  var done = false;
-  function finish(ok){
-    if (done) return;
-    done = true;
-    window.__xlsxReady = true;
-    window.__xlsxOk = ok;
-    if (typeof window.__startHub === "function") window.__startHub();
-  }
-  setTimeout(function(){ finish(false); }, 6000);
-  var s = document.createElement("script");
-  s.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
-  s.onload = function(){ finish(true); };
-  s.onerror = function(){ finish(false); };
-  document.head.appendChild(s);
-})();
-</script>
+var SESSION_KEY='ug-current-user';
+var CDN=['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'];
+var STAFF_ROLES=['committee','liaison','coordinator','documentation','treasurer','logistics','shift_lead'];
+var MEMBER_ROLES=['parent','student'];
+var ROLE_LABELS={committee:'Committee',liaison:'Farm Liaison',coordinator:'Coordinator',documentation:'Documentation',treasurer:'Treasurer',logistics:'Logistics',shift_lead:'Shift Lead',parent:'Parent',student:'Student'};
+var WARN_BANNER='Data could not be loaded. Showing offline fallback. Please check the Excel file.';
 
-<script>
-/* ================================================================
-   CONFIG
-   ================================================================ */
+/* ---- small utilities ---- */
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function norm(s){return String(s==null?'':s).trim().toLowerCase();}
+function num(v){if(typeof v==='number')return isFinite(v)?v:0;var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isFinite(n)?n:0;}
+function fmt(n,d){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d==null?1:d});}
+function peso(n){return (n<0?'-':'')+'\u20B1'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function g(o,h){var v=o[norm(h)];return v==null?'':v;}
+function sGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
+function sSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
+function sDel(k){try{sessionStorage.removeItem(k);}catch(e){}}
+function normRole(s){var r=norm(s).replace(/[\s\-]+/g,'_');return(STAFF_ROLES.indexOf(r)>-1||MEMBER_ROLES.indexOf(r)>-1)?r:'parent';}
+function matches(o,q){q=norm(q);if(!q)return true;return Object.keys(o).some(function(k){var v=o[k];return(typeof v==='string'||typeof v==='number')&&String(v).toLowerCase().indexOf(q)>-1;});}
 
-/* Files tried in order. Case variants matter on GitHub Pages, which
-   serves from a Linux filesystem where filenames are case-sensitive. */
-var FILE_CANDIDATES = ["people.xlsx", "People.xlsx", "PEOPLE.xlsx"];
-var SHEET_NAMES = ["People", "Staff", "List"];
-
-var ROLE_LABELS = {
-  committee:"Program Committee", liaison:"Farm Liaison", coordinator:"Community Lead",
-  documentation:"Documentation Lead", treasurer:"Fund Treasurer",
-  logistics:"Logistics & Tool Master", shift_lead:"Parent Shift Lead",
-  parent:"Parent", student:"Student"
-};
-var ROLE_MAP = {
-  "committee":"committee","program committee":"committee",
-  "liaison":"liaison","farm liaison":"liaison",
-  "coordinator":"coordinator","community lead":"coordinator","scholar coordinator":"coordinator",
-  "documentation":"documentation","documentation lead":"documentation",
-  "treasurer":"treasurer","fund treasurer":"treasurer",
-  "logistics":"logistics","logistics & tool master":"logistics","tool master":"logistics",
-  "shift lead":"shift_lead","parent shift lead":"shift_lead",
-  "parent":"parent","student":"student","scholar":"student","household":"parent"
-};
-
-var TOOLS = [
-  { id:"sweat", title:"Sweat Equity Journal", owner:"Program Committee",
-    desc:"Each scholar's contributions across five dimensions, total Sweat Equity points, and Scholar Level for the April scholarship review.",
-    href:"SweatEquity/sweat-equity.html", status:"planned",
-    roles:["committee","liaison","coordinator","documentation","parent","student"] },
-  { id:"attendance", title:"Farm Points", owner:"Documentation Lead",
-    desc:"Shift log, sign-in and sign-out, task category, verification, and each household's farm points and shifts to target.",
-    href:"Attendance/attendance.html", status:"planned",
-    roles:["committee","liaison","coordinator","documentation","shift_lead","parent","student"] },
-  { id:"farm", title:"Farm Production", owner:"Farming Leads",
-    desc:"What was planted, where, and when. Harvest weights in kilos, split into feeding and surplus portions.",
-    href:"FarmProduction/farm.html", status:"planned",
-    roles:["committee","liaison","coordinator","documentation","shift_lead","parent","student"] },
-  { id:"fund", title:"Welfare Fund & Money", owner:"Fund Treasurer",
-    desc:"Surplus sales revenue, deposits to the Welfare Fund, disbursements by category, and the running balance.",
-    href:"WelfareFund/fund.html", status:"planned",
-    roles:["committee","liaison","treasurer"] },
-  { id:"exceptions", title:"Exceptions & Safety", owner:"Farm Liaison",
-    desc:"Buy-out credits, hardship requests, disputes and appeals, safety incidents, and 60-day quiet-household flags.",
-    href:"Exceptions/exceptions.html", status:"planned",
-    roles:["committee","liaison","coordinator","documentation"] },
-  { id:"tools", title:"Tools & Materials", owner:"Logistics & Tool Master",
-    desc:"Tool inventory and condition, missing or damaged items, seed stock, consumables, and irrigation status.",
-    href:"Tools/tools.html", status:"planned",
-    roles:["committee","liaison","logistics","shift_lead","documentation"] }
-];
-
-/* Used only when people.xlsx can't be reached. Small on purpose — the
-   real list lives in the spreadsheet. This is what you see when the
-   file is missing or the network is down. */
-var FALLBACK_PEOPLE_DATA = [
-  ["ANGEL ALLAN CHELAN LEUS","committee","","","Committee"],
-  ["MARIA LUISA CASTRO","committee","","","Committee"],
-  ["FARM LIAISON (UNASSIGNED)","liaison","","","Placeholder"],
-  ["COMMUNITY LEAD (UNASSIGNED)","coordinator","","","Placeholder"],
-  ["DOCUMENTATION LEAD (UNASSIGNED)","documentation","","","Placeholder"],
-  ["FUND TREASURER (UNASSIGNED)","treasurer","","","Placeholder"],
-  ["LOGISTICS & TOOL MASTER (UNASSIGNED)","logistics","","","Placeholder"],
-  ["[SAMPLE STUDENT]","student","HH-000","","Scholar"],
-  ["[SAMPLE PARENT]","parent","HH-000","","Father"]
-];
-
-var PEOPLE = [];
-var currentUser = null;
-var showAllTools = false;
-var SESSION_KEY = "ug-current-user";
-
-function sGet(k){ try { return window.sessionStorage.getItem(k); } catch(e){ return null; } }
-function sSet(k,v){ try { window.sessionStorage.setItem(k,v); } catch(e){} }
-function sClear(k){ try { window.sessionStorage.removeItem(k); } catch(e){} }
-function lGet(k){ try { return window.localStorage.getItem(k); } catch(e){ return null; } }
-function lSet(k,v){ try { window.localStorage.setItem(k,v); } catch(e){} }
-
-function esc(s){
-  return (s === undefined || s === null ? "" : String(s))
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+/* ---- Excel dates ---- */
+function ymd(d){var m=d.getUTCMonth()+1,day=d.getUTCDate();return d.getUTCFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;}
+function excelDate(v){
+  if(v===''||v==null)return '';
+  if(v instanceof Date)return ymd(v);
+  if(typeof v==='number'){return(v>20000&&v<80000)?ymd(new Date(Math.round((v-25569)*86400000))):String(v);}
+  var s=String(v).trim();
+  if(/^\d{5}(\.\d+)?$/.test(s))return excelDate(parseFloat(s));
+  if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);
+  return s;
 }
-function normName(s){ return (s === undefined || s === null ? "" : String(s)).trim().toUpperCase(); }
-function normalizeRole(s){
-  var k = (s === undefined || s === null ? "" : String(s)).trim().toLowerCase();
-  return ROLE_MAP[k] || "parent";
-}
-function roleLabel(r){ return ROLE_LABELS[r] || r; }
-function firstName(full){ return (full || "").split(" ")[0] || full || ""; }
-
-function fallbackPeople(){
-  return FALLBACK_PEOPLE_DATA.map(function(row){
-    return {
-      name: normName(row[0]),
-      role: normalizeRole(row[1]),
-      hh: String(row[2] || "").trim(),
-      contact: String(row[3] || "").trim(),
-      type: String(row[4] || "").trim()
-    };
-  }).sort(function(a,b){ return a.name.localeCompare(b.name); });
+function daysBetween(a,b){
+  var re=/^(\d{4})-(\d{2})-(\d{2})$/,x=re.exec(a||''),y=re.exec(b||'');
+  if(!x||!y)return null;
+  return Math.round((Date.UTC(+y[1],y[2]-1,+y[3])-Date.UTC(+x[1],x[2]-1,+x[3]))/86400000);
 }
 
-/* ================================================================
-   PARSE A WORKBOOK INTO PEOPLE
-   Scans the first 10 rows for the header. Tolerates title rows and
-   blank rows above it. Prefers a sheet named People / Staff / List,
-   otherwise falls back to the first sheet.
-   ================================================================ */
-function parseWorkbook(wb){
-  var sheets = wb.SheetNames || [];
-  if (!sheets.length) throw new Error("Workbook has no sheets.");
-
-  var sheetName = null;
-  for (var i = 0; i < SHEET_NAMES.length; i++){
-    if (sheets.indexOf(SHEET_NAMES[i]) !== -1){ sheetName = SHEET_NAMES[i]; break; }
-  }
-  if (!sheetName) sheetName = sheets[0];
-
-  var rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: 1, defval: "" });
-  if (!rows || rows.length < 2) throw new Error("No rows in " + sheetName + ".");
-
-  var hIdx = -1, idx = null;
-  for (var k = 0; k < Math.min(rows.length, 10); k++){
-    var head = rows[k].map(function(c){ return String(c === undefined || c === null ? "" : c).trim().toLowerCase(); });
-    var n = head.indexOf("full name");
-    if (n === -1) n = head.indexOf("name");
-    if (n !== -1){
-      hIdx = k;
-      idx = {
-        name:    n,
-        role:    head.indexOf("role"),
-        hh:      head.indexOf("household id"),
-        contact: head.indexOf("contact"),
-        type:    head.indexOf("type")
-      };
-      break;
-    }
-  }
-  if (hIdx === -1) throw new Error("No 'Full Name' column found.");
-
-  var out = [];
-  for (var i = hIdx + 1; i < rows.length; i++){
-    var r = rows[i] || [];
-    var name = String(r[idx.name] === undefined ? "" : r[idx.name]).trim();
-    if (!name) continue;
-    out.push({
-      name:    normName(name),
-      role:    normalizeRole(idx.role    !== -1 ? r[idx.role]    : ""),
-      hh:      idx.hh      !== -1 ? String(r[idx.hh]      || "").trim() : "",
-      contact: idx.contact !== -1 ? String(r[idx.contact] || "").trim() : "",
-      type:    idx.type    !== -1 ? String(r[idx.type]    || "").trim() : ""
+/* ---- SheetJS loading + Excel fetching ---- */
+var _xlsxP=null;
+function loadSheetJS(){
+  if(window.XLSX)return Promise.resolve();
+  if(_xlsxP)return _xlsxP;
+  _xlsxP=new Promise(function(res,rej){
+    var i=0;
+    (function next(){
+      if(i>=CDN.length){rej(new Error('SheetJS library could not be loaded'));return;}
+      var s=document.createElement('script'),done=false;
+      function fail(){if(done)return;done=true;s.remove();next();}
+      s.async=true;s.src=CDN[i++];
+      s.onload=function(){if(done)return;done=true;window.XLSX?res():next();};
+      s.onerror=fail;setTimeout(fail,8000);
+      document.head.appendChild(s);
+    })();
+  });
+  return _xlsxP;
+}
+function withTimeout(p,ms,msg){return new Promise(function(res,rej){var t=setTimeout(function(){rej(new Error(msg));},ms);p.then(function(v){clearTimeout(t);res(v);},function(e){clearTimeout(t);rej(e);});});}
+function fetchExcel(fileName){
+  var p=Promise.all([loadSheetJS(),fetch('data/'+fileName+'?t='+Date.now(),{cache:'no-store'})]).then(function(r){
+    if(!r[1].ok)throw new Error('data/'+fileName+' returned HTTP '+r[1].status);
+    return r[1].arrayBuffer();
+  }).then(function(buf){return XLSX.read(buf,{type:'array'});});
+  return withTimeout(p,20000,'data/'+fileName+' timed out');
+}
+/* Finds the sheet by name, finds the header row within the first 10 rows, returns objects keyed by lower-case header. */
+function readSheet(wb,names,headers,strict){
+  var low=wb.SheetNames.map(norm),sn=null,i;
+  for(i=0;i<names.length&&sn===null;i++){var k=low.indexOf(norm(names[i]));if(k>-1)sn=wb.SheetNames[k];}
+  if(sn===null){if(strict)return[];sn=wb.SheetNames[0];}
+  var aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});
+  var want=headers.map(norm),best=-1,bs=0,r;
+  for(r=0;r<Math.min(10,aoa.length);r++){var sc=0;aoa[r].forEach(function(c){if(want.indexOf(norm(c))>-1)sc++;});if(sc>bs){bs=sc;best=r;}}
+  if(best<0||bs<2)throw new Error('Header row not found in sheet "'+sn+'"');
+  var keys=aoa[best].map(norm),out=[];
+  for(r=best+1;r<aoa.length;r++){
+    var o={},any=false;
+    keys.forEach(function(k,c){
+      if(!k)return;
+      var v=aoa[r][c];if(v==null)v='';
+      if(typeof v==='string')v=v.trim();
+      if(v!=='')any=true;
+      if(k.indexOf('date')>-1||k.indexOf('checked')>-1)v=excelDate(v);
+      o[k]=v;
     });
+    if(any)out.push(o);
   }
-  if (!out.length) throw new Error("No people rows found.");
-  out.sort(function(a,b){ return a.name.localeCompare(b.name); });
   return out;
 }
 
-/* ================================================================
-   LOAD PEOPLE.XLSX
-   Tries each filename variant, cache-busted. Overall 15s cap.
-   Falls through to the fallback list with a clear status message.
-   ================================================================ */
-function loadPeopleData(){
-  var statusEl = document.getElementById("peopleStatus");
-  var statusText = document.getElementById("peopleStatusText");
-  statusEl.className = "data-status";
-  statusText.textContent = "Looking for people.xlsx…";
+/* ---- session + role access ---- */
+function getUser(){var s=sGet(SESSION_KEY);if(!s)return null;try{var u=JSON.parse(s);if(!u||!u.name)return null;u.roleKey=normRole(u.roleKey||u.role);return u;}catch(e){return null;}}
+function isStaff(u){return !!u&&STAFF_ROLES.indexOf(u.roleKey)>-1;}
+function roleLabel(r){return ROLE_LABELS[r]||r;}
+function signOut(){sDel(SESSION_KEY);location.href='index.html';}
 
-  if (typeof XLSX === "undefined" || typeof fetch !== "function"){
-    applyFallback("Excel reader unavailable");
-    return;
-  }
-
-  var tried = [];
-  var settled = false;
-
-  function applyFallback(reason){
-    if (settled) return;
-    settled = true;
-    PEOPLE = fallbackPeople();
-    statusEl.className = "data-status warn";
-    statusText.textContent = reason;
-    renderPeopleList();
-    showLoadError(reason, tried);
-  }
-
-  function applyLive(people, source){
-    if (settled) return;
-    settled = true;
-    PEOPLE = people;
-    statusEl.className = "data-status live";
-    statusText.textContent = PEOPLE.length + " people · " + source;
-    renderPeopleList();
-  }
-
-  var overallTimer = setTimeout(function(){ applyFallback("people.xlsx timed out"); }, 15000);
-
-  function attempt(i){
-    if (settled) return;
-    if (i >= FILE_CANDIDATES.length){
-      clearTimeout(overallTimer);
-      applyFallback("people.xlsx not found");
-      return;
-    }
-    var name = FILE_CANDIDATES[i];
-    var url = name + "?t=" + Date.now();
-    tried.push(name);
-
-    fetch(url, { cache: "no-store" })
-      .then(function(res){
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return res.arrayBuffer();
-      })
-      .then(function(buf){
-        if (settled) return;
-        var wb = XLSX.read(new Uint8Array(buf), { type: "array" });
-        var rows = parseWorkbook(wb);
-        clearTimeout(overallTimer);
-        applyLive(rows, name);
-      })
-      .catch(function(){ attempt(i + 1); });
-  }
-  attempt(0);
+/* ---- page chrome ---- */
+function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ug-theme',t);}catch(e){}}
+function setupTopbar(title,hub){
+  var u=getUser(),el=document.getElementById('topbar');
+  el.innerHTML='<div class="tb-in">'+(hub?'':'<a class="tb-link" href="index.html">\u2190 Hub</a>')+'<div class="tb-title">'+esc(title)+'</div><div class="tb-right">'+
+    (u?'<span class="chip" title="'+esc(roleLabel(u.roleKey))+'">'+esc(u.name)+'</span>':'')+
+    '<button class="btn" id="themeBtn" type="button" aria-label="Toggle dark mode">\u25D0</button>'+
+    (u?'<button class="btn" id="outBtn" type="button">Sign out</button>':'')+'</div></div>';
+  document.getElementById('themeBtn').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
+  var o=document.getElementById('outBtn');if(o)o.onclick=signOut;
+}
+function initPage(opts){
+  setupTopbar(opts.title,false);
+  var u=getUser(),app=document.getElementById('app');
+  if(!u){app.innerHTML='<div class="card login"><h1>Please sign in</h1><p class="muted">You need to choose your name on the hub page before viewing this module.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Go to sign in</a></div>';return null;}
+  if(opts.staffOnly&&!isStaff(u)){app.innerHTML='<div class="card login"><h1>Not available</h1><p class="muted">This module is only available to program staff. Parents and students can use Farm Points and Sweat Equity.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Back to hub</a></div>';return null;}
+  return u;
+}
+function showBanner(err){
+  var b=document.getElementById('banner');if(!b)return;
+  b.innerHTML='<div class="banner">\u26A0 '+esc(WARN_BANNER)+(err&&err.message?'<small>'+esc(err.message)+'</small>':'')+'</div>';
 }
 
-/* Show the diagnostic panel in the people list when load fails. */
-function showLoadError(reason, tried){
-  var list = document.getElementById("peopleList");
-  if (!list) return;
-  var detail;
-  if (reason === "people.xlsx timed out"){
-    detail = "The fetch never returned. Hard-refresh with Ctrl+Shift+R and try again.";
-  } else if (reason === "Excel reader unavailable"){
-    detail = "The SheetJS library didn't load from the CDN. Check your internet connection and reload.";
-  } else if (reason === "people.xlsx not found"){
-    detail = "Tried: " + (tried || []).join(", ") +
-             "\nPath: " + location.pathname +
-             "\nPut people.xlsx next to index.html. Linux servers are case-sensitive.";
-  } else {
-    detail = reason;
-  }
-  var banner = document.createElement("div");
-  banner.className = "people-empty";
-  banner.style.background = "var(--warn-soft)";
-  banner.style.border = "1px solid var(--warn)";
-  banner.style.borderRadius = "10px";
-  banner.style.padding = "14px 16px";
-  banner.style.textAlign = "left";
-  banner.style.fontSize = "12.5px";
-  banner.style.marginBottom = "12px";
-  banner.innerHTML = "<b style='color:var(--warn)'>" + esc(reason) + "</b>" +
-    "<div class='detail' style='color:var(--muted)'>" + esc(detail).replace(/\n/g, "<br>") + "</div>";
-  list.insertBefore(banner, list.firstChild);
-}
-
-/* ================================================================
-   TOOL AUTO-DETECTION
-   HEAD-requests each tool's HTML to see if it's been uploaded. If it
-   responds 200, the card flips from Planned to Live automatically.
-   ================================================================ */
-function detectTools(){
-  if (typeof fetch !== "function") return;
-  TOOLS.forEach(function(t){
-    fetch(t.href, { method: "HEAD" })
-      .then(function(res){
-        if (res.ok){
-          t.status = "live";
-          if (currentUser) renderTools();
-        }
-      })
-      .catch(function(){ /* file missing or file:// — stays planned */ });
+/* ---- reusable HTML builders ---- */
+function stat(label,value,sub,cls){return '<div class="stat '+(cls||'')+'"><div class="l">'+esc(label)+'</div><div class="v">'+esc(value)+'</div>'+(sub?'<div class="s">'+esc(sub)+'</div>':'')+'</div>';}
+function statsRow(a){return '<div class="stats">'+a.join('')+'</div>';}
+function badge(text,cls){return '<span class="badge '+(cls||'')+'">'+esc(text)+'</span>';}
+function bar(label,val,max,ok){var p=max?Math.max(0,Math.min(val/max*100,100)):0;return '<div class="bar-row"><div class="bar-top"><span>'+esc(label)+'</span><span class="num">'+fmt(val)+' / '+fmt(max)+'</span></div><div class="bar'+(ok?' ok':'')+'"><span style="width:'+p.toFixed(1)+'%"></span></div></div>';}
+/* cols: [{h:'Label', f:function(row){return html}, wide:true}] */
+function tableHTML(cols,rows,rowClass){
+  if(!rows.length)return '<div class="empty">No records to show.</div>';
+  var h='<div class="table-wrap"><table><thead><tr>'+cols.map(function(c){return '<th>'+esc(c.h)+'</th>';}).join('')+'</tr></thead><tbody>';
+  rows.forEach(function(r){
+    var rc=rowClass?rowClass(r):'';
+    h+='<tr'+(rc?' class="'+rc+'"':'')+'>'+cols.map(function(c){return '<td data-label="'+esc(c.h)+'"'+(c.wide?' class="c-wide"':'')+'>'+c.f(r)+'</td>';}).join('')+'</tr>';
   });
+  return h+'</tbody></table></div>';
 }
-
-/* ================================================================
-   LOGIN UI & SIGN IN / OUT
-   ================================================================ */
-function renderPeopleList(){
-  var list = document.getElementById("peopleList");
-  var q = normName(document.getElementById("peopleSearch").value);
-  var filtered = q ? PEOPLE.filter(function(p){ return p.name.indexOf(q) !== -1; }) : PEOPLE;
-
-  // Wipe any previous error banner before rendering the fresh list.
-  var old = list.querySelector(".people-empty, .people-error");
-  var errorBanner = old && old.classList.contains("people-error") ? old : null;
-  if (errorBanner) list.removeChild(errorBanner);
-
-  if (!filtered.length){
-    list.innerHTML =
-      '<div class="people-empty"><b>No match for &ldquo;' + esc(q) + '&rdquo;.</b>' +
-      'Try a different spelling, or clear the search.</div>';
-    return;
-  }
-
-  list.innerHTML = filtered.map(function(p){
-    var i = PEOPLE.indexOf(p);
-    return '<button class="person" data-i="' + i + '" type="button">' +
-      '<span class="person-name">' + esc(p.name) + '</span>' +
-      '<span class="person-role">' + esc(roleLabel(p.role)) + '</span>' +
-    '</button>';
-  }).join("");
-
-  Array.prototype.forEach.call(list.querySelectorAll(".person"), function(el){
-    el.addEventListener("click", function(){ signIn(PEOPLE[+el.dataset.i]); });
-  });
+function searchBox(id,placeholder){return '<div class="toolbar"><input type="search" id="'+id+'" placeholder="'+esc(placeholder)+'" aria-label="'+esc(placeholder)+'"></div>';}
+/* Reusable "My Card": cfg.staff() / cfg.member() return inner HTML. */
+function renderMyCard(elId,user,cfg){
+  var el=document.getElementById(elId);if(!el)return;
+  var inner=isStaff(user)?(cfg.staff?cfg.staff():''):(cfg.member?cfg.member():'');
+  el.innerHTML='<div class="card"><h2>My Card \u2014 '+esc(user.name)+' \u00B7 '+esc(roleLabel(user.roleKey))+'</h2>'+inner+'</div>';
 }
+function mine(user,name){return norm(name)!==''&&norm(name)===norm(user.name);}
+</script>
+<script>
+(function(){
+var FALLBACK_PEOPLE=[["ANGEL ALLAN CHELAN LEUS", "committee", "", "", "Committee"], ["MARIA LUISA CASTRO", "committee", "", "", "Committee"], ["FARM LIAISON (UNASSIGNED)", "liaison", "", "", "Placeholder"], ["COMMUNITY LEAD (UNASSIGNED)", "coordinator", "", "", "Placeholder"], ["DOCUMENTATION LEAD (UNASSIGNED)", "documentation", "", "", "Placeholder"], ["FUND TREASURER (UNASSIGNED)", "treasurer", "", "", "Placeholder"], ["LOGISTICS & TOOL MASTER (UNASSIGNED)", "logistics", "", "", "Placeholder"], ["[SAMPLE STUDENT]", "student", "HH-000", "", "Scholar"], ["[SAMPLE PARENT]", "parent", "HH-000", "", "Father"]];
+var MODULES=[
+ {href:'attendance.html',name:'Farm Points',desc:'Household work-day and care-slot points',staff:true,member:true},
+ {href:'sweat-equity.html',name:'Sweat Equity',desc:'Scholar points, levels and progress',staff:true,member:true},
+ {href:'exceptions.html',name:'Exceptions & Safety',desc:'Case log and debrief notes',staff:true,member:false},
+ {href:'farm.html',name:'Farm Production',desc:'Harvest and crop records',staff:true,member:false},
+ {href:'tools.html',name:'Tools & Materials',desc:'Tool and material inventory',staff:true,member:false},
+ {href:'fund.html',name:'Welfare Fund',desc:'Income, expenses and balance',staff:true,member:false}
+];
+var PEOPLE=[],loaded=false;
+var app=document.getElementById('app');
 
-function signIn(person){
-  currentUser = person;
-  showAllTools = false;
-  sSet(SESSION_KEY, JSON.stringify(person));
-  showHome();
-}
-
-function signOut(){
-  currentUser = null;
-  showAllTools = false;
-  sClear(SESSION_KEY);
-  document.getElementById("peopleSearch").value = "";
-  renderPeopleList();
-  showLogin();
-}
+function toUser(r){return {name:String(g(r,'Full Name')).trim(),role:String(g(r,'Role')).trim(),roleKey:normRole(g(r,'Role')),household:String(g(r,'Household ID')).trim(),contact:String(g(r,'Contact')).trim(),type:String(g(r,'Type')).trim()};}
+function fallbackPeople(){return FALLBACK_PEOPLE.map(function(a){return {name:a[0],role:a[1],roleKey:normRole(a[1]),household:a[2],contact:a[3],type:a[4]};});}
 
 function showLogin(){
-  var lv = document.getElementById("loginView");
-  lv.hidden = false;
-  lv.style.opacity = "1";
-  lv.style.visibility = "visible";
-  document.getElementById("homeView").hidden = true;
-  // Auto-focus only where there is a physical keyboard; on phones it would
-  // open the on-screen keyboard immediately and cover the name list.
-  var canHover = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  if (canHover){
-    setTimeout(function(){
-      var s = document.getElementById("peopleSearch");
-      if (s) s.focus();
-    }, 50);
-  }
+  setupTopbar('Ugnayan Gulayan',true);
+  app.innerHTML='<div class="card login"><h1>Sign in</h1><p class="muted">Search for your name and tap it to continue.</p>'+
+   '<div id="banner"></div><input type="search" id="q" placeholder="Search your name\u2026" autocomplete="off" aria-label="Search your name"><div class="people" id="people"><p class="muted">Loading names\u2026</p></div></div>';
+  document.getElementById('q').oninput=drawList;
+  if(loaded){drawList();return;}
+  fetchExcel('people.xlsx').then(function(wb){
+    var rows=readSheet(wb,['People','Sheet1'],['Full Name','Role','Household ID','Contact','Type']);
+    PEOPLE=rows.map(toUser).filter(function(u){return u.name;});
+    loaded=true;drawList();
+  }).catch(function(e){PEOPLE=fallbackPeople();loaded=true;showBanner(e);drawList();});
 }
-
-function showHome(){
-  var lv = document.getElementById("loginView");
-  lv.style.opacity = "0";
-  lv.style.visibility = "hidden";
-  setTimeout(function(){ lv.hidden = true; }, 300);
-
-  document.getElementById("homeView").hidden = false;
-  document.getElementById("whoamiName").textContent = currentUser.name;
-  document.getElementById("whoamiRole").textContent = roleLabel(currentUser.role);
-  renderWelcome();
-  renderTools();
-  renderLocalSection();
+function drawList(){
+  var q=norm(document.getElementById('q').value),box=document.getElementById('people');
+  var list=PEOPLE.filter(function(u){return !q||norm(u.name).indexOf(q)>-1;});
+  if(!list.length){box.innerHTML='<div class="empty">No names match. Check the spelling or ask a program coordinator.</div>';return;}
+  box.innerHTML=list.map(function(u,i){return '<button type="button" class="person" data-i="'+PEOPLE.indexOf(u)+'"><span>'+esc(u.name)+'</span>'+badge(roleLabel(u.roleKey))+'</button>';}).join('');
+  Array.prototype.forEach.call(box.querySelectorAll('.person'),function(b){b.onclick=function(){signIn(PEOPLE[+b.getAttribute('data-i')]);};});
 }
-
-function renderWelcome(){
-  var u = currentUser;
-  var fn = firstName(u.name);
-  var title, sub, chips = [];
-
-  if (u.role === "student"){
-    title = "Kumusta, " + fn + ".";
-    sub = "Welcome to the Ugnayan Gulayan program hub. Your household information and tools are below.";
-    chips.push('<span class="meta-chip">Role <b>Student</b></span>');
-    if (u.hh)      chips.push('<span class="meta-chip">Household <b>' + esc(u.hh) + '</b></span>');
-    if (u.contact) chips.push('<span class="meta-chip">Contact <b>' + esc(u.contact) + '</b></span>');
-  } else if (u.role === "parent"){
-    title = "Kumusta, " + fn + ".";
-    sub = "Welcome to the Ugnayan Gulayan program hub. Your household information and tools are below.";
-    chips.push('<span class="meta-chip">Role <b>Parent</b></span>');
-    if (u.type)    chips.push('<span class="meta-chip">Relation <b>' + esc(u.type) + '</b></span>');
-    if (u.hh)      chips.push('<span class="meta-chip">Household <b>' + esc(u.hh) + '</b></span>');
-    if (u.contact) chips.push('<span class="meta-chip">Contact <b>' + esc(u.contact) + '</b></span>');
-  } else {
-    title = "Welcome, " + fn + ".";
-    sub = "Signed in as " + roleLabel(u.role) + ". Your tools are below.";
-    chips.push('<span class="meta-chip">Role <b>' + esc(roleLabel(u.role)) + '</b></span>');
-    if (u.contact) chips.push('<span class="meta-chip">Contact <b>' + esc(u.contact) + '</b></span>');
-  }
-  document.getElementById("welcomeTitle").textContent = title;
-  document.getElementById("welcomeSub").textContent = sub;
-  document.getElementById("metaRow").innerHTML = chips.join("");
+function signIn(u){sSet(SESSION_KEY,JSON.stringify(u));showDashboard();}
+function showDashboard(){
+  var u=getUser();if(!u){showLogin();return;}
+  setupTopbar('Ugnayan Gulayan',true);
+  var staff=isStaff(u);
+  var mods=MODULES.filter(function(m){return staff?m.staff:m.member;});
+  app.innerHTML='<h1>Welcome, '+esc(u.name)+'</h1><p class="muted">Signed in as '+esc(roleLabel(u.roleKey))+(u.household?' \u00B7 Household '+esc(u.household):'')+'</p>'+
+   '<div class="grid">'+mods.map(function(m){return '<a class="tile" href="'+m.href+'"><b>'+esc(m.name)+'</b><span>'+esc(m.desc)+'</span></a>';}).join('')+'</div>';
 }
-
-function iconFor(id){
-  switch (id){
-    case "sweat":
-      return '<svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z"/></svg>';
-    case "attendance":
-      return '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="M9 15l2 2 4-4"/></svg>';
-    case "farm":
-      return '<svg viewBox="0 0 24 24"><path d="M12 21V9"/><path d="M12 9c0-3 2-5 5-5 0 3-2 5-5 5z"/><path d="M12 13c0-3-2-5-5-5 0 3 2 5 5 5z"/></svg>';
-    case "fund":
-      return '<svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/><circle cx="12" cy="14.5" r="2.5"/></svg>';
-    case "exceptions":
-      return '<svg viewBox="0 0 24 24"><path d="M12 3l9.5 16.5H2.5L12 3z"/><path d="M12 10v4M12 17.5v.5"/></svg>';
-    case "tools":
-      return '<svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 01-5.4 5.4l-6 6a1.4 1.4 0 002 2l6-6a4 4 0 015.4-5.4l-2.6 2.6 1.6 1.6 2.6-2.6z"/></svg>';
-    default:
-      return '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>';
-  }
-}
-
-function toolCard(t){
-  var live = t.status === "live";
-  var open = live ? '<a class="card" href="' + esc(t.href) + '">' : '<div class="card planned">';
-  var close = live ? '</a>' : '</div>';
-  var foot = live
-    ? '<span class="badge badge-live"><span class="dot"></span>Live</span>' +
-      '<span class="open-link">Open <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>'
-    : '<span class="badge badge-planned">Planned</span>';
-  return open +
-    '<div class="card-top">' +
-      '<div class="card-icon">' + iconFor(t.id) + '</div>' +
-      '<div style="min-width:0">' +
-        '<div class="card-title">' + esc(t.title) + '</div>' +
-        '<div class="card-owner">' + esc(t.owner) + '</div>' +
-      '</div>' +
-    '</div>' +
-    '<p class="card-desc">' + esc(t.desc) + '</p>' +
-    '<div class="card-foot">' + foot + '</div>' +
-  close;
-}
-
-function renderTools(){
-  if (!currentUser) return;
-  var isCommittee = currentUser.role === "committee";
-  var showAll = isCommittee || showAllTools;
-  var visible = showAll
-    ? TOOLS.slice()
-    : TOOLS.filter(function(t){ return t.roles.indexOf(currentUser.role) !== -1; });
-
-  document.getElementById("toolsHead").textContent =
-    (showAll && !isCommittee) ? "All tools" : "Your tools";
-  document.getElementById("toolsCount").textContent =
-    visible.length + (visible.length === 1 ? " tool" : " tools");
-
-  var btn = document.getElementById("showAllBtn");
-  if (isCommittee){
-    btn.hidden = true;
-  } else {
-    btn.hidden = false;
-    btn.textContent = showAllTools ? "Show only mine" : "Show all";
-  }
-
-  var grid = document.getElementById("toolsGrid");
-  if (!visible.length){
-    grid.innerHTML =
-      '<div class="empty">No tools are assigned to your role yet.<br>' +
-      'Use <b>Show all</b> above to see everything that is planned.</div>';
-    return;
-  }
-  grid.innerHTML = visible.map(toolCard).join("");
-}
-
-function renderLocalSection(){
-  var h = location.hostname;
-  var isLocal =
-    location.protocol === "file:" ||
-    h === "localhost" || h === "127.0.0.1" || h === "" || h === "[::1]";
-  document.getElementById("localSection").hidden = !isLocal;
-}
-
-function setTheme(t){
-  document.documentElement.setAttribute("data-theme", t);
-  lSet("scholar-theme", t);
-  var icon = document.getElementById("themeIcon");
-  if (icon) icon.innerHTML = t === "dark" ? "&#9788;" : "&#9789;";
-}
-
-function wireUp(){
-  document.getElementById("peopleSearch").addEventListener("input", renderPeopleList);
-  document.getElementById("peopleSearch").addEventListener("keydown", function(e){
-    if (e.key === "Enter"){
-      var f = document.querySelector(".person");
-      if (f) f.click();
-    }
-  });
-  document.getElementById("switchBtn").addEventListener("click", signOut);
-  document.getElementById("reloadExcelBtn").addEventListener("click", function(){
-    loadPeopleData();
-  });
-  document.getElementById("showAllBtn").addEventListener("click", function(){
-    showAllTools = !showAllTools;
-    renderTools();
-  });
-  document.getElementById("themeBtn").addEventListener("click", function(){
-    var now = document.documentElement.getAttribute("data-theme");
-    setTheme(now === "dark" ? "light" : "dark");
-  });
-}
-
-function init(){
-  try {
-    setTheme(lGet("scholar-theme") || "light");
-    wireUp();
-
-    PEOPLE = fallbackPeople();
-    renderPeopleList();
-
-    loadPeopleData();
-    detectTools();
-
-    var saved = sGet(SESSION_KEY);
-    if (saved){
-      try {
-        var person = JSON.parse(saved);
-        if (person && person.name && person.role){
-          currentUser = person;
-          showHome();
-          return;
-        }
-      } catch(e){ /* corrupt entry, ignore */ }
-    }
-    showLogin();
-
-  } catch(err){
-    document.body.innerHTML =
-      '<div style="max-width:680px;margin:60px auto;padding:24px;font-family:system-ui,sans-serif">' +
-      '<h1 style="color:#b91c1c;font-size:18px;margin:0 0 8px">Something went wrong while starting the hub</h1>' +
-      '<pre style="background:#f4f4f5;padding:14px;border-radius:8px;font-size:12px;overflow:auto;white-space:pre-wrap">' +
-      String(err && err.stack ? err.stack : err) +
-      '</pre></div>';
-  }
-}
-
-function boot(){
-  if (document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-}
-window.__startHub = boot;
-if (window.__xlsxReady) boot();
+if(getUser())showDashboard();else showLogin();
+})();
 </script>
 </body>
 </html>
