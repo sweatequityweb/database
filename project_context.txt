@@ -1,2265 +1,0 @@
-================================================================================ 
-PROJECT STRUCTURE MAP (All Files) 
-================================================================================ 
- 
-Folder PATH listing for volume Acer
-Volume serial number is 827D-10BC
-C:.
-|   .nojekyll
-|   attendance.html
-|   exceptions.html
-|   farm.html
-|   fund.html
-|   index.html
-|   project_context.bat
-|   project_context.txt
-|   README.md
-|   sweat-equity.html
-|   tools.html
-|   
-\---data
-        attendance.xlsx
-        exceptions.xlsx
-        farm.xlsx
-        fund.xlsx
-        people.xlsx
-        scholar-journal.xlsx
-        tools.xlsx
-        
- 
-================================================================================ 
-TEXT FILE CONTENTS 
-================================================================================ 
- 
- 
-################################################################################ 
-FILE: .nojekyll 
-################################################################################ 
- 
- 
- 
- 
-################################################################################ 
-FILE: attendance.html 
-################################################################################ 
- 
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Farm Points â€” Ugnayan Gulayan</title>
-<script>try{var t=localStorage.getItem('ug-theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
-<style>
-:root{--bg:#f4f5f7;--surface:#ffffff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--accent:#2563eb;--ok:#16a34a;--warn:#d97706;--danger:#dc2626;
---shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);
---ok-bg:#f0fdf4;--warn-bg:#fffbeb;--danger-bg:#fef2f2;--accent-bg:#eff6ff;--soft:#f9fafb}
-[data-theme="dark"]{--bg:#0f1115;--surface:#171a21;--text:#e8eaed;--muted:#9aa3b2;--border:#262b36;--accent:#60a5fa;--ok:#4ade80;--warn:#fbbf24;--danger:#f87171;
---ok-bg:#10281a;--warn-bg:#33270b;--danger-bg:#331616;--accent-bg:#172338;--soft:#1c2029;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.4)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-a{color:var(--accent)}
-.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border)}
-.tb-in{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
-.tb-link{text-decoration:none;font-weight:600;white-space:nowrap}
-.tb-title{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tb-right{display:flex;align-items:center;gap:8px}
-.chip{font-size:12px;color:var(--muted);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:3px 10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn{font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.wrap{max-width:1100px;margin:0 auto;padding:16px}
-h1{font-size:20px;margin:4px 0 12px}
-.muted{color:var(--muted)}
-.banner{background:var(--warn-bg);border:1px solid var(--warn);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-weight:600}
-.banner small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
-.card h2{font-size:12px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.stat{background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
-.stat .l{font-size:11px;font-weight:650;color:var(--muted);text-transform:uppercase}
-.stat .v{font-size:22px;font-weight:700;line-height:1.2}
-.stat .s{font-size:12px;color:var(--muted)}
-.stat.ok .v{color:var(--ok)}.stat.warn .v{color:var(--warn)}.stat.danger .v{color:var(--danger)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.badge{display:inline-block;font-size:12px;font-weight:650;border-radius:99px;padding:2px 10px;border:1px solid var(--border);background:var(--soft);color:var(--muted);white-space:nowrap}
-.badge.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
-.badge.warn{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
-.badge.danger{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
-.badge.info{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
-.bar-row{margin:8px 0}
-.bar-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
-.bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden}
-.bar span{display:block;height:100%;background:var(--accent);border-radius:99px}
-.bar.ok span{background:var(--ok)}
-.toolbar{display:flex;gap:10px;margin-bottom:12px}
-input[type=search],input[type=text]{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;width:100%}
-input:focus{outline:2px solid var(--accent);outline-offset:0}
-.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
-tbody tr:last-child td{border-bottom:0}
-tr.hl-warn{background:var(--warn-bg)}tr.hl-ok{background:var(--ok-bg)}
-.num{font-variant-numeric:tabular-nums}
-.pos{color:var(--ok);font-weight:650}.neg{color:var(--danger);font-weight:650}
-.empty{text-align:center;color:var(--muted);padding:28px 12px}
-.section-title{font-size:15px;font-weight:700;margin:20px 0 8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.tile{display:block;text-decoration:none;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px}
-.tile:hover{border-color:var(--accent)}
-.tile b{display:block;font-size:15px}.tile span{color:var(--muted);font-size:13px}
-.people{max-height:50vh;overflow-y:auto;margin-top:10px}
-.person{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;cursor:pointer}
-.person:hover{border-color:var(--accent);background:var(--accent-bg)}
-.login{max-width:560px;margin:24px auto}
-@media (max-width:600px){
-  .tb-link{font-size:13px}
-  table,tbody{display:block;width:100%}
-  thead{display:none}
-  .table-wrap{background:none;border:0;box-shadow:none}
-  tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
-  tbody td{display:block;border:0;padding:0}
-  tbody td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase}
-  tbody td.c-wide{grid-column:1 / -1}
-  tbody tr.hl-warn{background:var(--warn-bg)}tbody tr.hl-ok{background:var(--ok-bg)}
-}
-</style>
-</head>
-<body>
-<header class="topbar" id="topbar"></header>
-<main class="wrap" id="app">
-<h1 id="h1">Farm Points</h1><div id="banner"></div><div id="mycard"></div><div id="content"><p class="muted">Loadingâ€¦</p></div>
-</main>
-<script>
-var SESSION_KEY='ug-current-user';
-var CDN=['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'];
-var STAFF_ROLES=['committee','liaison','coordinator','documentation','treasurer','logistics','shift_lead'];
-var MEMBER_ROLES=['parent','student'];
-var ROLE_LABELS={committee:'Committee',liaison:'Farm Liaison',coordinator:'Coordinator',documentation:'Documentation',treasurer:'Treasurer',logistics:'Logistics',shift_lead:'Shift Lead',parent:'Parent',student:'Student'};
-var WARN_BANNER='Data could not be loaded. Showing offline fallback. Please check the Excel file.';
-
-/* ---- small utilities ---- */
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-function norm(s){return String(s==null?'':s).trim().toLowerCase();}
-function num(v){if(typeof v==='number')return isFinite(v)?v:0;var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isFinite(n)?n:0;}
-function fmt(n,d){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d==null?1:d});}
-function peso(n){return (n<0?'-':'')+'\u20B1'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function g(o,h){var v=o[norm(h)];return v==null?'':v;}
-function sGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
-function sSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
-function sDel(k){try{sessionStorage.removeItem(k);}catch(e){}}
-function normRole(s){var r=norm(s).replace(/[\s\-]+/g,'_');return(STAFF_ROLES.indexOf(r)>-1||MEMBER_ROLES.indexOf(r)>-1)?r:'parent';}
-function matches(o,q){q=norm(q);if(!q)return true;return Object.keys(o).some(function(k){var v=o[k];return(typeof v==='string'||typeof v==='number')&&String(v).toLowerCase().indexOf(q)>-1;});}
-
-/* ---- Excel dates ---- */
-function ymd(d){var m=d.getUTCMonth()+1,day=d.getUTCDate();return d.getUTCFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;}
-function excelDate(v){
-  if(v===''||v==null)return '';
-  if(v instanceof Date)return ymd(v);
-  if(typeof v==='number'){return(v>20000&&v<80000)?ymd(new Date(Math.round((v-25569)*86400000))):String(v);}
-  var s=String(v).trim();
-  if(/^\d{5}(\.\d+)?$/.test(s))return excelDate(parseFloat(s));
-  if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);
-  return s;
-}
-function daysBetween(a,b){
-  var re=/^(\d{4})-(\d{2})-(\d{2})$/,x=re.exec(a||''),y=re.exec(b||'');
-  if(!x||!y)return null;
-  return Math.round((Date.UTC(+y[1],y[2]-1,+y[3])-Date.UTC(+x[1],x[2]-1,+x[3]))/86400000);
-}
-
-/* ---- SheetJS loading + Excel fetching ---- */
-var _xlsxP=null;
-function loadSheetJS(){
-  if(window.XLSX)return Promise.resolve();
-  if(_xlsxP)return _xlsxP;
-  _xlsxP=new Promise(function(res,rej){
-    var i=0;
-    (function next(){
-      if(i>=CDN.length){rej(new Error('SheetJS library could not be loaded'));return;}
-      var s=document.createElement('script'),done=false;
-      function fail(){if(done)return;done=true;s.remove();next();}
-      s.async=true;s.src=CDN[i++];
-      s.onload=function(){if(done)return;done=true;window.XLSX?res():next();};
-      s.onerror=fail;setTimeout(fail,8000);
-      document.head.appendChild(s);
-    })();
-  });
-  return _xlsxP;
-}
-function withTimeout(p,ms,msg){return new Promise(function(res,rej){var t=setTimeout(function(){rej(new Error(msg));},ms);p.then(function(v){clearTimeout(t);res(v);},function(e){clearTimeout(t);rej(e);});});}
-function fetchExcel(fileName){
-  var p=Promise.all([loadSheetJS(),fetch('data/'+fileName+'?t='+Date.now(),{cache:'no-store'})]).then(function(r){
-    if(!r[1].ok)throw new Error('data/'+fileName+' returned HTTP '+r[1].status);
-    return r[1].arrayBuffer();
-  }).then(function(buf){return XLSX.read(buf,{type:'array'});});
-  return withTimeout(p,20000,'data/'+fileName+' timed out');
-}
-/* Finds the sheet by name, finds the header row within the first 10 rows, returns objects keyed by lower-case header. */
-function readSheet(wb,names,headers,strict){
-  var low=wb.SheetNames.map(norm),sn=null,i;
-  for(i=0;i<names.length&&sn===null;i++){var k=low.indexOf(norm(names[i]));if(k>-1)sn=wb.SheetNames[k];}
-  if(sn===null){if(strict)return[];sn=wb.SheetNames[0];}
-  var aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});
-  var want=headers.map(norm),best=-1,bs=0,r;
-  for(r=0;r<Math.min(10,aoa.length);r++){var sc=0;aoa[r].forEach(function(c){if(want.indexOf(norm(c))>-1)sc++;});if(sc>bs){bs=sc;best=r;}}
-  if(best<0||bs<2)throw new Error('Header row not found in sheet "'+sn+'"');
-  var keys=aoa[best].map(norm),out=[];
-  for(r=best+1;r<aoa.length;r++){
-    var o={},any=false;
-    keys.forEach(function(k,c){
-      if(!k)return;
-      var v=aoa[r][c];if(v==null)v='';
-      if(typeof v==='string')v=v.trim();
-      if(v!=='')any=true;
-      if(k.indexOf('date')>-1||k.indexOf('checked')>-1)v=excelDate(v);
-      o[k]=v;
-    });
-    if(any)out.push(o);
-  }
-  return out;
-}
-
-/* ---- session + role access ---- */
-function getUser(){var s=sGet(SESSION_KEY);if(!s)return null;try{var u=JSON.parse(s);if(!u||!u.name)return null;u.roleKey=normRole(u.roleKey||u.role);return u;}catch(e){return null;}}
-function isStaff(u){return !!u&&STAFF_ROLES.indexOf(u.roleKey)>-1;}
-function roleLabel(r){return ROLE_LABELS[r]||r;}
-function signOut(){sDel(SESSION_KEY);location.href='index.html';}
-
-/* ---- page chrome ---- */
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ug-theme',t);}catch(e){}}
-function setupTopbar(title,hub){
-  var u=getUser(),el=document.getElementById('topbar');
-  el.innerHTML='<div class="tb-in">'+(hub?'':'<a class="tb-link" href="index.html">\u2190 Hub</a>')+'<div class="tb-title">'+esc(title)+'</div><div class="tb-right">'+
-    (u?'<span class="chip" title="'+esc(roleLabel(u.roleKey))+'">'+esc(u.name)+'</span>':'')+
-    '<button class="btn" id="themeBtn" type="button" aria-label="Toggle dark mode">\u25D0</button>'+
-    (u?'<button class="btn" id="outBtn" type="button">Sign out</button>':'')+'</div></div>';
-  document.getElementById('themeBtn').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
-  var o=document.getElementById('outBtn');if(o)o.onclick=signOut;
-}
-function initPage(opts){
-  setupTopbar(opts.title,false);
-  var u=getUser(),app=document.getElementById('app');
-  if(!u){app.innerHTML='<div class="card login"><h1>Please sign in</h1><p class="muted">You need to choose your name on the hub page before viewing this module.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Go to sign in</a></div>';return null;}
-  if(opts.staffOnly&&!isStaff(u)){app.innerHTML='<div class="card login"><h1>Not available</h1><p class="muted">This module is only available to program staff. Parents and students can use Farm Points and Sweat Equity.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Back to hub</a></div>';return null;}
-  return u;
-}
-function showBanner(err){
-  var b=document.getElementById('banner');if(!b)return;
-  b.innerHTML='<div class="banner">\u26A0 '+esc(WARN_BANNER)+(err&&err.message?'<small>'+esc(err.message)+'</small>':'')+'</div>';
-}
-
-/* ---- reusable HTML builders ---- */
-function stat(label,value,sub,cls){return '<div class="stat '+(cls||'')+'"><div class="l">'+esc(label)+'</div><div class="v">'+esc(value)+'</div>'+(sub?'<div class="s">'+esc(sub)+'</div>':'')+'</div>';}
-function statsRow(a){return '<div class="stats">'+a.join('')+'</div>';}
-function badge(text,cls){return '<span class="badge '+(cls||'')+'">'+esc(text)+'</span>';}
-function bar(label,val,max,ok){var p=max?Math.max(0,Math.min(val/max*100,100)):0;return '<div class="bar-row"><div class="bar-top"><span>'+esc(label)+'</span><span class="num">'+fmt(val)+' / '+fmt(max)+'</span></div><div class="bar'+(ok?' ok':'')+'"><span style="width:'+p.toFixed(1)+'%"></span></div></div>';}
-/* cols: [{h:'Label', f:function(row){return html}, wide:true}] */
-function tableHTML(cols,rows,rowClass){
-  if(!rows.length)return '<div class="empty">No records to show.</div>';
-  var h='<div class="table-wrap"><table><thead><tr>'+cols.map(function(c){return '<th>'+esc(c.h)+'</th>';}).join('')+'</tr></thead><tbody>';
-  rows.forEach(function(r){
-    var rc=rowClass?rowClass(r):'';
-    h+='<tr'+(rc?' class="'+rc+'"':'')+'>'+cols.map(function(c){return '<td data-label="'+esc(c.h)+'"'+(c.wide?' class="c-wide"':'')+'>'+c.f(r)+'</td>';}).join('')+'</tr>';
-  });
-  return h+'</tbody></table></div>';
-}
-function searchBox(id,placeholder){return '<div class="toolbar"><input type="search" id="'+id+'" placeholder="'+esc(placeholder)+'" aria-label="'+esc(placeholder)+'"></div>';}
-/* Reusable "My Card": cfg.staff() / cfg.member() return inner HTML. */
-function renderMyCard(elId,user,cfg){
-  var el=document.getElementById(elId);if(!el)return;
-  var inner=isStaff(user)?(cfg.staff?cfg.staff():''):(cfg.member?cfg.member():'');
-  el.innerHTML='<div class="card"><h2>My Card \u2014 '+esc(user.name)+' \u00B7 '+esc(roleLabel(user.roleKey))+'</h2>'+inner+'</div>';
-}
-function mine(user,name){return norm(name)!==''&&norm(name)===norm(user.name);}
-</script>
-<script>
-(function(){
-var FALLBACK=[["HH-001", "MATEO ASUMEN BOBILES", 0, "Standard"], ["HH-002", "JUNRISH EBUENGA CAONES", 0, "Solo Parent"], ["HH-003", "RICHLYN LANDICHO CAPULO", 0, "Standard"], ["HH-004", "FRANCIS ALLESANDRO CASPE CUSTODIO", 0, "Standard"], ["HH-005", "REYNIEL ALLEN ROBLES ESCUETA", 0, "OFW"], ["HH-006", "JOHN CARLO BARRUGA LAZANAS", 0, "Standard"], ["HH-007", "PHILIP ANDREW CABALLERO LOGRONIO", 0, "Standard"], ["HH-008", "CANDICE BARLOLAY MOSQUERA", 0, "Solo Parent"], ["HH-009", "RHEAN MARK MAGANA PACHECO", 0, "Standard"], ["HH-010", "AKEESHA LIANNE ALCAZAR ROSALES", 0, "Standard"], ["HH-011", "JOSHUA DAVID RELLATORRES ROSAS", 0, "Standard"], ["HH-012", "VINCE ARON SANGALANG SUGUITAN", 0, "Standard"], ["HH-013", "TRICIA YHANIE ABITO BIEN", 0, "Standard"], ["HH-014", "KRIZZEL CADE AUSTRIA DERLA", 0, "Solo Parent"], ["HH-015", "HERSHEY MHAORI HERNANDEZ", 0, "Standard"], ["HH-016", "RHAYNE LUMAG MARTINEZ", 0, "Standard"], ["HH-017", "KEISHA BRICE PANOPIO MELEGRITO", 0, "Standard"], ["HH-018", "KYLE BRENAN SAGADRACA MENDOZA", 0, "Standard"], ["HH-019", "NICOLE ANNE UROT SABAL", 0, "OFW"], ["HH-020", "AIKEE MIKAELA MIRANDUQUE SANTOS", 0, "Standard"], ["HH-021", "QUIM DRIZEL QUIMIO TOLENTINO", 0, "Standard"], ["HH-022", "XYRA HYACINTH RODRIGUEZ CLEOPAS", 0, "Standard"], ["HH-023", "SAMANTHA RAGODON ECRAELA", 0, "Standard"], ["HH-024", "FAITH EUNICE FAMILIAR FLORES", 0, "Standard"], ["HH-025", "ERIC JOSH SANTIAGO GARCIA", 0, "Solo Parent"], ["HH-026", "ANGELU T. NUMERON", 0, "Standard"], ["HH-027", "NASH IVAN RAFALLO PANTOJA", 0, "Standard"], ["HH-028", "ALLYN BAUTISTA RONDINA", 0, "Standard"], ["HH-029", "HANNA KIMBERLIE VALERA FERNANDEZ", 0, "Standard"], ["HH-030", "ANYA NATALIE HERNANDEZ DETRUZ", 0, "Standard"], ["HH-031", "RHAINE JANNELLE SUA NACIONALES", 0, "Standard"], ["HH-032", "ANDREA NICOLE PAR MERCADO", 0, "Standard"], ["HH-033", "GRACE ANUYO UMALI", 0, "Standard"], ["HH-034", "EUSSEY AOE SAN JUAN DEINLA", 0, "Standard"], ["HH-035", "ARVEL NICOLE TERCERO UMALI", 0, "Solo Parent"], ["HH-036", "FRANCHESCA LUBANG SISCON", 0, "Standard"]];
-var BANDS=[{min:100,label:'In Good Standing',cls:'ok'},{min:50,label:'On Track',cls:'info'},{min:25,label:'Needs Support',cls:'warn'},{min:0,label:'Needs Intervention',cls:'danger'}];
-var user=initPage({title:'Farm Points'});if(!user)return;
-var staff=isStaff(user),DATA=[],query='';
-function target(adj){var a=norm(adj);return(a.indexOf('solo')>-1||a.indexOf('ofw')>-1)?90:120;}
-function band(rate){for(var i=0;i<BANDS.length;i++)if(rate>=BANDS[i].min)return BANDS[i];return BANDS[3];}
-function aggregate(list){
-  var map={},order=[];
-  list.forEach(function(r){
-    var id=String(r.id).trim();if(!id)return;var k=id.toUpperCase();
-    if(!map[k]){map[k]={id:id,rep:r.rep,pts:0,adj:''};order.push(k);}
-    var m=map[k];m.pts+=r.pts;if(!m.rep)m.rep=r.rep;
-    if(r.adj&&(!m.adj||target(r.adj)<target(m.adj)))m.adj=r.adj;
-  });
-  return order.map(function(k){var m=map[k];m.target=target(m.adj);m.rem=Math.max(m.target-m.pts,0);m.rate=m.pts/m.target*100;m.band=band(m.rate);return m;})
-    .sort(function(a,b){return a.id.localeCompare(b.id,undefined,{numeric:true});});
-}
-fetchExcel('attendance.xlsx').then(function(wb){
-  var raw=readSheet(wb,['Attendance'],['Household ID','Representative Name','Points','Hardship Adjustment']);
-  DATA=aggregate(raw.map(function(r){return{id:g(r,'Household ID'),rep:g(r,'Representative Name'),pts:num(g(r,'Points')),adj:g(r,'Hardship Adjustment')};}));
-  render();
-}).catch(function(e){
-  DATA=aggregate(FALLBACK.map(function(a){return{id:a[0],rep:a[1],pts:a[2],adj:a[3]};}));
-  showBanner(e);render();
-});
-function render(){
-  renderMyCard('mycard',user,{
-    staff:function(){
-      var tot=0,rs=0,cnt={};BANDS.forEach(function(b){cnt[b.label]=0;});
-      DATA.forEach(function(r){tot+=r.pts;rs+=r.rate;cnt[r.band.label]++;});
-      return statsRow([stat('Households',DATA.length),stat('Total points',fmt(tot)),stat('Avg grant rate',(DATA.length?rs/DATA.length:0).toFixed(1)+'%'),stat('Needs intervention',cnt['Needs Intervention'],'',cnt['Needs Intervention']?'danger':'')])+
-        '<div class="chips">'+BANDS.map(function(b){return badge(b.label+': '+cnt[b.label],b.cls);}).join('')+'</div>';
-    },
-    member:function(){
-      var m=DATA.filter(function(r){return norm(r.id)===norm(user.household);});
-      if(!m.length)return '<p class="muted">We could not find '+(user.household?'household '+esc(user.household):'a household on your profile')+' in the Farm Points records. Please ask a coordinator.</p>';
-      return m.map(function(r){
-        return statsRow([stat('Household ID',r.id),stat('Points earned',fmt(r.pts),'Work Day = 8 pts \u00B7 Care Slot = 4 pts'),stat('Points remaining',fmt(r.rem),r.rem?'to reach '+r.target+' pts':'Target reached!',r.rem?'':'ok')])+bar('Progress to yearly target',Math.min(r.pts,r.target),r.target,r.rem===0);
-      }).join('');
-    }
-  });
-  var c=document.getElementById('content');
-  if(!staff){c.innerHTML='';return;}
-  c.innerHTML=searchBox('s','Search household or representative\u2026')+'<div id="tbl"></div>';
-  document.getElementById('s').oninput=function(){query=this.value;draw();};
-  draw();
-}
-function draw(){
-  var rows=DATA.filter(function(r){return matches(r,query);});
-  document.getElementById('tbl').innerHTML=tableHTML([
-   {h:'Household',f:function(r){return '<b>'+esc(r.id)+'</b>';}},
-   {h:'Representative',f:function(r){return esc(r.rep);},wide:true},
-   {h:'Points',f:function(r){return '<span class="num">'+fmt(r.pts)+'</span>';}},
-   {h:'Target',f:function(r){return '<span class="num">'+r.target+'</span>';}},
-   {h:'Remaining',f:function(r){return '<span class="num">'+fmt(r.rem)+'</span>';}},
-   {h:'Grant Rate',f:function(r){return '<span class="num">'+r.rate.toFixed(1)+'%</span>';}},
-   {h:'Standing Band',f:function(r){return badge(r.band.label,r.band.cls);}},
-   {h:'Adjustment',f:function(r){return esc(r.adj||'Standard');}}
-  ],rows);
-}
-})();
-</script>
-</body>
-</html>
- 
- 
- 
-################################################################################ 
-FILE: exceptions.html 
-################################################################################ 
- 
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Exceptions & Safety â€” Ugnayan Gulayan</title>
-<script>try{var t=localStorage.getItem('ug-theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
-<style>
-:root{--bg:#f4f5f7;--surface:#ffffff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--accent:#2563eb;--ok:#16a34a;--warn:#d97706;--danger:#dc2626;
---shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);
---ok-bg:#f0fdf4;--warn-bg:#fffbeb;--danger-bg:#fef2f2;--accent-bg:#eff6ff;--soft:#f9fafb}
-[data-theme="dark"]{--bg:#0f1115;--surface:#171a21;--text:#e8eaed;--muted:#9aa3b2;--border:#262b36;--accent:#60a5fa;--ok:#4ade80;--warn:#fbbf24;--danger:#f87171;
---ok-bg:#10281a;--warn-bg:#33270b;--danger-bg:#331616;--accent-bg:#172338;--soft:#1c2029;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.4)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-a{color:var(--accent)}
-.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border)}
-.tb-in{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
-.tb-link{text-decoration:none;font-weight:600;white-space:nowrap}
-.tb-title{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tb-right{display:flex;align-items:center;gap:8px}
-.chip{font-size:12px;color:var(--muted);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:3px 10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn{font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.wrap{max-width:1100px;margin:0 auto;padding:16px}
-h1{font-size:20px;margin:4px 0 12px}
-.muted{color:var(--muted)}
-.banner{background:var(--warn-bg);border:1px solid var(--warn);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-weight:600}
-.banner small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
-.card h2{font-size:12px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.stat{background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
-.stat .l{font-size:11px;font-weight:650;color:var(--muted);text-transform:uppercase}
-.stat .v{font-size:22px;font-weight:700;line-height:1.2}
-.stat .s{font-size:12px;color:var(--muted)}
-.stat.ok .v{color:var(--ok)}.stat.warn .v{color:var(--warn)}.stat.danger .v{color:var(--danger)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.badge{display:inline-block;font-size:12px;font-weight:650;border-radius:99px;padding:2px 10px;border:1px solid var(--border);background:var(--soft);color:var(--muted);white-space:nowrap}
-.badge.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
-.badge.warn{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
-.badge.danger{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
-.badge.info{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
-.bar-row{margin:8px 0}
-.bar-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
-.bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden}
-.bar span{display:block;height:100%;background:var(--accent);border-radius:99px}
-.bar.ok span{background:var(--ok)}
-.toolbar{display:flex;gap:10px;margin-bottom:12px}
-input[type=search],input[type=text]{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;width:100%}
-input:focus{outline:2px solid var(--accent);outline-offset:0}
-.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
-tbody tr:last-child td{border-bottom:0}
-tr.hl-warn{background:var(--warn-bg)}tr.hl-ok{background:var(--ok-bg)}
-.num{font-variant-numeric:tabular-nums}
-.pos{color:var(--ok);font-weight:650}.neg{color:var(--danger);font-weight:650}
-.empty{text-align:center;color:var(--muted);padding:28px 12px}
-.section-title{font-size:15px;font-weight:700;margin:20px 0 8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.tile{display:block;text-decoration:none;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px}
-.tile:hover{border-color:var(--accent)}
-.tile b{display:block;font-size:15px}.tile span{color:var(--muted);font-size:13px}
-.people{max-height:50vh;overflow-y:auto;margin-top:10px}
-.person{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;cursor:pointer}
-.person:hover{border-color:var(--accent);background:var(--accent-bg)}
-.login{max-width:560px;margin:24px auto}
-@media (max-width:600px){
-  .tb-link{font-size:13px}
-  table,tbody{display:block;width:100%}
-  thead{display:none}
-  .table-wrap{background:none;border:0;box-shadow:none}
-  tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
-  tbody td{display:block;border:0;padding:0}
-  tbody td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase}
-  tbody td.c-wide{grid-column:1 / -1}
-  tbody tr.hl-warn{background:var(--warn-bg)}tbody tr.hl-ok{background:var(--ok-bg)}
-}
-</style>
-</head>
-<body>
-<header class="topbar" id="topbar"></header>
-<main class="wrap" id="app">
-<h1 id="h1">Exceptions & Safety</h1><div id="banner"></div><div id="mycard"></div><div id="content"><p class="muted">Loadingâ€¦</p></div>
-</main>
-<script>
-var SESSION_KEY='ug-current-user';
-var CDN=['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'];
-var STAFF_ROLES=['committee','liaison','coordinator','documentation','treasurer','logistics','shift_lead'];
-var MEMBER_ROLES=['parent','student'];
-var ROLE_LABELS={committee:'Committee',liaison:'Farm Liaison',coordinator:'Coordinator',documentation:'Documentation',treasurer:'Treasurer',logistics:'Logistics',shift_lead:'Shift Lead',parent:'Parent',student:'Student'};
-var WARN_BANNER='Data could not be loaded. Showing offline fallback. Please check the Excel file.';
-
-/* ---- small utilities ---- */
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-function norm(s){return String(s==null?'':s).trim().toLowerCase();}
-function num(v){if(typeof v==='number')return isFinite(v)?v:0;var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isFinite(n)?n:0;}
-function fmt(n,d){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d==null?1:d});}
-function peso(n){return (n<0?'-':'')+'\u20B1'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function g(o,h){var v=o[norm(h)];return v==null?'':v;}
-function sGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
-function sSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
-function sDel(k){try{sessionStorage.removeItem(k);}catch(e){}}
-function normRole(s){var r=norm(s).replace(/[\s\-]+/g,'_');return(STAFF_ROLES.indexOf(r)>-1||MEMBER_ROLES.indexOf(r)>-1)?r:'parent';}
-function matches(o,q){q=norm(q);if(!q)return true;return Object.keys(o).some(function(k){var v=o[k];return(typeof v==='string'||typeof v==='number')&&String(v).toLowerCase().indexOf(q)>-1;});}
-
-/* ---- Excel dates ---- */
-function ymd(d){var m=d.getUTCMonth()+1,day=d.getUTCDate();return d.getUTCFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;}
-function excelDate(v){
-  if(v===''||v==null)return '';
-  if(v instanceof Date)return ymd(v);
-  if(typeof v==='number'){return(v>20000&&v<80000)?ymd(new Date(Math.round((v-25569)*86400000))):String(v);}
-  var s=String(v).trim();
-  if(/^\d{5}(\.\d+)?$/.test(s))return excelDate(parseFloat(s));
-  if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);
-  return s;
-}
-function daysBetween(a,b){
-  var re=/^(\d{4})-(\d{2})-(\d{2})$/,x=re.exec(a||''),y=re.exec(b||'');
-  if(!x||!y)return null;
-  return Math.round((Date.UTC(+y[1],y[2]-1,+y[3])-Date.UTC(+x[1],x[2]-1,+x[3]))/86400000);
-}
-
-/* ---- SheetJS loading + Excel fetching ---- */
-var _xlsxP=null;
-function loadSheetJS(){
-  if(window.XLSX)return Promise.resolve();
-  if(_xlsxP)return _xlsxP;
-  _xlsxP=new Promise(function(res,rej){
-    var i=0;
-    (function next(){
-      if(i>=CDN.length){rej(new Error('SheetJS library could not be loaded'));return;}
-      var s=document.createElement('script'),done=false;
-      function fail(){if(done)return;done=true;s.remove();next();}
-      s.async=true;s.src=CDN[i++];
-      s.onload=function(){if(done)return;done=true;window.XLSX?res():next();};
-      s.onerror=fail;setTimeout(fail,8000);
-      document.head.appendChild(s);
-    })();
-  });
-  return _xlsxP;
-}
-function withTimeout(p,ms,msg){return new Promise(function(res,rej){var t=setTimeout(function(){rej(new Error(msg));},ms);p.then(function(v){clearTimeout(t);res(v);},function(e){clearTimeout(t);rej(e);});});}
-function fetchExcel(fileName){
-  var p=Promise.all([loadSheetJS(),fetch('data/'+fileName+'?t='+Date.now(),{cache:'no-store'})]).then(function(r){
-    if(!r[1].ok)throw new Error('data/'+fileName+' returned HTTP '+r[1].status);
-    return r[1].arrayBuffer();
-  }).then(function(buf){return XLSX.read(buf,{type:'array'});});
-  return withTimeout(p,20000,'data/'+fileName+' timed out');
-}
-/* Finds the sheet by name, finds the header row within the first 10 rows, returns objects keyed by lower-case header. */
-function readSheet(wb,names,headers,strict){
-  var low=wb.SheetNames.map(norm),sn=null,i;
-  for(i=0;i<names.length&&sn===null;i++){var k=low.indexOf(norm(names[i]));if(k>-1)sn=wb.SheetNames[k];}
-  if(sn===null){if(strict)return[];sn=wb.SheetNames[0];}
-  var aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});
-  var want=headers.map(norm),best=-1,bs=0,r;
-  for(r=0;r<Math.min(10,aoa.length);r++){var sc=0;aoa[r].forEach(function(c){if(want.indexOf(norm(c))>-1)sc++;});if(sc>bs){bs=sc;best=r;}}
-  if(best<0||bs<2)throw new Error('Header row not found in sheet "'+sn+'"');
-  var keys=aoa[best].map(norm),out=[];
-  for(r=best+1;r<aoa.length;r++){
-    var o={},any=false;
-    keys.forEach(function(k,c){
-      if(!k)return;
-      var v=aoa[r][c];if(v==null)v='';
-      if(typeof v==='string')v=v.trim();
-      if(v!=='')any=true;
-      if(k.indexOf('date')>-1||k.indexOf('checked')>-1)v=excelDate(v);
-      o[k]=v;
-    });
-    if(any)out.push(o);
-  }
-  return out;
-}
-
-/* ---- session + role access ---- */
-function getUser(){var s=sGet(SESSION_KEY);if(!s)return null;try{var u=JSON.parse(s);if(!u||!u.name)return null;u.roleKey=normRole(u.roleKey||u.role);return u;}catch(e){return null;}}
-function isStaff(u){return !!u&&STAFF_ROLES.indexOf(u.roleKey)>-1;}
-function roleLabel(r){return ROLE_LABELS[r]||r;}
-function signOut(){sDel(SESSION_KEY);location.href='index.html';}
-
-/* ---- page chrome ---- */
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ug-theme',t);}catch(e){}}
-function setupTopbar(title,hub){
-  var u=getUser(),el=document.getElementById('topbar');
-  el.innerHTML='<div class="tb-in">'+(hub?'':'<a class="tb-link" href="index.html">\u2190 Hub</a>')+'<div class="tb-title">'+esc(title)+'</div><div class="tb-right">'+
-    (u?'<span class="chip" title="'+esc(roleLabel(u.roleKey))+'">'+esc(u.name)+'</span>':'')+
-    '<button class="btn" id="themeBtn" type="button" aria-label="Toggle dark mode">\u25D0</button>'+
-    (u?'<button class="btn" id="outBtn" type="button">Sign out</button>':'')+'</div></div>';
-  document.getElementById('themeBtn').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
-  var o=document.getElementById('outBtn');if(o)o.onclick=signOut;
-}
-function initPage(opts){
-  setupTopbar(opts.title,false);
-  var u=getUser(),app=document.getElementById('app');
-  if(!u){app.innerHTML='<div class="card login"><h1>Please sign in</h1><p class="muted">You need to choose your name on the hub page before viewing this module.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Go to sign in</a></div>';return null;}
-  if(opts.staffOnly&&!isStaff(u)){app.innerHTML='<div class="card login"><h1>Not available</h1><p class="muted">This module is only available to program staff. Parents and students can use Farm Points and Sweat Equity.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Back to hub</a></div>';return null;}
-  return u;
-}
-function showBanner(err){
-  var b=document.getElementById('banner');if(!b)return;
-  b.innerHTML='<div class="banner">\u26A0 '+esc(WARN_BANNER)+(err&&err.message?'<small>'+esc(err.message)+'</small>':'')+'</div>';
-}
-
-/* ---- reusable HTML builders ---- */
-function stat(label,value,sub,cls){return '<div class="stat '+(cls||'')+'"><div class="l">'+esc(label)+'</div><div class="v">'+esc(value)+'</div>'+(sub?'<div class="s">'+esc(sub)+'</div>':'')+'</div>';}
-function statsRow(a){return '<div class="stats">'+a.join('')+'</div>';}
-function badge(text,cls){return '<span class="badge '+(cls||'')+'">'+esc(text)+'</span>';}
-function bar(label,val,max,ok){var p=max?Math.max(0,Math.min(val/max*100,100)):0;return '<div class="bar-row"><div class="bar-top"><span>'+esc(label)+'</span><span class="num">'+fmt(val)+' / '+fmt(max)+'</span></div><div class="bar'+(ok?' ok':'')+'"><span style="width:'+p.toFixed(1)+'%"></span></div></div>';}
-/* cols: [{h:'Label', f:function(row){return html}, wide:true}] */
-function tableHTML(cols,rows,rowClass){
-  if(!rows.length)return '<div class="empty">No records to show.</div>';
-  var h='<div class="table-wrap"><table><thead><tr>'+cols.map(function(c){return '<th>'+esc(c.h)+'</th>';}).join('')+'</tr></thead><tbody>';
-  rows.forEach(function(r){
-    var rc=rowClass?rowClass(r):'';
-    h+='<tr'+(rc?' class="'+rc+'"':'')+'>'+cols.map(function(c){return '<td data-label="'+esc(c.h)+'"'+(c.wide?' class="c-wide"':'')+'>'+c.f(r)+'</td>';}).join('')+'</tr>';
-  });
-  return h+'</tbody></table></div>';
-}
-function searchBox(id,placeholder){return '<div class="toolbar"><input type="search" id="'+id+'" placeholder="'+esc(placeholder)+'" aria-label="'+esc(placeholder)+'"></div>';}
-/* Reusable "My Card": cfg.staff() / cfg.member() return inner HTML. */
-function renderMyCard(elId,user,cfg){
-  var el=document.getElementById(elId);if(!el)return;
-  var inner=isStaff(user)?(cfg.staff?cfg.staff():''):(cfg.member?cfg.member():'');
-  el.innerHTML='<div class="card"><h2>My Card \u2014 '+esc(user.name)+' \u00B7 '+esc(roleLabel(user.roleKey))+'</h2>'+inner+'</div>';
-}
-function mine(user,name){return norm(name)!==''&&norm(name)===norm(user.name);}
-</script>
-<script>
-(function(){
-var user=initPage({title:'Exceptions & Safety',staffOnly:true});if(!user)return;
-var CASES=[],NOTES=[],query='';
-var WARN=['unresolved','open','pending','review'],OK=['resolved','closed','approved'];
-function sc(s){var n=norm(s),i;for(i=0;i<WARN.length;i++)if(n.indexOf(WARN[i])>-1)return 'warn';for(i=0;i<OK.length;i++)if(n.indexOf(OK[i])>-1)return 'ok';return '';}
-fetchExcel('exceptions.xlsx').then(function(wb){
-  var a=readSheet(wb,['Exceptions'],['Date','Household ID','Type','Description','First Action Date','Status','Filed By','Resolved By','Resolution Date','Notes']);
-  var b=[];try{b=readSheet(wb,['DebriefNotes','Debrief Notes'],['Date','Pod','Issue','Raised By','Noted By'],true);}catch(e){}
-  CASES=a.map(function(r){
-    var o={date:g(r,'Date'),hh:g(r,'Household ID'),type:g(r,'Type'),desc:g(r,'Description'),first:g(r,'First Action Date'),status:g(r,'Status'),filed:g(r,'Filed By'),resolver:g(r,'Resolved By'),resDate:g(r,'Resolution Date'),notes:g(r,'Notes')};
-    o.tti=daysBetween(o.date,o.first);o.cls=sc(o.status);return o;
-  }).sort(function(x,y){return String(y.date).localeCompare(String(x.date));});
-  NOTES=b.map(function(r){return{date:g(r,'Date'),pod:g(r,'Pod'),issue:g(r,'Issue'),raised:g(r,'Raised By'),noted:g(r,'Noted By')};}).sort(function(x,y){return String(y.date).localeCompare(String(x.date));});
-  render();
-}).catch(function(e){CASES=[];NOTES=[];showBanner(e);render();});
-function render(){
-  renderMyCard('mycard',user,{staff:function(){
-    var open=0,done=0,ts=0,tn=0,mineN=0;
-    CASES.forEach(function(r){if(r.cls==='warn')open++;if(r.cls==='ok')done++;if(r.tti!==null&&r.tti>=0){ts+=r.tti;tn++;}if(mine(user,r.filed))mineN++;});
-    return statsRow([stat('Total cases',CASES.length),stat('Open / pending',open,'',open?'warn':''),stat('Resolved / closed',done,'',done?'ok':''),stat('Avg time-to-intervention',tn?fmt(ts/tn)+' d':'\u2014',tn+' case(s) with a first action'),stat('Filed by me',mineN)]);
-  }});
-  document.getElementById('content').innerHTML=searchBox('s','Search cases and notes\u2026')+'<div class="section-title">Case log</div><div id="t1"></div><div class="section-title">Debrief notes</div><div id="t2"></div>';
-  document.getElementById('s').oninput=function(){query=this.value;draw();};
-  draw();
-}
-function draw(){
-  var c=CASES.filter(function(r){return matches(r,query);}),n=NOTES.filter(function(r){return matches(r,query);});
-  document.getElementById('t1').innerHTML=tableHTML([
-   {h:'Date',f:function(r){return esc(r.date);}},{h:'Household',f:function(r){return esc(r.hh);}},{h:'Type',f:function(r){return esc(r.type);}},
-   {h:'Status',f:function(r){return badge(r.status||'\u2014',r.cls);}},
-   {h:'Description',f:function(r){return esc(r.desc);},wide:true},
-   {h:'First Action',f:function(r){return esc(r.first)||'<span class="muted">None yet</span>';}},
-   {h:'Time-to-Intervention',f:function(r){return r.tti===null?'<span class="muted">\u2014</span>':'<span class="num">'+r.tti+' day'+(r.tti===1?'':'s')+'</span>';}},
-   {h:'Filed By',f:function(r){return esc(r.filed);}},{h:'Resolved By',f:function(r){return esc(r.resolver);}},{h:'Resolution Date',f:function(r){return esc(r.resDate);}},
-   {h:'Notes',f:function(r){return esc(r.notes);},wide:true}
-  ],c,function(r){return r.cls?'hl-'+r.cls:'';});
-  document.getElementById('t2').innerHTML=tableHTML([
-   {h:'Date',f:function(r){return esc(r.date);}},{h:'Pod',f:function(r){return esc(r.pod);}},{h:'Issue',f:function(r){return esc(r.issue);},wide:true},
-   {h:'Raised By',f:function(r){return esc(r.raised);}},{h:'Noted By',f:function(r){return esc(r.noted);}}
-  ],n);
-}
-})();
-</script>
-</body>
-</html>
- 
- 
- 
-################################################################################ 
-FILE: farm.html 
-################################################################################ 
- 
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Farm Production â€” Ugnayan Gulayan</title>
-<script>try{var t=localStorage.getItem('ug-theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
-<style>
-:root{--bg:#f4f5f7;--surface:#ffffff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--accent:#2563eb;--ok:#16a34a;--warn:#d97706;--danger:#dc2626;
---shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);
---ok-bg:#f0fdf4;--warn-bg:#fffbeb;--danger-bg:#fef2f2;--accent-bg:#eff6ff;--soft:#f9fafb}
-[data-theme="dark"]{--bg:#0f1115;--surface:#171a21;--text:#e8eaed;--muted:#9aa3b2;--border:#262b36;--accent:#60a5fa;--ok:#4ade80;--warn:#fbbf24;--danger:#f87171;
---ok-bg:#10281a;--warn-bg:#33270b;--danger-bg:#331616;--accent-bg:#172338;--soft:#1c2029;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.4)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-a{color:var(--accent)}
-.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border)}
-.tb-in{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
-.tb-link{text-decoration:none;font-weight:600;white-space:nowrap}
-.tb-title{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tb-right{display:flex;align-items:center;gap:8px}
-.chip{font-size:12px;color:var(--muted);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:3px 10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn{font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.wrap{max-width:1100px;margin:0 auto;padding:16px}
-h1{font-size:20px;margin:4px 0 12px}
-.muted{color:var(--muted)}
-.banner{background:var(--warn-bg);border:1px solid var(--warn);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-weight:600}
-.banner small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
-.card h2{font-size:12px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.stat{background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
-.stat .l{font-size:11px;font-weight:650;color:var(--muted);text-transform:uppercase}
-.stat .v{font-size:22px;font-weight:700;line-height:1.2}
-.stat .s{font-size:12px;color:var(--muted)}
-.stat.ok .v{color:var(--ok)}.stat.warn .v{color:var(--warn)}.stat.danger .v{color:var(--danger)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.badge{display:inline-block;font-size:12px;font-weight:650;border-radius:99px;padding:2px 10px;border:1px solid var(--border);background:var(--soft);color:var(--muted);white-space:nowrap}
-.badge.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
-.badge.warn{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
-.badge.danger{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
-.badge.info{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
-.bar-row{margin:8px 0}
-.bar-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
-.bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden}
-.bar span{display:block;height:100%;background:var(--accent);border-radius:99px}
-.bar.ok span{background:var(--ok)}
-.toolbar{display:flex;gap:10px;margin-bottom:12px}
-input[type=search],input[type=text]{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;width:100%}
-input:focus{outline:2px solid var(--accent);outline-offset:0}
-.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
-tbody tr:last-child td{border-bottom:0}
-tr.hl-warn{background:var(--warn-bg)}tr.hl-ok{background:var(--ok-bg)}
-.num{font-variant-numeric:tabular-nums}
-.pos{color:var(--ok);font-weight:650}.neg{color:var(--danger);font-weight:650}
-.empty{text-align:center;color:var(--muted);padding:28px 12px}
-.section-title{font-size:15px;font-weight:700;margin:20px 0 8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.tile{display:block;text-decoration:none;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px}
-.tile:hover{border-color:var(--accent)}
-.tile b{display:block;font-size:15px}.tile span{color:var(--muted);font-size:13px}
-.people{max-height:50vh;overflow-y:auto;margin-top:10px}
-.person{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;cursor:pointer}
-.person:hover{border-color:var(--accent);background:var(--accent-bg)}
-.login{max-width:560px;margin:24px auto}
-@media (max-width:600px){
-  .tb-link{font-size:13px}
-  table,tbody{display:block;width:100%}
-  thead{display:none}
-  .table-wrap{background:none;border:0;box-shadow:none}
-  tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
-  tbody td{display:block;border:0;padding:0}
-  tbody td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase}
-  tbody td.c-wide{grid-column:1 / -1}
-  tbody tr.hl-warn{background:var(--warn-bg)}tbody tr.hl-ok{background:var(--ok-bg)}
-}
-</style>
-</head>
-<body>
-<header class="topbar" id="topbar"></header>
-<main class="wrap" id="app">
-<h1 id="h1">Farm Production</h1><div id="banner"></div><div id="mycard"></div><div id="content"><p class="muted">Loadingâ€¦</p></div>
-</main>
-<script>
-var SESSION_KEY='ug-current-user';
-var CDN=['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'];
-var STAFF_ROLES=['committee','liaison','coordinator','documentation','treasurer','logistics','shift_lead'];
-var MEMBER_ROLES=['parent','student'];
-var ROLE_LABELS={committee:'Committee',liaison:'Farm Liaison',coordinator:'Coordinator',documentation:'Documentation',treasurer:'Treasurer',logistics:'Logistics',shift_lead:'Shift Lead',parent:'Parent',student:'Student'};
-var WARN_BANNER='Data could not be loaded. Showing offline fallback. Please check the Excel file.';
-
-/* ---- small utilities ---- */
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-function norm(s){return String(s==null?'':s).trim().toLowerCase();}
-function num(v){if(typeof v==='number')return isFinite(v)?v:0;var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isFinite(n)?n:0;}
-function fmt(n,d){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d==null?1:d});}
-function peso(n){return (n<0?'-':'')+'\u20B1'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function g(o,h){var v=o[norm(h)];return v==null?'':v;}
-function sGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
-function sSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
-function sDel(k){try{sessionStorage.removeItem(k);}catch(e){}}
-function normRole(s){var r=norm(s).replace(/[\s\-]+/g,'_');return(STAFF_ROLES.indexOf(r)>-1||MEMBER_ROLES.indexOf(r)>-1)?r:'parent';}
-function matches(o,q){q=norm(q);if(!q)return true;return Object.keys(o).some(function(k){var v=o[k];return(typeof v==='string'||typeof v==='number')&&String(v).toLowerCase().indexOf(q)>-1;});}
-
-/* ---- Excel dates ---- */
-function ymd(d){var m=d.getUTCMonth()+1,day=d.getUTCDate();return d.getUTCFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;}
-function excelDate(v){
-  if(v===''||v==null)return '';
-  if(v instanceof Date)return ymd(v);
-  if(typeof v==='number'){return(v>20000&&v<80000)?ymd(new Date(Math.round((v-25569)*86400000))):String(v);}
-  var s=String(v).trim();
-  if(/^\d{5}(\.\d+)?$/.test(s))return excelDate(parseFloat(s));
-  if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);
-  return s;
-}
-function daysBetween(a,b){
-  var re=/^(\d{4})-(\d{2})-(\d{2})$/,x=re.exec(a||''),y=re.exec(b||'');
-  if(!x||!y)return null;
-  return Math.round((Date.UTC(+y[1],y[2]-1,+y[3])-Date.UTC(+x[1],x[2]-1,+x[3]))/86400000);
-}
-
-/* ---- SheetJS loading + Excel fetching ---- */
-var _xlsxP=null;
-function loadSheetJS(){
-  if(window.XLSX)return Promise.resolve();
-  if(_xlsxP)return _xlsxP;
-  _xlsxP=new Promise(function(res,rej){
-    var i=0;
-    (function next(){
-      if(i>=CDN.length){rej(new Error('SheetJS library could not be loaded'));return;}
-      var s=document.createElement('script'),done=false;
-      function fail(){if(done)return;done=true;s.remove();next();}
-      s.async=true;s.src=CDN[i++];
-      s.onload=function(){if(done)return;done=true;window.XLSX?res():next();};
-      s.onerror=fail;setTimeout(fail,8000);
-      document.head.appendChild(s);
-    })();
-  });
-  return _xlsxP;
-}
-function withTimeout(p,ms,msg){return new Promise(function(res,rej){var t=setTimeout(function(){rej(new Error(msg));},ms);p.then(function(v){clearTimeout(t);res(v);},function(e){clearTimeout(t);rej(e);});});}
-function fetchExcel(fileName){
-  var p=Promise.all([loadSheetJS(),fetch('data/'+fileName+'?t='+Date.now(),{cache:'no-store'})]).then(function(r){
-    if(!r[1].ok)throw new Error('data/'+fileName+' returned HTTP '+r[1].status);
-    return r[1].arrayBuffer();
-  }).then(function(buf){return XLSX.read(buf,{type:'array'});});
-  return withTimeout(p,20000,'data/'+fileName+' timed out');
-}
-/* Finds the sheet by name, finds the header row within the first 10 rows, returns objects keyed by lower-case header. */
-function readSheet(wb,names,headers,strict){
-  var low=wb.SheetNames.map(norm),sn=null,i;
-  for(i=0;i<names.length&&sn===null;i++){var k=low.indexOf(norm(names[i]));if(k>-1)sn=wb.SheetNames[k];}
-  if(sn===null){if(strict)return[];sn=wb.SheetNames[0];}
-  var aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});
-  var want=headers.map(norm),best=-1,bs=0,r;
-  for(r=0;r<Math.min(10,aoa.length);r++){var sc=0;aoa[r].forEach(function(c){if(want.indexOf(norm(c))>-1)sc++;});if(sc>bs){bs=sc;best=r;}}
-  if(best<0||bs<2)throw new Error('Header row not found in sheet "'+sn+'"');
-  var keys=aoa[best].map(norm),out=[];
-  for(r=best+1;r<aoa.length;r++){
-    var o={},any=false;
-    keys.forEach(function(k,c){
-      if(!k)return;
-      var v=aoa[r][c];if(v==null)v='';
-      if(typeof v==='string')v=v.trim();
-      if(v!=='')any=true;
-      if(k.indexOf('date')>-1||k.indexOf('checked')>-1)v=excelDate(v);
-      o[k]=v;
-    });
-    if(any)out.push(o);
-  }
-  return out;
-}
-
-/* ---- session + role access ---- */
-function getUser(){var s=sGet(SESSION_KEY);if(!s)return null;try{var u=JSON.parse(s);if(!u||!u.name)return null;u.roleKey=normRole(u.roleKey||u.role);return u;}catch(e){return null;}}
-function isStaff(u){return !!u&&STAFF_ROLES.indexOf(u.roleKey)>-1;}
-function roleLabel(r){return ROLE_LABELS[r]||r;}
-function signOut(){sDel(SESSION_KEY);location.href='index.html';}
-
-/* ---- page chrome ---- */
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ug-theme',t);}catch(e){}}
-function setupTopbar(title,hub){
-  var u=getUser(),el=document.getElementById('topbar');
-  el.innerHTML='<div class="tb-in">'+(hub?'':'<a class="tb-link" href="index.html">\u2190 Hub</a>')+'<div class="tb-title">'+esc(title)+'</div><div class="tb-right">'+
-    (u?'<span class="chip" title="'+esc(roleLabel(u.roleKey))+'">'+esc(u.name)+'</span>':'')+
-    '<button class="btn" id="themeBtn" type="button" aria-label="Toggle dark mode">\u25D0</button>'+
-    (u?'<button class="btn" id="outBtn" type="button">Sign out</button>':'')+'</div></div>';
-  document.getElementById('themeBtn').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
-  var o=document.getElementById('outBtn');if(o)o.onclick=signOut;
-}
-function initPage(opts){
-  setupTopbar(opts.title,false);
-  var u=getUser(),app=document.getElementById('app');
-  if(!u){app.innerHTML='<div class="card login"><h1>Please sign in</h1><p class="muted">You need to choose your name on the hub page before viewing this module.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Go to sign in</a></div>';return null;}
-  if(opts.staffOnly&&!isStaff(u)){app.innerHTML='<div class="card login"><h1>Not available</h1><p class="muted">This module is only available to program staff. Parents and students can use Farm Points and Sweat Equity.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Back to hub</a></div>';return null;}
-  return u;
-}
-function showBanner(err){
-  var b=document.getElementById('banner');if(!b)return;
-  b.innerHTML='<div class="banner">\u26A0 '+esc(WARN_BANNER)+(err&&err.message?'<small>'+esc(err.message)+'</small>':'')+'</div>';
-}
-
-/* ---- reusable HTML builders ---- */
-function stat(label,value,sub,cls){return '<div class="stat '+(cls||'')+'"><div class="l">'+esc(label)+'</div><div class="v">'+esc(value)+'</div>'+(sub?'<div class="s">'+esc(sub)+'</div>':'')+'</div>';}
-function statsRow(a){return '<div class="stats">'+a.join('')+'</div>';}
-function badge(text,cls){return '<span class="badge '+(cls||'')+'">'+esc(text)+'</span>';}
-function bar(label,val,max,ok){var p=max?Math.max(0,Math.min(val/max*100,100)):0;return '<div class="bar-row"><div class="bar-top"><span>'+esc(label)+'</span><span class="num">'+fmt(val)+' / '+fmt(max)+'</span></div><div class="bar'+(ok?' ok':'')+'"><span style="width:'+p.toFixed(1)+'%"></span></div></div>';}
-/* cols: [{h:'Label', f:function(row){return html}, wide:true}] */
-function tableHTML(cols,rows,rowClass){
-  if(!rows.length)return '<div class="empty">No records to show.</div>';
-  var h='<div class="table-wrap"><table><thead><tr>'+cols.map(function(c){return '<th>'+esc(c.h)+'</th>';}).join('')+'</tr></thead><tbody>';
-  rows.forEach(function(r){
-    var rc=rowClass?rowClass(r):'';
-    h+='<tr'+(rc?' class="'+rc+'"':'')+'>'+cols.map(function(c){return '<td data-label="'+esc(c.h)+'"'+(c.wide?' class="c-wide"':'')+'>'+c.f(r)+'</td>';}).join('')+'</tr>';
-  });
-  return h+'</tbody></table></div>';
-}
-function searchBox(id,placeholder){return '<div class="toolbar"><input type="search" id="'+id+'" placeholder="'+esc(placeholder)+'" aria-label="'+esc(placeholder)+'"></div>';}
-/* Reusable "My Card": cfg.staff() / cfg.member() return inner HTML. */
-function renderMyCard(elId,user,cfg){
-  var el=document.getElementById(elId);if(!el)return;
-  var inner=isStaff(user)?(cfg.staff?cfg.staff():''):(cfg.member?cfg.member():'');
-  el.innerHTML='<div class="card"><h2>My Card \u2014 '+esc(user.name)+' \u00B7 '+esc(roleLabel(user.roleKey))+'</h2>'+inner+'</div>';
-}
-function mine(user,name){return norm(name)!==''&&norm(name)===norm(user.name);}
-</script>
-<script>
-(function(){
-var user=initPage({title:'Farm Production',staffOnly:true});if(!user)return;
-var DATA=[],query='';
-fetchExcel('farm.xlsx').then(function(wb){
-  var raw=readSheet(wb,['FarmLog'],['Date','Cycle','Type','Crop','Plot/Bed','Kilos Harvested','Kilos Fed','Kilos Surplus','Recorded By','Notes']);
-  DATA=raw.map(function(r){
-    var o={date:g(r,'Date'),cycle:g(r,'Cycle'),type:g(r,'Type'),crop:g(r,'Crop'),plot:g(r,'Plot/Bed'),harv:num(g(r,'Kilos Harvested')),fed:num(g(r,'Kilos Fed')),by:g(r,'Recorded By'),notes:g(r,'Notes')};
-    var s=g(r,'Kilos Surplus');o.surplus=s===''?Math.max(o.harv-o.fed,0):num(s);return o;
-  }).sort(function(a,b){return String(b.date).localeCompare(String(a.date));});
-  render();
-}).catch(function(e){DATA=[];showBanner(e);render();});
-function render(){
-  renderMyCard('mycard',user,{staff:function(){
-    var h=0,f=0,s=0,m=0;DATA.forEach(function(r){h+=r.harv;f+=r.fed;s+=r.surplus;if(mine(user,r.by))m++;});
-    return statsRow([stat('Entries',DATA.length),stat('Kilos harvested',fmt(h)),stat('Kilos fed to scholars',fmt(f)),stat('Kilos surplus',fmt(s),'Sold into the Welfare Fund','ok'),stat('Recorded by me',m)]);
-  }});
-  document.getElementById('content').innerHTML=searchBox('s','Search crop, plot, cycle, notes\u2026')+'<div id="tbl"></div>';
-  document.getElementById('s').oninput=function(){query=this.value;draw();};draw();
-}
-function draw(){
-  var rows=DATA.filter(function(r){return matches(r,query);});
-  document.getElementById('tbl').innerHTML=tableHTML([
-   {h:'Date',f:function(r){return esc(r.date);}},{h:'Cycle',f:function(r){return esc(r.cycle);}},{h:'Type',f:function(r){return esc(r.type);}},
-   {h:'Crop',f:function(r){return '<b>'+esc(r.crop)+'</b>';}},{h:'Plot/Bed',f:function(r){return esc(r.plot);}},
-   {h:'Kilos Harvested',f:function(r){return '<span class="num">'+fmt(r.harv)+'</span>';}},
-   {h:'Kilos Fed',f:function(r){return '<span class="num">'+fmt(r.fed)+'</span>';}},
-   {h:'Kilos Surplus',f:function(r){return '<span class="num">'+fmt(r.surplus)+'</span>';}},
-   {h:'Recorded By',f:function(r){return esc(r.by);}},{h:'Notes',f:function(r){return esc(r.notes);},wide:true}
-  ],rows);
-}
-})();
-</script>
-</body>
-</html>
- 
- 
- 
-################################################################################ 
-FILE: fund.html 
-################################################################################ 
- 
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Welfare Fund â€” Ugnayan Gulayan</title>
-<script>try{var t=localStorage.getItem('ug-theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
-<style>
-:root{--bg:#f4f5f7;--surface:#ffffff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--accent:#2563eb;--ok:#16a34a;--warn:#d97706;--danger:#dc2626;
---shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);
---ok-bg:#f0fdf4;--warn-bg:#fffbeb;--danger-bg:#fef2f2;--accent-bg:#eff6ff;--soft:#f9fafb}
-[data-theme="dark"]{--bg:#0f1115;--surface:#171a21;--text:#e8eaed;--muted:#9aa3b2;--border:#262b36;--accent:#60a5fa;--ok:#4ade80;--warn:#fbbf24;--danger:#f87171;
---ok-bg:#10281a;--warn-bg:#33270b;--danger-bg:#331616;--accent-bg:#172338;--soft:#1c2029;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.4)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-a{color:var(--accent)}
-.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border)}
-.tb-in{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
-.tb-link{text-decoration:none;font-weight:600;white-space:nowrap}
-.tb-title{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tb-right{display:flex;align-items:center;gap:8px}
-.chip{font-size:12px;color:var(--muted);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:3px 10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn{font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.wrap{max-width:1100px;margin:0 auto;padding:16px}
-h1{font-size:20px;margin:4px 0 12px}
-.muted{color:var(--muted)}
-.banner{background:var(--warn-bg);border:1px solid var(--warn);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-weight:600}
-.banner small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
-.card h2{font-size:12px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.stat{background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
-.stat .l{font-size:11px;font-weight:650;color:var(--muted);text-transform:uppercase}
-.stat .v{font-size:22px;font-weight:700;line-height:1.2}
-.stat .s{font-size:12px;color:var(--muted)}
-.stat.ok .v{color:var(--ok)}.stat.warn .v{color:var(--warn)}.stat.danger .v{color:var(--danger)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.badge{display:inline-block;font-size:12px;font-weight:650;border-radius:99px;padding:2px 10px;border:1px solid var(--border);background:var(--soft);color:var(--muted);white-space:nowrap}
-.badge.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
-.badge.warn{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
-.badge.danger{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
-.badge.info{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
-.bar-row{margin:8px 0}
-.bar-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
-.bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden}
-.bar span{display:block;height:100%;background:var(--accent);border-radius:99px}
-.bar.ok span{background:var(--ok)}
-.toolbar{display:flex;gap:10px;margin-bottom:12px}
-input[type=search],input[type=text]{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;width:100%}
-input:focus{outline:2px solid var(--accent);outline-offset:0}
-.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
-tbody tr:last-child td{border-bottom:0}
-tr.hl-warn{background:var(--warn-bg)}tr.hl-ok{background:var(--ok-bg)}
-.num{font-variant-numeric:tabular-nums}
-.pos{color:var(--ok);font-weight:650}.neg{color:var(--danger);font-weight:650}
-.empty{text-align:center;color:var(--muted);padding:28px 12px}
-.section-title{font-size:15px;font-weight:700;margin:20px 0 8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.tile{display:block;text-decoration:none;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px}
-.tile:hover{border-color:var(--accent)}
-.tile b{display:block;font-size:15px}.tile span{color:var(--muted);font-size:13px}
-.people{max-height:50vh;overflow-y:auto;margin-top:10px}
-.person{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;cursor:pointer}
-.person:hover{border-color:var(--accent);background:var(--accent-bg)}
-.login{max-width:560px;margin:24px auto}
-@media (max-width:600px){
-  .tb-link{font-size:13px}
-  table,tbody{display:block;width:100%}
-  thead{display:none}
-  .table-wrap{background:none;border:0;box-shadow:none}
-  tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
-  tbody td{display:block;border:0;padding:0}
-  tbody td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase}
-  tbody td.c-wide{grid-column:1 / -1}
-  tbody tr.hl-warn{background:var(--warn-bg)}tbody tr.hl-ok{background:var(--ok-bg)}
-}
-</style>
-</head>
-<body>
-<header class="topbar" id="topbar"></header>
-<main class="wrap" id="app">
-<h1 id="h1">Welfare Fund</h1><div id="banner"></div><div id="mycard"></div><div id="content"><p class="muted">Loadingâ€¦</p></div>
-</main>
-<script>
-var SESSION_KEY='ug-current-user';
-var CDN=['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'];
-var STAFF_ROLES=['committee','liaison','coordinator','documentation','treasurer','logistics','shift_lead'];
-var MEMBER_ROLES=['parent','student'];
-var ROLE_LABELS={committee:'Committee',liaison:'Farm Liaison',coordinator:'Coordinator',documentation:'Documentation',treasurer:'Treasurer',logistics:'Logistics',shift_lead:'Shift Lead',parent:'Parent',student:'Student'};
-var WARN_BANNER='Data could not be loaded. Showing offline fallback. Please check the Excel file.';
-
-/* ---- small utilities ---- */
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-function norm(s){return String(s==null?'':s).trim().toLowerCase();}
-function num(v){if(typeof v==='number')return isFinite(v)?v:0;var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isFinite(n)?n:0;}
-function fmt(n,d){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d==null?1:d});}
-function peso(n){return (n<0?'-':'')+'\u20B1'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function g(o,h){var v=o[norm(h)];return v==null?'':v;}
-function sGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
-function sSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
-function sDel(k){try{sessionStorage.removeItem(k);}catch(e){}}
-function normRole(s){var r=norm(s).replace(/[\s\-]+/g,'_');return(STAFF_ROLES.indexOf(r)>-1||MEMBER_ROLES.indexOf(r)>-1)?r:'parent';}
-function matches(o,q){q=norm(q);if(!q)return true;return Object.keys(o).some(function(k){var v=o[k];return(typeof v==='string'||typeof v==='number')&&String(v).toLowerCase().indexOf(q)>-1;});}
-
-/* ---- Excel dates ---- */
-function ymd(d){var m=d.getUTCMonth()+1,day=d.getUTCDate();return d.getUTCFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;}
-function excelDate(v){
-  if(v===''||v==null)return '';
-  if(v instanceof Date)return ymd(v);
-  if(typeof v==='number'){return(v>20000&&v<80000)?ymd(new Date(Math.round((v-25569)*86400000))):String(v);}
-  var s=String(v).trim();
-  if(/^\d{5}(\.\d+)?$/.test(s))return excelDate(parseFloat(s));
-  if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);
-  return s;
-}
-function daysBetween(a,b){
-  var re=/^(\d{4})-(\d{2})-(\d{2})$/,x=re.exec(a||''),y=re.exec(b||'');
-  if(!x||!y)return null;
-  return Math.round((Date.UTC(+y[1],y[2]-1,+y[3])-Date.UTC(+x[1],x[2]-1,+x[3]))/86400000);
-}
-
-/* ---- SheetJS loading + Excel fetching ---- */
-var _xlsxP=null;
-function loadSheetJS(){
-  if(window.XLSX)return Promise.resolve();
-  if(_xlsxP)return _xlsxP;
-  _xlsxP=new Promise(function(res,rej){
-    var i=0;
-    (function next(){
-      if(i>=CDN.length){rej(new Error('SheetJS library could not be loaded'));return;}
-      var s=document.createElement('script'),done=false;
-      function fail(){if(done)return;done=true;s.remove();next();}
-      s.async=true;s.src=CDN[i++];
-      s.onload=function(){if(done)return;done=true;window.XLSX?res():next();};
-      s.onerror=fail;setTimeout(fail,8000);
-      document.head.appendChild(s);
-    })();
-  });
-  return _xlsxP;
-}
-function withTimeout(p,ms,msg){return new Promise(function(res,rej){var t=setTimeout(function(){rej(new Error(msg));},ms);p.then(function(v){clearTimeout(t);res(v);},function(e){clearTimeout(t);rej(e);});});}
-function fetchExcel(fileName){
-  var p=Promise.all([loadSheetJS(),fetch('data/'+fileName+'?t='+Date.now(),{cache:'no-store'})]).then(function(r){
-    if(!r[1].ok)throw new Error('data/'+fileName+' returned HTTP '+r[1].status);
-    return r[1].arrayBuffer();
-  }).then(function(buf){return XLSX.read(buf,{type:'array'});});
-  return withTimeout(p,20000,'data/'+fileName+' timed out');
-}
-/* Finds the sheet by name, finds the header row within the first 10 rows, returns objects keyed by lower-case header. */
-function readSheet(wb,names,headers,strict){
-  var low=wb.SheetNames.map(norm),sn=null,i;
-  for(i=0;i<names.length&&sn===null;i++){var k=low.indexOf(norm(names[i]));if(k>-1)sn=wb.SheetNames[k];}
-  if(sn===null){if(strict)return[];sn=wb.SheetNames[0];}
-  var aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});
-  var want=headers.map(norm),best=-1,bs=0,r;
-  for(r=0;r<Math.min(10,aoa.length);r++){var sc=0;aoa[r].forEach(function(c){if(want.indexOf(norm(c))>-1)sc++;});if(sc>bs){bs=sc;best=r;}}
-  if(best<0||bs<2)throw new Error('Header row not found in sheet "'+sn+'"');
-  var keys=aoa[best].map(norm),out=[];
-  for(r=best+1;r<aoa.length;r++){
-    var o={},any=false;
-    keys.forEach(function(k,c){
-      if(!k)return;
-      var v=aoa[r][c];if(v==null)v='';
-      if(typeof v==='string')v=v.trim();
-      if(v!=='')any=true;
-      if(k.indexOf('date')>-1||k.indexOf('checked')>-1)v=excelDate(v);
-      o[k]=v;
-    });
-    if(any)out.push(o);
-  }
-  return out;
-}
-
-/* ---- session + role access ---- */
-function getUser(){var s=sGet(SESSION_KEY);if(!s)return null;try{var u=JSON.parse(s);if(!u||!u.name)return null;u.roleKey=normRole(u.roleKey||u.role);return u;}catch(e){return null;}}
-function isStaff(u){return !!u&&STAFF_ROLES.indexOf(u.roleKey)>-1;}
-function roleLabel(r){return ROLE_LABELS[r]||r;}
-function signOut(){sDel(SESSION_KEY);location.href='index.html';}
-
-/* ---- page chrome ---- */
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ug-theme',t);}catch(e){}}
-function setupTopbar(title,hub){
-  var u=getUser(),el=document.getElementById('topbar');
-  el.innerHTML='<div class="tb-in">'+(hub?'':'<a class="tb-link" href="index.html">\u2190 Hub</a>')+'<div class="tb-title">'+esc(title)+'</div><div class="tb-right">'+
-    (u?'<span class="chip" title="'+esc(roleLabel(u.roleKey))+'">'+esc(u.name)+'</span>':'')+
-    '<button class="btn" id="themeBtn" type="button" aria-label="Toggle dark mode">\u25D0</button>'+
-    (u?'<button class="btn" id="outBtn" type="button">Sign out</button>':'')+'</div></div>';
-  document.getElementById('themeBtn').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
-  var o=document.getElementById('outBtn');if(o)o.onclick=signOut;
-}
-function initPage(opts){
-  setupTopbar(opts.title,false);
-  var u=getUser(),app=document.getElementById('app');
-  if(!u){app.innerHTML='<div class="card login"><h1>Please sign in</h1><p class="muted">You need to choose your name on the hub page before viewing this module.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Go to sign in</a></div>';return null;}
-  if(opts.staffOnly&&!isStaff(u)){app.innerHTML='<div class="card login"><h1>Not available</h1><p class="muted">This module is only available to program staff. Parents and students can use Farm Points and Sweat Equity.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Back to hub</a></div>';return null;}
-  return u;
-}
-function showBanner(err){
-  var b=document.getElementById('banner');if(!b)return;
-  b.innerHTML='<div class="banner">\u26A0 '+esc(WARN_BANNER)+(err&&err.message?'<small>'+esc(err.message)+'</small>':'')+'</div>';
-}
-
-/* ---- reusable HTML builders ---- */
-function stat(label,value,sub,cls){return '<div class="stat '+(cls||'')+'"><div class="l">'+esc(label)+'</div><div class="v">'+esc(value)+'</div>'+(sub?'<div class="s">'+esc(sub)+'</div>':'')+'</div>';}
-function statsRow(a){return '<div class="stats">'+a.join('')+'</div>';}
-function badge(text,cls){return '<span class="badge '+(cls||'')+'">'+esc(text)+'</span>';}
-function bar(label,val,max,ok){var p=max?Math.max(0,Math.min(val/max*100,100)):0;return '<div class="bar-row"><div class="bar-top"><span>'+esc(label)+'</span><span class="num">'+fmt(val)+' / '+fmt(max)+'</span></div><div class="bar'+(ok?' ok':'')+'"><span style="width:'+p.toFixed(1)+'%"></span></div></div>';}
-/* cols: [{h:'Label', f:function(row){return html}, wide:true}] */
-function tableHTML(cols,rows,rowClass){
-  if(!rows.length)return '<div class="empty">No records to show.</div>';
-  var h='<div class="table-wrap"><table><thead><tr>'+cols.map(function(c){return '<th>'+esc(c.h)+'</th>';}).join('')+'</tr></thead><tbody>';
-  rows.forEach(function(r){
-    var rc=rowClass?rowClass(r):'';
-    h+='<tr'+(rc?' class="'+rc+'"':'')+'>'+cols.map(function(c){return '<td data-label="'+esc(c.h)+'"'+(c.wide?' class="c-wide"':'')+'>'+c.f(r)+'</td>';}).join('')+'</tr>';
-  });
-  return h+'</tbody></table></div>';
-}
-function searchBox(id,placeholder){return '<div class="toolbar"><input type="search" id="'+id+'" placeholder="'+esc(placeholder)+'" aria-label="'+esc(placeholder)+'"></div>';}
-/* Reusable "My Card": cfg.staff() / cfg.member() return inner HTML. */
-function renderMyCard(elId,user,cfg){
-  var el=document.getElementById(elId);if(!el)return;
-  var inner=isStaff(user)?(cfg.staff?cfg.staff():''):(cfg.member?cfg.member():'');
-  el.innerHTML='<div class="card"><h2>My Card \u2014 '+esc(user.name)+' \u00B7 '+esc(roleLabel(user.roleKey))+'</h2>'+inner+'</div>';
-}
-function mine(user,name){return norm(name)!==''&&norm(name)===norm(user.name);}
-</script>
-<script>
-(function(){
-var user=initPage({title:'Welfare Fund',staffOnly:true});if(!user)return;
-var DATA=[],income=0,expense=0,query='';
-function kind(t){var n=norm(t);return n.indexOf('income')>-1?'income':(n.indexOf('expense')>-1?'expense':'');}
-fetchExcel('fund.xlsx').then(function(wb){
-  var raw=readSheet(wb,['Ledger'],['Date','Type','Category','Description','Amount','Running Balance','Recorded By','Notes']);
-  DATA=raw.map(function(r){return{date:g(r,'Date'),type:g(r,'Type (Income/Expense)')||g(r,'Type'),cat:g(r,'Category'),desc:g(r,'Description'),amt:Math.abs(num(g(r,'Amount'))),by:g(r,'Recorded By'),notes:g(r,'Notes')};});
-  render();
-}).catch(function(e){DATA=[];showBanner(e);render();});
-function render(){
-  var bal=0;income=0;expense=0;
-  DATA.forEach(function(r){r.kind=kind(r.type);if(r.kind==='income'){income+=r.amt;bal+=r.amt;}else if(r.kind==='expense'){expense+=r.amt;bal-=r.amt;}r.bal=bal;});
-  var balance=income-expense;
-  renderMyCard('mycard',user,{staff:function(){
-    var m=DATA.filter(function(r){return mine(user,r.by);}).length;
-    return statsRow([stat('Current balance',peso(balance),'Income minus expenses',balance<0?'danger':'ok'),stat('Total income',peso(income),'','ok'),stat('Total expenses',peso(expense),'','danger'),stat('Ledger entries',DATA.length),stat('Recorded by me',m)]);
-  }});
-  document.getElementById('content').innerHTML=searchBox('s','Search category, description, notes\u2026')+'<div id="tbl"></div>';
-  document.getElementById('s').oninput=function(){query=this.value;draw();};draw();
-}
-function draw(){
-  var rows=DATA.filter(function(r){return matches(r,query);});
-  document.getElementById('tbl').innerHTML=tableHTML([
-   {h:'Date',f:function(r){return esc(r.date);}},
-   {h:'Type',f:function(r){return badge(r.type||'\u2014',r.kind==='income'?'ok':(r.kind==='expense'?'danger':''));}},
-   {h:'Category',f:function(r){return esc(r.cat);}},
-   {h:'Description',f:function(r){return esc(r.desc);},wide:true},
-   {h:'Amount',f:function(r){return '<span class="num '+(r.kind==='income'?'pos':(r.kind==='expense'?'neg':''))+'">'+(r.kind==='expense'?'\u2212':(r.kind==='income'?'+':''))+peso(r.amt)+'</span>';}},
-   {h:'Running Balance',f:function(r){return '<span class="num">'+peso(r.bal)+'</span>';}},
-   {h:'Recorded By',f:function(r){return esc(r.by);}},{h:'Notes',f:function(r){return esc(r.notes);},wide:true}
-  ],rows);
-}
-})();
-</script>
-</body>
-</html>
- 
- 
- 
-################################################################################ 
-FILE: index.html 
-################################################################################ 
- 
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Program Hub â€” Ugnayan Gulayan</title>
-<script>try{var t=localStorage.getItem('ug-theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
-<style>
-:root{--bg:#f4f5f7;--surface:#ffffff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--accent:#2563eb;--ok:#16a34a;--warn:#d97706;--danger:#dc2626;
---shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);
---ok-bg:#f0fdf4;--warn-bg:#fffbeb;--danger-bg:#fef2f2;--accent-bg:#eff6ff;--soft:#f9fafb}
-[data-theme="dark"]{--bg:#0f1115;--surface:#171a21;--text:#e8eaed;--muted:#9aa3b2;--border:#262b36;--accent:#60a5fa;--ok:#4ade80;--warn:#fbbf24;--danger:#f87171;
---ok-bg:#10281a;--warn-bg:#33270b;--danger-bg:#331616;--accent-bg:#172338;--soft:#1c2029;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.4)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-a{color:var(--accent)}
-.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border)}
-.tb-in{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
-.tb-link{text-decoration:none;font-weight:600;white-space:nowrap}
-.tb-title{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tb-right{display:flex;align-items:center;gap:8px}
-.chip{font-size:12px;color:var(--muted);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:3px 10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn{font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.wrap{max-width:1100px;margin:0 auto;padding:16px}
-h1{font-size:20px;margin:4px 0 12px}
-.muted{color:var(--muted)}
-.banner{background:var(--warn-bg);border:1px solid var(--warn);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-weight:600}
-.banner small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
-.card h2{font-size:12px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.stat{background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
-.stat .l{font-size:11px;font-weight:650;color:var(--muted);text-transform:uppercase}
-.stat .v{font-size:22px;font-weight:700;line-height:1.2}
-.stat .s{font-size:12px;color:var(--muted)}
-.stat.ok .v{color:var(--ok)}.stat.warn .v{color:var(--warn)}.stat.danger .v{color:var(--danger)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.badge{display:inline-block;font-size:12px;font-weight:650;border-radius:99px;padding:2px 10px;border:1px solid var(--border);background:var(--soft);color:var(--muted);white-space:nowrap}
-.badge.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
-.badge.warn{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
-.badge.danger{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
-.badge.info{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
-.bar-row{margin:8px 0}
-.bar-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
-.bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden}
-.bar span{display:block;height:100%;background:var(--accent);border-radius:99px}
-.bar.ok span{background:var(--ok)}
-.toolbar{display:flex;gap:10px;margin-bottom:12px}
-input[type=search],input[type=text]{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;width:100%}
-input:focus{outline:2px solid var(--accent);outline-offset:0}
-.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
-tbody tr:last-child td{border-bottom:0}
-tr.hl-warn{background:var(--warn-bg)}tr.hl-ok{background:var(--ok-bg)}
-.num{font-variant-numeric:tabular-nums}
-.pos{color:var(--ok);font-weight:650}.neg{color:var(--danger);font-weight:650}
-.empty{text-align:center;color:var(--muted);padding:28px 12px}
-.section-title{font-size:15px;font-weight:700;margin:20px 0 8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.tile{display:block;text-decoration:none;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px}
-.tile:hover{border-color:var(--accent)}
-.tile b{display:block;font-size:15px}.tile span{color:var(--muted);font-size:13px}
-.people{max-height:50vh;overflow-y:auto;margin-top:10px}
-.person{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;cursor:pointer}
-.person:hover{border-color:var(--accent);background:var(--accent-bg)}
-.login{max-width:560px;margin:24px auto}
-@media (max-width:600px){
-  .tb-link{font-size:13px}
-  table,tbody{display:block;width:100%}
-  thead{display:none}
-  .table-wrap{background:none;border:0;box-shadow:none}
-  tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
-  tbody td{display:block;border:0;padding:0}
-  tbody td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase}
-  tbody td.c-wide{grid-column:1 / -1}
-  tbody tr.hl-warn{background:var(--warn-bg)}tbody tr.hl-ok{background:var(--ok-bg)}
-}
-</style>
-</head>
-<body>
-<header class="topbar" id="topbar"></header>
-<main class="wrap" id="app">
-<h1 id="h1">Program Hub</h1><div id="banner"></div><div id="mycard"></div><div id="content"><p class="muted">Loadingâ€¦</p></div>
-</main>
-<script>
-var SESSION_KEY='ug-current-user';
-var CDN=['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'];
-var STAFF_ROLES=['committee','liaison','coordinator','documentation','treasurer','logistics','shift_lead'];
-var MEMBER_ROLES=['parent','student'];
-var ROLE_LABELS={committee:'Committee',liaison:'Farm Liaison',coordinator:'Coordinator',documentation:'Documentation',treasurer:'Treasurer',logistics:'Logistics',shift_lead:'Shift Lead',parent:'Parent',student:'Student'};
-var WARN_BANNER='Data could not be loaded. Showing offline fallback. Please check the Excel file.';
-
-/* ---- small utilities ---- */
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-function norm(s){return String(s==null?'':s).trim().toLowerCase();}
-function num(v){if(typeof v==='number')return isFinite(v)?v:0;var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isFinite(n)?n:0;}
-function fmt(n,d){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d==null?1:d});}
-function peso(n){return (n<0?'-':'')+'\u20B1'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function g(o,h){var v=o[norm(h)];return v==null?'':v;}
-function sGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
-function sSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
-function sDel(k){try{sessionStorage.removeItem(k);}catch(e){}}
-function normRole(s){var r=norm(s).replace(/[\s\-]+/g,'_');return(STAFF_ROLES.indexOf(r)>-1||MEMBER_ROLES.indexOf(r)>-1)?r:'parent';}
-function matches(o,q){q=norm(q);if(!q)return true;return Object.keys(o).some(function(k){var v=o[k];return(typeof v==='string'||typeof v==='number')&&String(v).toLowerCase().indexOf(q)>-1;});}
-
-/* ---- Excel dates ---- */
-function ymd(d){var m=d.getUTCMonth()+1,day=d.getUTCDate();return d.getUTCFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;}
-function excelDate(v){
-  if(v===''||v==null)return '';
-  if(v instanceof Date)return ymd(v);
-  if(typeof v==='number'){return(v>20000&&v<80000)?ymd(new Date(Math.round((v-25569)*86400000))):String(v);}
-  var s=String(v).trim();
-  if(/^\d{5}(\.\d+)?$/.test(s))return excelDate(parseFloat(s));
-  if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);
-  return s;
-}
-function daysBetween(a,b){
-  var re=/^(\d{4})-(\d{2})-(\d{2})$/,x=re.exec(a||''),y=re.exec(b||'');
-  if(!x||!y)return null;
-  return Math.round((Date.UTC(+y[1],y[2]-1,+y[3])-Date.UTC(+x[1],x[2]-1,+x[3]))/86400000);
-}
-
-/* ---- SheetJS loading + Excel fetching ---- */
-var _xlsxP=null;
-function loadSheetJS(){
-  if(window.XLSX)return Promise.resolve();
-  if(_xlsxP)return _xlsxP;
-  _xlsxP=new Promise(function(res,rej){
-    var i=0;
-    (function next(){
-      if(i>=CDN.length){rej(new Error('SheetJS library could not be loaded'));return;}
-      var s=document.createElement('script'),done=false;
-      function fail(){if(done)return;done=true;s.remove();next();}
-      s.async=true;s.src=CDN[i++];
-      s.onload=function(){if(done)return;done=true;window.XLSX?res():next();};
-      s.onerror=fail;setTimeout(fail,8000);
-      document.head.appendChild(s);
-    })();
-  });
-  return _xlsxP;
-}
-function withTimeout(p,ms,msg){return new Promise(function(res,rej){var t=setTimeout(function(){rej(new Error(msg));},ms);p.then(function(v){clearTimeout(t);res(v);},function(e){clearTimeout(t);rej(e);});});}
-function fetchExcel(fileName){
-  var p=Promise.all([loadSheetJS(),fetch('data/'+fileName+'?t='+Date.now(),{cache:'no-store'})]).then(function(r){
-    if(!r[1].ok)throw new Error('data/'+fileName+' returned HTTP '+r[1].status);
-    return r[1].arrayBuffer();
-  }).then(function(buf){return XLSX.read(buf,{type:'array'});});
-  return withTimeout(p,20000,'data/'+fileName+' timed out');
-}
-/* Finds the sheet by name, finds the header row within the first 10 rows, returns objects keyed by lower-case header. */
-function readSheet(wb,names,headers,strict){
-  var low=wb.SheetNames.map(norm),sn=null,i;
-  for(i=0;i<names.length&&sn===null;i++){var k=low.indexOf(norm(names[i]));if(k>-1)sn=wb.SheetNames[k];}
-  if(sn===null){if(strict)return[];sn=wb.SheetNames[0];}
-  var aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});
-  var want=headers.map(norm),best=-1,bs=0,r;
-  for(r=0;r<Math.min(10,aoa.length);r++){var sc=0;aoa[r].forEach(function(c){if(want.indexOf(norm(c))>-1)sc++;});if(sc>bs){bs=sc;best=r;}}
-  if(best<0||bs<2)throw new Error('Header row not found in sheet "'+sn+'"');
-  var keys=aoa[best].map(norm),out=[];
-  for(r=best+1;r<aoa.length;r++){
-    var o={},any=false;
-    keys.forEach(function(k,c){
-      if(!k)return;
-      var v=aoa[r][c];if(v==null)v='';
-      if(typeof v==='string')v=v.trim();
-      if(v!=='')any=true;
-      if(k.indexOf('date')>-1||k.indexOf('checked')>-1)v=excelDate(v);
-      o[k]=v;
-    });
-    if(any)out.push(o);
-  }
-  return out;
-}
-
-/* ---- session + role access ---- */
-function getUser(){var s=sGet(SESSION_KEY);if(!s)return null;try{var u=JSON.parse(s);if(!u||!u.name)return null;u.roleKey=normRole(u.roleKey||u.role);return u;}catch(e){return null;}}
-function isStaff(u){return !!u&&STAFF_ROLES.indexOf(u.roleKey)>-1;}
-function roleLabel(r){return ROLE_LABELS[r]||r;}
-function signOut(){sDel(SESSION_KEY);location.href='index.html';}
-
-/* ---- page chrome ---- */
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ug-theme',t);}catch(e){}}
-function setupTopbar(title,hub){
-  var u=getUser(),el=document.getElementById('topbar');
-  el.innerHTML='<div class="tb-in">'+(hub?'':'<a class="tb-link" href="index.html">\u2190 Hub</a>')+'<div class="tb-title">'+esc(title)+'</div><div class="tb-right">'+
-    (u?'<span class="chip" title="'+esc(roleLabel(u.roleKey))+'">'+esc(u.name)+'</span>':'')+
-    '<button class="btn" id="themeBtn" type="button" aria-label="Toggle dark mode">\u25D0</button>'+
-    (u?'<button class="btn" id="outBtn" type="button">Sign out</button>':'')+'</div></div>';
-  document.getElementById('themeBtn').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
-  var o=document.getElementById('outBtn');if(o)o.onclick=signOut;
-}
-function initPage(opts){
-  setupTopbar(opts.title,false);
-  var u=getUser(),app=document.getElementById('app');
-  if(!u){app.innerHTML='<div class="card login"><h1>Please sign in</h1><p class="muted">You need to choose your name on the hub page before viewing this module.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Go to sign in</a></div>';return null;}
-  if(opts.staffOnly&&!isStaff(u)){app.innerHTML='<div class="card login"><h1>Not available</h1><p class="muted">This module is only available to program staff. Parents and students can use Farm Points and Sweat Equity.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Back to hub</a></div>';return null;}
-  return u;
-}
-function showBanner(err){
-  var b=document.getElementById('banner');if(!b)return;
-  b.innerHTML='<div class="banner">\u26A0 '+esc(WARN_BANNER)+(err&&err.message?'<small>'+esc(err.message)+'</small>':'')+'</div>';
-}
-
-/* ---- reusable HTML builders ---- */
-function stat(label,value,sub,cls){return '<div class="stat '+(cls||'')+'"><div class="l">'+esc(label)+'</div><div class="v">'+esc(value)+'</div>'+(sub?'<div class="s">'+esc(sub)+'</div>':'')+'</div>';}
-function statsRow(a){return '<div class="stats">'+a.join('')+'</div>';}
-function badge(text,cls){return '<span class="badge '+(cls||'')+'">'+esc(text)+'</span>';}
-function bar(label,val,max,ok){var p=max?Math.max(0,Math.min(val/max*100,100)):0;return '<div class="bar-row"><div class="bar-top"><span>'+esc(label)+'</span><span class="num">'+fmt(val)+' / '+fmt(max)+'</span></div><div class="bar'+(ok?' ok':'')+'"><span style="width:'+p.toFixed(1)+'%"></span></div></div>';}
-/* cols: [{h:'Label', f:function(row){return html}, wide:true}] */
-function tableHTML(cols,rows,rowClass){
-  if(!rows.length)return '<div class="empty">No records to show.</div>';
-  var h='<div class="table-wrap"><table><thead><tr>'+cols.map(function(c){return '<th>'+esc(c.h)+'</th>';}).join('')+'</tr></thead><tbody>';
-  rows.forEach(function(r){
-    var rc=rowClass?rowClass(r):'';
-    h+='<tr'+(rc?' class="'+rc+'"':'')+'>'+cols.map(function(c){return '<td data-label="'+esc(c.h)+'"'+(c.wide?' class="c-wide"':'')+'>'+c.f(r)+'</td>';}).join('')+'</tr>';
-  });
-  return h+'</tbody></table></div>';
-}
-function searchBox(id,placeholder){return '<div class="toolbar"><input type="search" id="'+id+'" placeholder="'+esc(placeholder)+'" aria-label="'+esc(placeholder)+'"></div>';}
-/* Reusable "My Card": cfg.staff() / cfg.member() return inner HTML. */
-function renderMyCard(elId,user,cfg){
-  var el=document.getElementById(elId);if(!el)return;
-  var inner=isStaff(user)?(cfg.staff?cfg.staff():''):(cfg.member?cfg.member():'');
-  el.innerHTML='<div class="card"><h2>My Card \u2014 '+esc(user.name)+' \u00B7 '+esc(roleLabel(user.roleKey))+'</h2>'+inner+'</div>';
-}
-function mine(user,name){return norm(name)!==''&&norm(name)===norm(user.name);}
-</script>
-<script>
-(function(){
-var FALLBACK_PEOPLE=[["ANGEL ALLAN CHELAN LEUS", "committee", "", "", "Committee"], ["MARIA LUISA CASTRO", "committee", "", "", "Committee"], ["FARM LIAISON (UNASSIGNED)", "liaison", "", "", "Placeholder"], ["COMMUNITY LEAD (UNASSIGNED)", "coordinator", "", "", "Placeholder"], ["DOCUMENTATION LEAD (UNASSIGNED)", "documentation", "", "", "Placeholder"], ["FUND TREASURER (UNASSIGNED)", "treasurer", "", "", "Placeholder"], ["LOGISTICS & TOOL MASTER (UNASSIGNED)", "logistics", "", "", "Placeholder"], ["[SAMPLE STUDENT]", "student", "HH-000", "", "Scholar"], ["[SAMPLE PARENT]", "parent", "HH-000", "", "Father"]];
-var MODULES=[
- {href:'attendance.html',name:'Farm Points',desc:'Household work-day and care-slot points',staff:true,member:true},
- {href:'sweat-equity.html',name:'Sweat Equity',desc:'Scholar points, levels and progress',staff:true,member:true},
- {href:'exceptions.html',name:'Exceptions & Safety',desc:'Case log and debrief notes',staff:true,member:false},
- {href:'farm.html',name:'Farm Production',desc:'Harvest and crop records',staff:true,member:false},
- {href:'tools.html',name:'Tools & Materials',desc:'Tool and material inventory',staff:true,member:false},
- {href:'fund.html',name:'Welfare Fund',desc:'Income, expenses and balance',staff:true,member:false}
-];
-var PEOPLE=[],loaded=false;
-var app=document.getElementById('app');
-
-function toUser(r){return {name:String(g(r,'Full Name')).trim(),role:String(g(r,'Role')).trim(),roleKey:normRole(g(r,'Role')),household:String(g(r,'Household ID')).trim(),contact:String(g(r,'Contact')).trim(),type:String(g(r,'Type')).trim()};}
-function fallbackPeople(){return FALLBACK_PEOPLE.map(function(a){return {name:a[0],role:a[1],roleKey:normRole(a[1]),household:a[2],contact:a[3],type:a[4]};});}
-
-function showLogin(){
-  setupTopbar('Ugnayan Gulayan',true);
-  app.innerHTML='<div class="card login"><h1>Sign in</h1><p class="muted">Search for your name and tap it to continue.</p>'+
-   '<div id="banner"></div><input type="search" id="q" placeholder="Search your name\u2026" autocomplete="off" aria-label="Search your name"><div class="people" id="people"><p class="muted">Loading names\u2026</p></div></div>';
-  document.getElementById('q').oninput=drawList;
-  if(loaded){drawList();return;}
-  fetchExcel('people.xlsx').then(function(wb){
-    var rows=readSheet(wb,['People','Sheet1'],['Full Name','Role','Household ID','Contact','Type']);
-    PEOPLE=rows.map(toUser).filter(function(u){return u.name;});
-    loaded=true;drawList();
-  }).catch(function(e){PEOPLE=fallbackPeople();loaded=true;showBanner(e);drawList();});
-}
-function drawList(){
-  var q=norm(document.getElementById('q').value),box=document.getElementById('people');
-  var list=PEOPLE.filter(function(u){return !q||norm(u.name).indexOf(q)>-1;});
-  if(!list.length){box.innerHTML='<div class="empty">No names match. Check the spelling or ask a program coordinator.</div>';return;}
-  box.innerHTML=list.map(function(u,i){return '<button type="button" class="person" data-i="'+PEOPLE.indexOf(u)+'"><span>'+esc(u.name)+'</span>'+badge(roleLabel(u.roleKey))+'</button>';}).join('');
-  Array.prototype.forEach.call(box.querySelectorAll('.person'),function(b){b.onclick=function(){signIn(PEOPLE[+b.getAttribute('data-i')]);};});
-}
-function signIn(u){sSet(SESSION_KEY,JSON.stringify(u));showDashboard();}
-function showDashboard(){
-  var u=getUser();if(!u){showLogin();return;}
-  setupTopbar('Ugnayan Gulayan',true);
-  var staff=isStaff(u);
-  var mods=MODULES.filter(function(m){return staff?m.staff:m.member;});
-  app.innerHTML='<h1>Welcome, '+esc(u.name)+'</h1><p class="muted">Signed in as '+esc(roleLabel(u.roleKey))+(u.household?' \u00B7 Household '+esc(u.household):'')+'</p>'+
-   '<div class="grid">'+mods.map(function(m){return '<a class="tile" href="'+m.href+'"><b>'+esc(m.name)+'</b><span>'+esc(m.desc)+'</span></a>';}).join('')+'</div>';
-}
-if(getUser())showDashboard();else showLogin();
-})();
-</script>
-</body>
-</html>
- 
- 
- 
-################################################################################ 
-FILE: README.md 
-################################################################################ 
- 
-# Ugnayan Gulayan / Sweat Equity Portal
-
-A static site for GitHub Pages. No backend, no build step. All data lives in the Excel files in `data/`.
-
-## Publishing
-1. Put everything in this folder at the **root** of the repository (keep `.nojekyll`).
-2. Repo **Settings > Pages**: deploy from the `main` branch, `/ (root)`.
-
-## Updating data (non-technical staff)
-1. Open the repo on GitHub, go into the `data` folder.
-2. **Add file > Upload files**, drop in the updated Excel file. **Keep the exact same file name** and keep the column headers and sheet name.
-3. Commit. The site shows new data after GitHub Pages redeploys (usually a minute or two).
-
-Tips
-- Dates: either Excel dates or text like `2026-10-21` both work.
-- Fund expenses can be entered as positive numbers; the site subtracts them.
-- Attendance: enter total points per household (Work Day = 8, Care Slot = 4). Put `Solo Parent` or `OFW` in *Hardship Adjustment* for the 90-point target.
-- If a file is missing or broken, the page shows a yellow warning banner and an offline fallback.
-- The files in `data/` currently contain SAMPLE rows. Replace them with your real data.
-
-## Roles (people.xlsx > Role)
-Staff (all modules): committee, liaison, coordinator, documentation, treasurer, logistics, shift_lead.
-Parent / student (Hub, Farm Points, Sweat Equity only). Any unrecognised role is treated as parent.
-Parents and students are matched to their records by **Household ID**.
- 
- 
- 
-################################################################################ 
-FILE: sweat-equity.html 
-################################################################################ 
- 
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sweat Equity â€” Ugnayan Gulayan</title>
-<script>try{var t=localStorage.getItem('ug-theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
-<style>
-:root{--bg:#f4f5f7;--surface:#ffffff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--accent:#2563eb;--ok:#16a34a;--warn:#d97706;--danger:#dc2626;
---shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);
---ok-bg:#f0fdf4;--warn-bg:#fffbeb;--danger-bg:#fef2f2;--accent-bg:#eff6ff;--soft:#f9fafb}
-[data-theme="dark"]{--bg:#0f1115;--surface:#171a21;--text:#e8eaed;--muted:#9aa3b2;--border:#262b36;--accent:#60a5fa;--ok:#4ade80;--warn:#fbbf24;--danger:#f87171;
---ok-bg:#10281a;--warn-bg:#33270b;--danger-bg:#331616;--accent-bg:#172338;--soft:#1c2029;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.4)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-a{color:var(--accent)}
-.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border)}
-.tb-in{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
-.tb-link{text-decoration:none;font-weight:600;white-space:nowrap}
-.tb-title{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tb-right{display:flex;align-items:center;gap:8px}
-.chip{font-size:12px;color:var(--muted);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:3px 10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn{font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.wrap{max-width:1100px;margin:0 auto;padding:16px}
-h1{font-size:20px;margin:4px 0 12px}
-.muted{color:var(--muted)}
-.banner{background:var(--warn-bg);border:1px solid var(--warn);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-weight:600}
-.banner small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
-.card h2{font-size:12px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.stat{background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
-.stat .l{font-size:11px;font-weight:650;color:var(--muted);text-transform:uppercase}
-.stat .v{font-size:22px;font-weight:700;line-height:1.2}
-.stat .s{font-size:12px;color:var(--muted)}
-.stat.ok .v{color:var(--ok)}.stat.warn .v{color:var(--warn)}.stat.danger .v{color:var(--danger)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.badge{display:inline-block;font-size:12px;font-weight:650;border-radius:99px;padding:2px 10px;border:1px solid var(--border);background:var(--soft);color:var(--muted);white-space:nowrap}
-.badge.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
-.badge.warn{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
-.badge.danger{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
-.badge.info{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
-.bar-row{margin:8px 0}
-.bar-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
-.bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden}
-.bar span{display:block;height:100%;background:var(--accent);border-radius:99px}
-.bar.ok span{background:var(--ok)}
-.toolbar{display:flex;gap:10px;margin-bottom:12px}
-input[type=search],input[type=text]{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;width:100%}
-input:focus{outline:2px solid var(--accent);outline-offset:0}
-.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
-tbody tr:last-child td{border-bottom:0}
-tr.hl-warn{background:var(--warn-bg)}tr.hl-ok{background:var(--ok-bg)}
-.num{font-variant-numeric:tabular-nums}
-.pos{color:var(--ok);font-weight:650}.neg{color:var(--danger);font-weight:650}
-.empty{text-align:center;color:var(--muted);padding:28px 12px}
-.section-title{font-size:15px;font-weight:700;margin:20px 0 8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.tile{display:block;text-decoration:none;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px}
-.tile:hover{border-color:var(--accent)}
-.tile b{display:block;font-size:15px}.tile span{color:var(--muted);font-size:13px}
-.people{max-height:50vh;overflow-y:auto;margin-top:10px}
-.person{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;cursor:pointer}
-.person:hover{border-color:var(--accent);background:var(--accent-bg)}
-.login{max-width:560px;margin:24px auto}
-@media (max-width:600px){
-  .tb-link{font-size:13px}
-  table,tbody{display:block;width:100%}
-  thead{display:none}
-  .table-wrap{background:none;border:0;box-shadow:none}
-  tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
-  tbody td{display:block;border:0;padding:0}
-  tbody td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase}
-  tbody td.c-wide{grid-column:1 / -1}
-  tbody tr.hl-warn{background:var(--warn-bg)}tbody tr.hl-ok{background:var(--ok-bg)}
-}
-</style>
-</head>
-<body>
-<header class="topbar" id="topbar"></header>
-<main class="wrap" id="app">
-<h1 id="h1">Sweat Equity</h1><div id="banner"></div><div id="mycard"></div><div id="content"><p class="muted">Loadingâ€¦</p></div>
-</main>
-<script>
-var SESSION_KEY='ug-current-user';
-var CDN=['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'];
-var STAFF_ROLES=['committee','liaison','coordinator','documentation','treasurer','logistics','shift_lead'];
-var MEMBER_ROLES=['parent','student'];
-var ROLE_LABELS={committee:'Committee',liaison:'Farm Liaison',coordinator:'Coordinator',documentation:'Documentation',treasurer:'Treasurer',logistics:'Logistics',shift_lead:'Shift Lead',parent:'Parent',student:'Student'};
-var WARN_BANNER='Data could not be loaded. Showing offline fallback. Please check the Excel file.';
-
-/* ---- small utilities ---- */
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-function norm(s){return String(s==null?'':s).trim().toLowerCase();}
-function num(v){if(typeof v==='number')return isFinite(v)?v:0;var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isFinite(n)?n:0;}
-function fmt(n,d){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d==null?1:d});}
-function peso(n){return (n<0?'-':'')+'\u20B1'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function g(o,h){var v=o[norm(h)];return v==null?'':v;}
-function sGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
-function sSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
-function sDel(k){try{sessionStorage.removeItem(k);}catch(e){}}
-function normRole(s){var r=norm(s).replace(/[\s\-]+/g,'_');return(STAFF_ROLES.indexOf(r)>-1||MEMBER_ROLES.indexOf(r)>-1)?r:'parent';}
-function matches(o,q){q=norm(q);if(!q)return true;return Object.keys(o).some(function(k){var v=o[k];return(typeof v==='string'||typeof v==='number')&&String(v).toLowerCase().indexOf(q)>-1;});}
-
-/* ---- Excel dates ---- */
-function ymd(d){var m=d.getUTCMonth()+1,day=d.getUTCDate();return d.getUTCFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;}
-function excelDate(v){
-  if(v===''||v==null)return '';
-  if(v instanceof Date)return ymd(v);
-  if(typeof v==='number'){return(v>20000&&v<80000)?ymd(new Date(Math.round((v-25569)*86400000))):String(v);}
-  var s=String(v).trim();
-  if(/^\d{5}(\.\d+)?$/.test(s))return excelDate(parseFloat(s));
-  if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);
-  return s;
-}
-function daysBetween(a,b){
-  var re=/^(\d{4})-(\d{2})-(\d{2})$/,x=re.exec(a||''),y=re.exec(b||'');
-  if(!x||!y)return null;
-  return Math.round((Date.UTC(+y[1],y[2]-1,+y[3])-Date.UTC(+x[1],x[2]-1,+x[3]))/86400000);
-}
-
-/* ---- SheetJS loading + Excel fetching ---- */
-var _xlsxP=null;
-function loadSheetJS(){
-  if(window.XLSX)return Promise.resolve();
-  if(_xlsxP)return _xlsxP;
-  _xlsxP=new Promise(function(res,rej){
-    var i=0;
-    (function next(){
-      if(i>=CDN.length){rej(new Error('SheetJS library could not be loaded'));return;}
-      var s=document.createElement('script'),done=false;
-      function fail(){if(done)return;done=true;s.remove();next();}
-      s.async=true;s.src=CDN[i++];
-      s.onload=function(){if(done)return;done=true;window.XLSX?res():next();};
-      s.onerror=fail;setTimeout(fail,8000);
-      document.head.appendChild(s);
-    })();
-  });
-  return _xlsxP;
-}
-function withTimeout(p,ms,msg){return new Promise(function(res,rej){var t=setTimeout(function(){rej(new Error(msg));},ms);p.then(function(v){clearTimeout(t);res(v);},function(e){clearTimeout(t);rej(e);});});}
-function fetchExcel(fileName){
-  var p=Promise.all([loadSheetJS(),fetch('data/'+fileName+'?t='+Date.now(),{cache:'no-store'})]).then(function(r){
-    if(!r[1].ok)throw new Error('data/'+fileName+' returned HTTP '+r[1].status);
-    return r[1].arrayBuffer();
-  }).then(function(buf){return XLSX.read(buf,{type:'array'});});
-  return withTimeout(p,20000,'data/'+fileName+' timed out');
-}
-/* Finds the sheet by name, finds the header row within the first 10 rows, returns objects keyed by lower-case header. */
-function readSheet(wb,names,headers,strict){
-  var low=wb.SheetNames.map(norm),sn=null,i;
-  for(i=0;i<names.length&&sn===null;i++){var k=low.indexOf(norm(names[i]));if(k>-1)sn=wb.SheetNames[k];}
-  if(sn===null){if(strict)return[];sn=wb.SheetNames[0];}
-  var aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});
-  var want=headers.map(norm),best=-1,bs=0,r;
-  for(r=0;r<Math.min(10,aoa.length);r++){var sc=0;aoa[r].forEach(function(c){if(want.indexOf(norm(c))>-1)sc++;});if(sc>bs){bs=sc;best=r;}}
-  if(best<0||bs<2)throw new Error('Header row not found in sheet "'+sn+'"');
-  var keys=aoa[best].map(norm),out=[];
-  for(r=best+1;r<aoa.length;r++){
-    var o={},any=false;
-    keys.forEach(function(k,c){
-      if(!k)return;
-      var v=aoa[r][c];if(v==null)v='';
-      if(typeof v==='string')v=v.trim();
-      if(v!=='')any=true;
-      if(k.indexOf('date')>-1||k.indexOf('checked')>-1)v=excelDate(v);
-      o[k]=v;
-    });
-    if(any)out.push(o);
-  }
-  return out;
-}
-
-/* ---- session + role access ---- */
-function getUser(){var s=sGet(SESSION_KEY);if(!s)return null;try{var u=JSON.parse(s);if(!u||!u.name)return null;u.roleKey=normRole(u.roleKey||u.role);return u;}catch(e){return null;}}
-function isStaff(u){return !!u&&STAFF_ROLES.indexOf(u.roleKey)>-1;}
-function roleLabel(r){return ROLE_LABELS[r]||r;}
-function signOut(){sDel(SESSION_KEY);location.href='index.html';}
-
-/* ---- page chrome ---- */
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ug-theme',t);}catch(e){}}
-function setupTopbar(title,hub){
-  var u=getUser(),el=document.getElementById('topbar');
-  el.innerHTML='<div class="tb-in">'+(hub?'':'<a class="tb-link" href="index.html">\u2190 Hub</a>')+'<div class="tb-title">'+esc(title)+'</div><div class="tb-right">'+
-    (u?'<span class="chip" title="'+esc(roleLabel(u.roleKey))+'">'+esc(u.name)+'</span>':'')+
-    '<button class="btn" id="themeBtn" type="button" aria-label="Toggle dark mode">\u25D0</button>'+
-    (u?'<button class="btn" id="outBtn" type="button">Sign out</button>':'')+'</div></div>';
-  document.getElementById('themeBtn').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
-  var o=document.getElementById('outBtn');if(o)o.onclick=signOut;
-}
-function initPage(opts){
-  setupTopbar(opts.title,false);
-  var u=getUser(),app=document.getElementById('app');
-  if(!u){app.innerHTML='<div class="card login"><h1>Please sign in</h1><p class="muted">You need to choose your name on the hub page before viewing this module.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Go to sign in</a></div>';return null;}
-  if(opts.staffOnly&&!isStaff(u)){app.innerHTML='<div class="card login"><h1>Not available</h1><p class="muted">This module is only available to program staff. Parents and students can use Farm Points and Sweat Equity.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Back to hub</a></div>';return null;}
-  return u;
-}
-function showBanner(err){
-  var b=document.getElementById('banner');if(!b)return;
-  b.innerHTML='<div class="banner">\u26A0 '+esc(WARN_BANNER)+(err&&err.message?'<small>'+esc(err.message)+'</small>':'')+'</div>';
-}
-
-/* ---- reusable HTML builders ---- */
-function stat(label,value,sub,cls){return '<div class="stat '+(cls||'')+'"><div class="l">'+esc(label)+'</div><div class="v">'+esc(value)+'</div>'+(sub?'<div class="s">'+esc(sub)+'</div>':'')+'</div>';}
-function statsRow(a){return '<div class="stats">'+a.join('')+'</div>';}
-function badge(text,cls){return '<span class="badge '+(cls||'')+'">'+esc(text)+'</span>';}
-function bar(label,val,max,ok){var p=max?Math.max(0,Math.min(val/max*100,100)):0;return '<div class="bar-row"><div class="bar-top"><span>'+esc(label)+'</span><span class="num">'+fmt(val)+' / '+fmt(max)+'</span></div><div class="bar'+(ok?' ok':'')+'"><span style="width:'+p.toFixed(1)+'%"></span></div></div>';}
-/* cols: [{h:'Label', f:function(row){return html}, wide:true}] */
-function tableHTML(cols,rows,rowClass){
-  if(!rows.length)return '<div class="empty">No records to show.</div>';
-  var h='<div class="table-wrap"><table><thead><tr>'+cols.map(function(c){return '<th>'+esc(c.h)+'</th>';}).join('')+'</tr></thead><tbody>';
-  rows.forEach(function(r){
-    var rc=rowClass?rowClass(r):'';
-    h+='<tr'+(rc?' class="'+rc+'"':'')+'>'+cols.map(function(c){return '<td data-label="'+esc(c.h)+'"'+(c.wide?' class="c-wide"':'')+'>'+c.f(r)+'</td>';}).join('')+'</tr>';
-  });
-  return h+'</tbody></table></div>';
-}
-function searchBox(id,placeholder){return '<div class="toolbar"><input type="search" id="'+id+'" placeholder="'+esc(placeholder)+'" aria-label="'+esc(placeholder)+'"></div>';}
-/* Reusable "My Card": cfg.staff() / cfg.member() return inner HTML. */
-function renderMyCard(elId,user,cfg){
-  var el=document.getElementById(elId);if(!el)return;
-  var inner=isStaff(user)?(cfg.staff?cfg.staff():''):(cfg.member?cfg.member():'');
-  el.innerHTML='<div class="card"><h2>My Card \u2014 '+esc(user.name)+' \u00B7 '+esc(roleLabel(user.roleKey))+'</h2>'+inner+'</div>';
-}
-function mine(user,name){return norm(name)!==''&&norm(name)===norm(user.name);}
-</script>
-<script>
-(function(){
-var FALLBACK=[["HH-001", "MATEO ASUMEN BOBILES", 0, "Standard"], ["HH-002", "JUNRISH EBUENGA CAONES", 0, "Solo Parent"], ["HH-003", "RICHLYN LANDICHO CAPULO", 0, "Standard"], ["HH-004", "FRANCIS ALLESANDRO CASPE CUSTODIO", 0, "Standard"], ["HH-005", "REYNIEL ALLEN ROBLES ESCUETA", 0, "OFW"], ["HH-006", "JOHN CARLO BARRUGA LAZANAS", 0, "Standard"], ["HH-007", "PHILIP ANDREW CABALLERO LOGRONIO", 0, "Standard"], ["HH-008", "CANDICE BARLOLAY MOSQUERA", 0, "Solo Parent"], ["HH-009", "RHEAN MARK MAGANA PACHECO", 0, "Standard"], ["HH-010", "AKEESHA LIANNE ALCAZAR ROSALES", 0, "Standard"], ["HH-011", "JOSHUA DAVID RELLATORRES ROSAS", 0, "Standard"], ["HH-012", "VINCE ARON SANGALANG SUGUITAN", 0, "Standard"], ["HH-013", "TRICIA YHANIE ABITO BIEN", 0, "Standard"], ["HH-014", "KRIZZEL CADE AUSTRIA DERLA", 0, "Solo Parent"], ["HH-015", "HERSHEY MHAORI HERNANDEZ", 0, "Standard"], ["HH-016", "RHAYNE LUMAG MARTINEZ", 0, "Standard"], ["HH-017", "KEISHA BRICE PANOPIO MELEGRITO", 0, "Standard"], ["HH-018", "KYLE BRENAN SAGADRACA MENDOZA", 0, "Standard"], ["HH-019", "NICOLE ANNE UROT SABAL", 0, "OFW"], ["HH-020", "AIKEE MIKAELA MIRANDUQUE SANTOS", 0, "Standard"], ["HH-021", "QUIM DRIZEL QUIMIO TOLENTINO", 0, "Standard"], ["HH-022", "XYRA HYACINTH RODRIGUEZ CLEOPAS", 0, "Standard"], ["HH-023", "SAMANTHA RAGODON ECRAELA", 0, "Standard"], ["HH-024", "FAITH EUNICE FAMILIAR FLORES", 0, "Standard"], ["HH-025", "ERIC JOSH SANTIAGO GARCIA", 0, "Solo Parent"], ["HH-026", "ANGELU T. NUMERON", 0, "Standard"], ["HH-027", "NASH IVAN RAFALLO PANTOJA", 0, "Standard"], ["HH-028", "ALLYN BAUTISTA RONDINA", 0, "Standard"], ["HH-029", "HANNA KIMBERLIE VALERA FERNANDEZ", 0, "Standard"], ["HH-030", "ANYA NATALIE HERNANDEZ DETRUZ", 0, "Standard"], ["HH-031", "RHAINE JANNELLE SUA NACIONALES", 0, "Standard"], ["HH-032", "ANDREA NICOLE PAR MERCADO", 0, "Standard"], ["HH-033", "GRACE ANUYO UMALI", 0, "Standard"], ["HH-034", "EUSSEY AOE SAN JUAN DEINLA", 0, "Standard"], ["HH-035", "ARVEL NICOLE TERCERO UMALI", 0, "Solo Parent"], ["HH-036", "FRANCHESCA LUBANG SISCON", 0, "Standard"]];
-var DIMS=[{k:'academic',h:'Academic',max:100},{k:'community',h:'Community',max:50},{k:'leadership',h:'Leadership',max:50},{k:'skills',h:'Skills',max:30},{k:'parental',h:'Parental',max:40}];
-var MAXTOTAL=270;
-var user=initPage({title:'Sweat Equity'});if(!user)return;
-var staff=isStaff(user),DATA=[],query='';
-function level(t){if(t>=201)return{n:4,label:'Level 4',share:100,cls:'ok'};if(t>=151)return{n:3,label:'Level 3',share:75,cls:'info'};if(t>=101)return{n:2,label:'Level 2',share:50,cls:'warn'};if(t>=1)return{n:1,label:'Level 1',share:25,cls:'danger'};return{n:0,label:'Not Started',share:0,cls:''};}
-function build(r){
-  var o={id:String(r.id).trim(),name:r.name,total:0};
-  DIMS.forEach(function(d){o[d.k]=Math.max(0,Math.min(num(r[d.k]),d.max));o.total+=o[d.k];});
-  o.level=level(o.total);return o;
-}
-fetchExcel('scholar-journal.xlsx').then(function(wb){
-  var raw=readSheet(wb,['Roster'],['Household ID','Scholar','Academic','Community','Leadership','Skills','Parental']);
-  DATA=raw.map(function(r){var o={id:g(r,'Household ID'),name:g(r,'Scholar')};DIMS.forEach(function(d){o[d.k]=g(r,d.h);});return build(o);}).filter(function(r){return r.id||r.name;});
-  render();
-}).catch(function(e){
-  DATA=FALLBACK.map(function(a){return build({id:a[0],name:'Scholar of '+a[0]});});
-  showBanner(e);render();
-});
-function scholarCard(r){
-  return '<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center"><b>'+esc(r.name||'Scholar')+'</b><span>'+badge(r.level.label,r.level.cls)+' '+badge(r.level.share+'% share')+'</span></div>'+
-    '<div class="muted" style="font-size:12px">Total points: <b class="num">'+fmt(r.total)+'</b> / '+MAXTOTAL+'</div>'+bar('Overall',r.total,MAXTOTAL,r.level.n===4)+
-    DIMS.map(function(d){return bar(d.h,r[d.k],d.max);}).join('')+'</div>';
-}
-function render(){
-  renderMyCard('mycard',user,{
-    staff:function(){
-      var tot=0,cnt={0:0,1:0,2:0,3:0,4:0};DATA.forEach(function(r){tot+=r.total;cnt[r.level.n]++;});
-      return statsRow([stat('Scholars',DATA.length),stat('Average points',fmt(DATA.length?tot/DATA.length:0)),stat('Level 4',cnt[4],'100% share','ok'),stat('Not started',cnt[0])])+
-        '<div class="chips">'+[4,3,2,1,0].map(function(n){var l=level(n===4?201:n===3?151:n===2?101:n===1?1:0);return badge(l.label+': '+cnt[n],l.cls);}).join('')+'</div>';
-    },
-    member:function(){
-      var m=DATA.filter(function(r){return norm(r.id)===norm(user.household);});
-      if(!m.length)return '<p class="muted">We could not find '+(user.household?'household '+esc(user.household):'a household on your profile')+' in the Sweat Equity roster. Please ask a coordinator.</p>';
-      return m.map(scholarCard).join('');
-    }
-  });
-  var c=document.getElementById('content');
-  if(!staff){c.innerHTML='';return;}
-  c.innerHTML=searchBox('s','Search scholar or household\u2026')+'<div id="tbl"></div>';
-  document.getElementById('s').oninput=function(){query=this.value;draw();};
-  draw();
-}
-function draw(){
-  var rows=DATA.filter(function(r){return matches({a:r.id,b:r.name,c:r.level.label},query);});
-  var cols=[{h:'Household',f:function(r){return '<b>'+esc(r.id)+'</b>';}},{h:'Scholar',f:function(r){return esc(r.name);},wide:true}];
-  DIMS.forEach(function(d){cols.push({h:d.h,f:function(r){return '<span class="num">'+fmt(r[d.k])+'/'+d.max+'</span>';}});});
-  cols.push({h:'Total',f:function(r){return '<b class="num">'+fmt(r.total)+'</b>';}});
-  cols.push({h:'Level',f:function(r){return badge(r.level.label,r.level.cls);}});
-  cols.push({h:'Share',f:function(r){return r.level.share+'%';}});
-  document.getElementById('tbl').innerHTML=tableHTML(cols,rows);
-}
-})();
-</script>
-</body>
-</html>
- 
- 
- 
-################################################################################ 
-FILE: tools.html 
-################################################################################ 
- 
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tools & Materials â€” Ugnayan Gulayan</title>
-<script>try{var t=localStorage.getItem('ug-theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
-<style>
-:root{--bg:#f4f5f7;--surface:#ffffff;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--accent:#2563eb;--ok:#16a34a;--warn:#d97706;--danger:#dc2626;
---shadow:0 1px 2px rgba(16,24,40,.05),0 4px 12px rgba(16,24,40,.06);
---ok-bg:#f0fdf4;--warn-bg:#fffbeb;--danger-bg:#fef2f2;--accent-bg:#eff6ff;--soft:#f9fafb}
-[data-theme="dark"]{--bg:#0f1115;--surface:#171a21;--text:#e8eaed;--muted:#9aa3b2;--border:#262b36;--accent:#60a5fa;--ok:#4ade80;--warn:#fbbf24;--danger:#f87171;
---ok-bg:#10281a;--warn-bg:#33270b;--danger-bg:#331616;--accent-bg:#172338;--soft:#1c2029;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.4)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-a{color:var(--accent)}
-.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border)}
-.tb-in{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
-.tb-link{text-decoration:none;font-weight:600;white-space:nowrap}
-.tb-title{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tb-right{display:flex;align-items:center;gap:8px}
-.chip{font-size:12px;color:var(--muted);background:var(--soft);border:1px solid var(--border);border-radius:99px;padding:3px 10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn{font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.wrap{max-width:1100px;margin:0 auto;padding:16px}
-h1{font-size:20px;margin:4px 0 12px}
-.muted{color:var(--muted)}
-.banner{background:var(--warn-bg);border:1px solid var(--warn);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-weight:600}
-.banner small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
-.card h2{font-size:12px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
-.stat{background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
-.stat .l{font-size:11px;font-weight:650;color:var(--muted);text-transform:uppercase}
-.stat .v{font-size:22px;font-weight:700;line-height:1.2}
-.stat .s{font-size:12px;color:var(--muted)}
-.stat.ok .v{color:var(--ok)}.stat.warn .v{color:var(--warn)}.stat.danger .v{color:var(--danger)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.badge{display:inline-block;font-size:12px;font-weight:650;border-radius:99px;padding:2px 10px;border:1px solid var(--border);background:var(--soft);color:var(--muted);white-space:nowrap}
-.badge.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
-.badge.warn{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
-.badge.danger{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
-.badge.info{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
-.bar-row{margin:8px 0}
-.bar-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
-.bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden}
-.bar span{display:block;height:100%;background:var(--accent);border-radius:99px}
-.bar.ok span{background:var(--ok)}
-.toolbar{display:flex;gap:10px;margin-bottom:12px}
-input[type=search],input[type=text]{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;width:100%}
-input:focus{outline:2px solid var(--accent);outline-offset:0}
-.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
-tbody tr:last-child td{border-bottom:0}
-tr.hl-warn{background:var(--warn-bg)}tr.hl-ok{background:var(--ok-bg)}
-.num{font-variant-numeric:tabular-nums}
-.pos{color:var(--ok);font-weight:650}.neg{color:var(--danger);font-weight:650}
-.empty{text-align:center;color:var(--muted);padding:28px 12px}
-.section-title{font-size:15px;font-weight:700;margin:20px 0 8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.tile{display:block;text-decoration:none;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:16px}
-.tile:hover{border-color:var(--accent)}
-.tile b{display:block;font-size:15px}.tile span{color:var(--muted);font-size:13px}
-.people{max-height:50vh;overflow-y:auto;margin-top:10px}
-.person{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;cursor:pointer}
-.person:hover{border-color:var(--accent);background:var(--accent-bg)}
-.login{max-width:560px;margin:24px auto}
-@media (max-width:600px){
-  .tb-link{font-size:13px}
-  table,tbody{display:block;width:100%}
-  thead{display:none}
-  .table-wrap{background:none;border:0;box-shadow:none}
-  tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
-  tbody td{display:block;border:0;padding:0}
-  tbody td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase}
-  tbody td.c-wide{grid-column:1 / -1}
-  tbody tr.hl-warn{background:var(--warn-bg)}tbody tr.hl-ok{background:var(--ok-bg)}
-}
-</style>
-</head>
-<body>
-<header class="topbar" id="topbar"></header>
-<main class="wrap" id="app">
-<h1 id="h1">Tools & Materials</h1><div id="banner"></div><div id="mycard"></div><div id="content"><p class="muted">Loadingâ€¦</p></div>
-</main>
-<script>
-var SESSION_KEY='ug-current-user';
-var CDN=['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js','https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'];
-var STAFF_ROLES=['committee','liaison','coordinator','documentation','treasurer','logistics','shift_lead'];
-var MEMBER_ROLES=['parent','student'];
-var ROLE_LABELS={committee:'Committee',liaison:'Farm Liaison',coordinator:'Coordinator',documentation:'Documentation',treasurer:'Treasurer',logistics:'Logistics',shift_lead:'Shift Lead',parent:'Parent',student:'Student'};
-var WARN_BANNER='Data could not be loaded. Showing offline fallback. Please check the Excel file.';
-
-/* ---- small utilities ---- */
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-function norm(s){return String(s==null?'':s).trim().toLowerCase();}
-function num(v){if(typeof v==='number')return isFinite(v)?v:0;var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isFinite(n)?n:0;}
-function fmt(n,d){return Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d==null?1:d});}
-function peso(n){return (n<0?'-':'')+'\u20B1'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function g(o,h){var v=o[norm(h)];return v==null?'':v;}
-function sGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
-function sSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
-function sDel(k){try{sessionStorage.removeItem(k);}catch(e){}}
-function normRole(s){var r=norm(s).replace(/[\s\-]+/g,'_');return(STAFF_ROLES.indexOf(r)>-1||MEMBER_ROLES.indexOf(r)>-1)?r:'parent';}
-function matches(o,q){q=norm(q);if(!q)return true;return Object.keys(o).some(function(k){var v=o[k];return(typeof v==='string'||typeof v==='number')&&String(v).toLowerCase().indexOf(q)>-1;});}
-
-/* ---- Excel dates ---- */
-function ymd(d){var m=d.getUTCMonth()+1,day=d.getUTCDate();return d.getUTCFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;}
-function excelDate(v){
-  if(v===''||v==null)return '';
-  if(v instanceof Date)return ymd(v);
-  if(typeof v==='number'){return(v>20000&&v<80000)?ymd(new Date(Math.round((v-25569)*86400000))):String(v);}
-  var s=String(v).trim();
-  if(/^\d{5}(\.\d+)?$/.test(s))return excelDate(parseFloat(s));
-  if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);
-  return s;
-}
-function daysBetween(a,b){
-  var re=/^(\d{4})-(\d{2})-(\d{2})$/,x=re.exec(a||''),y=re.exec(b||'');
-  if(!x||!y)return null;
-  return Math.round((Date.UTC(+y[1],y[2]-1,+y[3])-Date.UTC(+x[1],x[2]-1,+x[3]))/86400000);
-}
-
-/* ---- SheetJS loading + Excel fetching ---- */
-var _xlsxP=null;
-function loadSheetJS(){
-  if(window.XLSX)return Promise.resolve();
-  if(_xlsxP)return _xlsxP;
-  _xlsxP=new Promise(function(res,rej){
-    var i=0;
-    (function next(){
-      if(i>=CDN.length){rej(new Error('SheetJS library could not be loaded'));return;}
-      var s=document.createElement('script'),done=false;
-      function fail(){if(done)return;done=true;s.remove();next();}
-      s.async=true;s.src=CDN[i++];
-      s.onload=function(){if(done)return;done=true;window.XLSX?res():next();};
-      s.onerror=fail;setTimeout(fail,8000);
-      document.head.appendChild(s);
-    })();
-  });
-  return _xlsxP;
-}
-function withTimeout(p,ms,msg){return new Promise(function(res,rej){var t=setTimeout(function(){rej(new Error(msg));},ms);p.then(function(v){clearTimeout(t);res(v);},function(e){clearTimeout(t);rej(e);});});}
-function fetchExcel(fileName){
-  var p=Promise.all([loadSheetJS(),fetch('data/'+fileName+'?t='+Date.now(),{cache:'no-store'})]).then(function(r){
-    if(!r[1].ok)throw new Error('data/'+fileName+' returned HTTP '+r[1].status);
-    return r[1].arrayBuffer();
-  }).then(function(buf){return XLSX.read(buf,{type:'array'});});
-  return withTimeout(p,20000,'data/'+fileName+' timed out');
-}
-/* Finds the sheet by name, finds the header row within the first 10 rows, returns objects keyed by lower-case header. */
-function readSheet(wb,names,headers,strict){
-  var low=wb.SheetNames.map(norm),sn=null,i;
-  for(i=0;i<names.length&&sn===null;i++){var k=low.indexOf(norm(names[i]));if(k>-1)sn=wb.SheetNames[k];}
-  if(sn===null){if(strict)return[];sn=wb.SheetNames[0];}
-  var aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''});
-  var want=headers.map(norm),best=-1,bs=0,r;
-  for(r=0;r<Math.min(10,aoa.length);r++){var sc=0;aoa[r].forEach(function(c){if(want.indexOf(norm(c))>-1)sc++;});if(sc>bs){bs=sc;best=r;}}
-  if(best<0||bs<2)throw new Error('Header row not found in sheet "'+sn+'"');
-  var keys=aoa[best].map(norm),out=[];
-  for(r=best+1;r<aoa.length;r++){
-    var o={},any=false;
-    keys.forEach(function(k,c){
-      if(!k)return;
-      var v=aoa[r][c];if(v==null)v='';
-      if(typeof v==='string')v=v.trim();
-      if(v!=='')any=true;
-      if(k.indexOf('date')>-1||k.indexOf('checked')>-1)v=excelDate(v);
-      o[k]=v;
-    });
-    if(any)out.push(o);
-  }
-  return out;
-}
-
-/* ---- session + role access ---- */
-function getUser(){var s=sGet(SESSION_KEY);if(!s)return null;try{var u=JSON.parse(s);if(!u||!u.name)return null;u.roleKey=normRole(u.roleKey||u.role);return u;}catch(e){return null;}}
-function isStaff(u){return !!u&&STAFF_ROLES.indexOf(u.roleKey)>-1;}
-function roleLabel(r){return ROLE_LABELS[r]||r;}
-function signOut(){sDel(SESSION_KEY);location.href='index.html';}
-
-/* ---- page chrome ---- */
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('ug-theme',t);}catch(e){}}
-function setupTopbar(title,hub){
-  var u=getUser(),el=document.getElementById('topbar');
-  el.innerHTML='<div class="tb-in">'+(hub?'':'<a class="tb-link" href="index.html">\u2190 Hub</a>')+'<div class="tb-title">'+esc(title)+'</div><div class="tb-right">'+
-    (u?'<span class="chip" title="'+esc(roleLabel(u.roleKey))+'">'+esc(u.name)+'</span>':'')+
-    '<button class="btn" id="themeBtn" type="button" aria-label="Toggle dark mode">\u25D0</button>'+
-    (u?'<button class="btn" id="outBtn" type="button">Sign out</button>':'')+'</div></div>';
-  document.getElementById('themeBtn').onclick=function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');};
-  var o=document.getElementById('outBtn');if(o)o.onclick=signOut;
-}
-function initPage(opts){
-  setupTopbar(opts.title,false);
-  var u=getUser(),app=document.getElementById('app');
-  if(!u){app.innerHTML='<div class="card login"><h1>Please sign in</h1><p class="muted">You need to choose your name on the hub page before viewing this module.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Go to sign in</a></div>';return null;}
-  if(opts.staffOnly&&!isStaff(u)){app.innerHTML='<div class="card login"><h1>Not available</h1><p class="muted">This module is only available to program staff. Parents and students can use Farm Points and Sweat Equity.</p><a class="btn primary" href="index.html" style="text-decoration:none;display:inline-block">Back to hub</a></div>';return null;}
-  return u;
-}
-function showBanner(err){
-  var b=document.getElementById('banner');if(!b)return;
-  b.innerHTML='<div class="banner">\u26A0 '+esc(WARN_BANNER)+(err&&err.message?'<small>'+esc(err.message)+'</small>':'')+'</div>';
-}
-
-/* ---- reusable HTML builders ---- */
-function stat(label,value,sub,cls){return '<div class="stat '+(cls||'')+'"><div class="l">'+esc(label)+'</div><div class="v">'+esc(value)+'</div>'+(sub?'<div class="s">'+esc(sub)+'</div>':'')+'</div>';}
-function statsRow(a){return '<div class="stats">'+a.join('')+'</div>';}
-function badge(text,cls){return '<span class="badge '+(cls||'')+'">'+esc(text)+'</span>';}
-function bar(label,val,max,ok){var p=max?Math.max(0,Math.min(val/max*100,100)):0;return '<div class="bar-row"><div class="bar-top"><span>'+esc(label)+'</span><span class="num">'+fmt(val)+' / '+fmt(max)+'</span></div><div class="bar'+(ok?' ok':'')+'"><span style="width:'+p.toFixed(1)+'%"></span></div></div>';}
-/* cols: [{h:'Label', f:function(row){return html}, wide:true}] */
-function tableHTML(cols,rows,rowClass){
-  if(!rows.length)return '<div class="empty">No records to show.</div>';
-  var h='<div class="table-wrap"><table><thead><tr>'+cols.map(function(c){return '<th>'+esc(c.h)+'</th>';}).join('')+'</tr></thead><tbody>';
-  rows.forEach(function(r){
-    var rc=rowClass?rowClass(r):'';
-    h+='<tr'+(rc?' class="'+rc+'"':'')+'>'+cols.map(function(c){return '<td data-label="'+esc(c.h)+'"'+(c.wide?' class="c-wide"':'')+'>'+c.f(r)+'</td>';}).join('')+'</tr>';
-  });
-  return h+'</tbody></table></div>';
-}
-function searchBox(id,placeholder){return '<div class="toolbar"><input type="search" id="'+id+'" placeholder="'+esc(placeholder)+'" aria-label="'+esc(placeholder)+'"></div>';}
-/* Reusable "My Card": cfg.staff() / cfg.member() return inner HTML. */
-function renderMyCard(elId,user,cfg){
-  var el=document.getElementById(elId);if(!el)return;
-  var inner=isStaff(user)?(cfg.staff?cfg.staff():''):(cfg.member?cfg.member():'');
-  el.innerHTML='<div class="card"><h2>My Card \u2014 '+esc(user.name)+' \u00B7 '+esc(roleLabel(user.roleKey))+'</h2>'+inner+'</div>';
-}
-function mine(user,name){return norm(name)!==''&&norm(name)===norm(user.name);}
-</script>
-<script>
-(function(){
-var user=initPage({title:'Tools & Materials',staffOnly:true});if(!user)return;
-var DATA=[],query='';
-var BAD=['poor','broken','damaged','missing','lost','repair'],FAIR=['fair','worn','needs'];
-function cc(s){var n=norm(s),i;for(i=0;i<BAD.length;i++)if(n.indexOf(BAD[i])>-1)return 'danger';for(i=0;i<FAIR.length;i++)if(n.indexOf(FAIR[i])>-1)return 'warn';return n?'ok':'';}
-fetchExcel('tools.xlsx').then(function(wb){
-  var raw=readSheet(wb,['Inventory'],['Item','Category','Quantity','Unit','Condition','Location','Last Checked','Notes']);
-  DATA=raw.map(function(r){var o={item:g(r,'Item'),cat:g(r,'Category'),qty:num(g(r,'Quantity')),unit:g(r,'Unit'),cond:g(r,'Condition'),loc:g(r,'Location'),checked:g(r,'Last Checked'),notes:g(r,'Notes')};o.cls=cc(o.cond);return o;});
-  render();
-}).catch(function(e){DATA=[];showBanner(e);render();});
-function render(){
-  renderMyCard('mycard',user,{staff:function(){
-    var q=0,bad=0,cats={};DATA.forEach(function(r){q+=r.qty;if(r.cls==='danger'||r.cls==='warn')bad++;if(r.cat)cats[norm(r.cat)]=1;});
-    return statsRow([stat('Item types',DATA.length),stat('Total quantity',fmt(q)),stat('Categories',Object.keys(cats).length),stat('Need attention',bad,'Fair, poor or needs repair',bad?'warn':'ok')]);
-  }});
-  document.getElementById('content').innerHTML=searchBox('s','Search item, category, location\u2026')+'<div id="tbl"></div>';
-  document.getElementById('s').oninput=function(){query=this.value;draw();};draw();
-}
-function draw(){
-  var rows=DATA.filter(function(r){return matches(r,query);});
-  document.getElementById('tbl').innerHTML=tableHTML([
-   {h:'Item',f:function(r){return '<b>'+esc(r.item)+'</b>';}},{h:'Category',f:function(r){return esc(r.cat);}},
-   {h:'Quantity',f:function(r){return '<span class="num">'+fmt(r.qty)+'</span> '+esc(r.unit);}},
-   {h:'Condition',f:function(r){return badge(r.cond||'\u2014',r.cls);}},{h:'Location',f:function(r){return esc(r.loc);}},
-   {h:'Last Checked',f:function(r){return esc(r.checked);}},{h:'Notes',f:function(r){return esc(r.notes);},wide:true}
-  ],rows);
-}
-})();
-</script>
-</body>
-</html>
- 
- 
- 
-################################################################################ 
-FILE: data\attendance.xlsx 
-################################################################################ 
- 
-PK    U]FÇMH•   Í      docProps/app.xmlMÏMÂ0à¿Rv·™Š¤D=Š¼Ï.u…¶)m„úïí?nyyÈ¢.‰"&¶˜Eñ.äm32Ç@Ö#ú>ËÊ¡Š¡ä{®1İŒ±¤Ã¢m×€…18Ìâ·°éÔ.FguÏ–Bw²:Q&ÃâX4:±'«Ü
-çz%>‹K9—+ÿ‹SËSæÊoüd¿ºPK    U]Oâ¼³ï   +     docProps/core.xmlÍ’ÏJÄ0‡_Ero§éê"¡Û‹âIApAñ’Ùİ`ó‡d¤İ·7»]DÀcf~ùæ˜N¡|ÄçèF2˜®&;¸$TØ°Q IĞÊTç„ËÍVR~Æ=©>ä¡mš5X$©%I˜UXˆ¬ï´*¢$Ox­|øŒCi8 EG	xÍõóÄpœ†.€Fmú. ^ˆ¥ú'¶t€’S2KjÇz\•\ŞÃÛÓãKY·2.‘t
-ó¯dnØyòëêî~ûÀú¶i×oª–o.®oÅMû>»şğ»[¯ÍÎücã³`ßÁ¯»è¿ PK    U]™\œ#  œ'     xl/theme/theme1.xmlíZ[sÚ8~ï¯ĞxgömÆ6¶´sivÛ´™„íN…Xlyd‘„¿G6Ë–í’Mº›<,éûÎEGçè8yóî.bè†ˆ”òx`Ù/ÛÖ»·/ŞàW2$A0§¯ğÀ
-¥L^µZi Ã8}ÉÃÜ‚‹KxËÖ\à[/#Öê´ÛİV„il¡Gd`}^,h@ĞTQZo_ ´å3øËTe£WA&¹ˆ´òùlÅüÚŞ>eÏé:2n0X Îo§äNZˆáTÂÄÀjg?VkÇÑÒH€‚É}”ºIö£Ó2;:XÎv|öÄíŸŒÊÚt4màãñx8¶ËÒ‹pàQ»Âôl¿¤A	´£iĞdØöÚ®‘¦ªSOÓ÷}ßë›hœ
-[OÓkwİÓ‰Æ­Ğx¾ñO‡Ã®‰Æ«Ğtëi&'ı®k¤éhBFãëzµå@Ó  XpvÖÌÒ–^)úu”Ù»İA\ğXî9‰şÆÅÖiÒ–4Fr 7ÄÑLP|¯A¶ŠàÂ’Ò\ÖÏ)µPšÈõG‚!ÅÜ¯ıõ—»É¤3z}:Îk”i«§í»›Ï“üsèäŸ§“×MBÎp¼,	ñû#[a‡'n;r:gB|Ïöö‘¥%2Ïïù
-ëN<gV–°]ÏÏäŒr#»İöX}öOGn#×©À³"×”F$EŸÈ-ºä8µI2?†˜jP¤	1–¡†ø´Æ¬à}·¾Èßˆ÷«oš=W¡XIÚ„øFâœsæsÑlû¥FÑöU¼Ü£—X—ß4ª5,ÅÖx•Àñ­œ<Í”A†—$&©9~MHş+¥ÚşœÓ@ğ”/$úJ‘i³#§t&Íè3ÁF¯u‡hÒ<zşùœ5
-‘g³F!„i»ğ¯$š­Â+B>b6rµ¶q©„`ZÆÑxNÒ´üY¬5“>`ÈìÍ‘uÎÖ‘’^7B>bÎ‹¿†8Jší¢qXı^ÃIÁè‚Ëfı¸~†Õ3l,÷GÔJä&§?é24£šY	½„VjŸª‡4>¨2
-ñ¹>åzx
-7–Æ¼P®‚{ÿÑÚ7Â«ø‚À9.}Ï¥ï¹ô=¡Ò·7#}gÁÓ‹[ŞFn[Äû®1Ú×4.(cWrÍÈÇT¯“)Ø9ŸÀìıh>ñíúÙ$„¯šY-#K³A$¸ü‹Êğ*Ä	èd[%	ËTÓe7ŠBnéSõJ•×å¯¹(¸<[äé¯¡t>,Ïù<_ç´Í3C·rKê¶”¾µ&8Jô±ÌpNË;g<’¶w 5ûö]vä#¥0S—C¸B¾mºÜ:8˜‘¹
-ÓRoÃùéÅxâ9Ù¹}˜WmçØÑÑûçÁQ°£ï<–Çˆò¢!î¡†˜ÏÃC‡y{_˜g•ÆP4ml¬$,F·`¸×ñ,àd`- ƒ¯QòRU`1[Æ+¢|LŒEèpç—\_ãÑ’ãÛ¦eµn¯)wm"R9Âi˜g«ÊŞe±ÁUÏU[ò°¾j=´NÏşY­ÈŸNHc”¦J¢óS¾ç+IÄU8¿E3¶—¼ãæÇqNS¸v¶2¹»9©ze1g¦òß-	,[ˆYâM]íÕç›œ®z"vú—wÁ`òıpÉGå;ç_ô]C®~öİãún“;HLœyÅtE#•2äPî’Í”ÉDğ‚d¦€˜ú½ò¹)Î­>9E,ƒ†N^Ò%Š°!rãïï“jwŒ×ú,m„T2dÕÊC‰Á=3rCØT%ó®Ú&…ÛâTÍ»¾&`KÃzn-'ÿÛ^Ô=´=Fó£™à³‡s›z¸ÂE¬ÿXÖù2ß9pÛ:Ş^æ,C¤~Á}ŠŠ€«b¾º¯Où%œ;´{ñ ›üÖÛ¤öİà|Ô«Z¥d+?K|’cŒ[ô4_b­¦±­ÆÚ1y€Xó¡f8ß‡Eš3Õ‹¬9
-oAÕ@å?ÛÔhö4‘^1™¶6£äN
-<Üşï°ÂÄáí‹¿PK    U]>–Aë{  Î     xl/worksheets/sheet1.xmlU]sÚ0ü+½7Ûi3ìn¡ÀƒCûĞéƒ‚V#K®$BÒ_ß“íx(1N_@·{·+é<:Jõ¨sJz.¸ĞÎ)oGosZ}%K*`g'UALÕŞÑ¥¢$«@wÜÁà£S&p8ªÖäÁp&h¢>Q/cÊå1ÀCüº°fûÜØ'•dOSj6e¢`æ´,+¨ĞL
-¤è.ÀÑğvêÛø*à£G}2FVÉƒ”v2Ï<À–YPô’–œU¹‘åİ™	åø\ŒÈÖ°'š@X€¤1²°ûP¥!–vJş¡¢ÊI9…X¨¥|\“4¤Vâï¦^ÜÊ±E_+ÿ\ù
->=M'’g™É|ƒQFwäÀÍZg´ñêÚòm%×Õ/:Ö±C£íAC5*(˜¨ÿÉsãñ	À»¹ p€{. ¼à\÷Ào Õ1:µ”Ê‡)1$)yDÊF›TfÖ`&ì•J‚]8ÎäAÓ\òÍ§#Ç £]w¶zÜ^S¸Çš
-8i8=´$í ™ô“$’	£;pÓwJ'
-^+Q”ı£à›Iğ¢5Ämq+V÷ëìÃ`0è²¢÷#É]Œ’h/ïvÙpJ`ŸúSèC¢§SÅı9RCDª{dz­Lï}™Ã.™ı¸Et¯P”nñWãù]œviõŞhõÜ3­ı‰şC«ßjõß×êviíÇ}İ,×ót†âñ&^~‰Ğ$Z-»ÕúoOöúLmªTr‰¢.ÜaçäÛN¿ jÏ„Fz'té«O×©ºÃÕhÒÕÃ©[l5ÌáƒC•€ı”æubÛHû	ÿPK    U]Iùo±  Ÿ     xl/styles.xmlİVÛ›0ıÄ”$Ö¢P%H»¨‘*µÕJ»}u‚!–|¡Æ¬’~}=˜@.U¶êSAöŸ331dÕÚ£`/{ÆltBµëxomó9IÚİIÚ~ÒS©´‘Ôº©©“¶1Œ–-¤H³YšHÊUœ¯T'7Ò¶ÑNwÊ®ãYœä«J«ÉBbopK©dÑë¸ ‚oï×RÉÅÑ›`Øi¡Md](lÏÁÒşöğÜÏ ÊAGr¥ïáÚÏ£áT ¾&¦Şºhg›şºGbÀûGëÖq!.st†|ÕPk™Q7é9½ñŠ†ñë±qIÖ†ç‹‡ønB«/Áe]œç²xHÉ—§^æŒ:ŠöùV›’™1öy|2å+Á*ëè†×{xZİÀŞikµtƒ’ÓZ+Ú'vb'»cB¼@kı¬.´Uä{äk	íÁş†. aèeüôÏÕ¼ö™,ù+Ù¨áoÚ>u.ÕÏuÚ²gÃ*~èç‡jô©Ï'õÅ•:mq|¼V’ùÜïv˜¯è‰½1cù:oç¦Ìw÷¡ÂCZü“„“a‹ÏêxQÅÑÁÑXÇ?àå &‰hÛqa¹f{^–LİÓÉ[ºuoŸ}·¾dí„}Áu<¿³’w2W=CZÃªiüšv'ÜùâªdVÃÔ“‹óâ/ \#Ó[áÁ8#€a~°0ga~ş§|–h>Ãb[‘%ÊY¢Ï
-!Ec~ÂœÌ]áL³Œ4Åv´(‚Ø¾¥)üÂjXlÀÀü€§í5^m¼CŞï¬¦ïu–)Ş‰X¦ø^Ş7`dY¸Ú˜``UÀzü‡ı@O…9„@U±Ø°Œ#Y†!Ğ‹áMSdwR¸ÃõÁN	!YF G@†ÀiÄ,ˆCé¿ƒWß£äôJ¦¿äùPK    U]—Š»À        _rels/.rels’¹nÃ0@ÅĞ0Ğ!ˆ3eñùV¢ØŠE¿¯Ú¥qy=<Üi@í8¤¶‹©ıRiZÕ¸H¶%iÎ‘B®Ô,5‡Ò@DÛcC°Z,>@.f·½d§s¤Wˆ\×¥=Û/OAo€¯:LqBiHK3ğÍÒ2÷ó5EåJ#•[xÓåşvàIÑ¡"XšEÉÓ¢¥ÇöÓé¯c"´z[èùqhT
-Üc%Œqb´ş5‚Éì~ PK    U]ä{£7  '     xl/workbook.xmlQ]KÃ@ü+á~€I‹,MA,jA´XéûõnÓ,½°·iµ¿ŞMB°à‹Ow3»ÌÍÌ-Î‘ûÙ—w!•ªfnæyL^§›Ø@IÉkH‡<5Ú¦€½Ë§E1Ë½Æ –‹QkCù5ˆ†1!;b‡pN¿óf'L¸G‡ü]ªşî@ez¼€-U¡²TÇóK$¼ÄÀÚmEçJ5; Fó‡Şv&?õ>õëı‡#¥š"X!%î7z}-O Ëj9>¡c •fx¦Ø6Œ¤È¯bô=ŒçPâœşSc¬*4°Š¦õxè‘ÀuCª±I*ÚC©˜!Xt¡ä•µ²8»ª‹æ(ZÛÁãhÌB…ì›h%á¥$³¡¬;zéíİä^Êh{î=¼FmÇœã- PK    U]$›¢­   ø     xl/_rels/workbook.xml.relsµ‘=ƒ0…¯å 5P©CL]X+.ó#Å®
-·/…:ta²-ïÉNŸhwn ¶ó$FkÊdËìï ¤[´Š.Îã0Oj¬âY†¼Ò½j’(ºAØ3dî™¢œ<şCtuİi|8ı²8ğ0¼]è©Ed)JäLÂh¶6ÁRâËL–¢¨2Š*–pZ âÉ miV}°ON´çy7÷E®Íã	®ßpxtşPK    U]ey’  Ï     [Content_Types].xml­“MNÃ0…¯e[%.,X ¦`]pcO«ş“gZÒÛ3NÚJ …M¬xŞ¼Ï—¬Ş°èõØ”Q|UNb"x®´!9Iüš¶"Jµ“[÷ËåƒPÁxª({”ëÕ3´ro©xéyMğM™ÀbY<ÂÌjJ£5J×ÅÁë”êD¨¹sĞ`g".XPŠ«„\ùpê{;@JFC±‘‰^¥c•è­@:ZÀzÚâÊCÛ:¨½ã–c©± gëÑt1M&0ŒÏ»ÙüÁf
-ÈÊM
-9±Ç#ÉİUd#Hd¦¯x!²õìûAN[ƒ¾‘Íãıi7äbXæÏø{ÆÿÎñÂî¿?±¼ÖNæ‹á?^PK    U]FÇMH•   Í              €    docProps/app.xmlPK    U]Oâ¼³ï   +             €Ã   docProps/core.xmlPK    U]™\œ#  œ'             €á  xl/theme/theme1.xmlPK    U]>–Aë{  Î             €"  xl/worksheets/sheet1.xmlPK    U]Iùo±  Ÿ             €Ó
-  xl/styles.xmlPK    U]—Š»À                €¯  _rels/.relsPK    U]ä{£7  '             €˜  xl/workbook.xmlPK    U]$›¢­   ø             €ü  xl/_rels/workbook.xml.relsPK    U]ey’  Ï             €á  [Content_Types].xmlPK    	 	 >  +     
- 
- 
-################################################################################ 
-FILE: data\exceptions.xlsx 
-################################################################################ 
- 
-PK    U]FÇMH•   Í      docProps/app.xmlMÏMÂ0à¿Rv·™Š¤D=Š¼Ï.u…¶)m„úïí?nyyÈ¢.‰"&¶˜Eñ.äm32Ç@Ö#ú>ËÊ¡Š¡ä{®1İŒ±¤Ã¢m×€…18Ìâ·°éÔ.FguÏ–Bw²:Q&ÃâX4:±'«Ü
-çz%>‹K9—+ÿ‹SËSæÊoüd¿ºPK    U]Oâ¼³ï   +     docProps/core.xmlÍ’ÏJÄ0‡_Ero§éê"¡Û‹âIApAñ’Ùİ`ó‡d¤İ·7»]DÀcf~ùæ˜N¡|ÄçèF2˜®&;¸$TØ°Q IĞÊTç„ËÍVR~Æ=©>ä¡mš5X$©%I˜UXˆ¬ï´*¢$Ox­|øŒCi8 EG	xÍõóÄpœ†.€Fmú. ^ˆ¥ú'¶t€’S2KjÇz\•\ŞÃÛÓãKY·2.‘t
-ó¯dnØyòëêî~ûÀú¶i×oª–o.®oÅMû>»şğ»[¯ÍÎücã³`ßÁ¯»è¿ PK    U]™\œ#  œ'     xl/theme/theme1.xmlíZ[sÚ8~ï¯ĞxgömÆ6¶´sivÛ´™„íN…Xlyd‘„¿G6Ë–í’Mº›<,éûÎEGçè8yóî.bè†ˆ”òx`Ù/ÛÖ»·/ŞàW2$A0§¯ğÀ
-¥L^µZi Ã8}ÉÃÜ‚‹KxËÖ\à[/#Öê´ÛİV„il¡Gd`}^,h@ĞTQZo_ ´å3øËTe£WA&¹ˆ´òùlÅüÚŞ>eÏé:2n0X Îo§äNZˆáTÂÄÀjg?VkÇÑÒH€‚É}”ºIö£Ó2;:XÎv|öÄíŸŒÊÚt4màãñx8¶ËÒ‹pàQ»Âôl¿¤A	´£iĞdØöÚ®‘¦ªSOÓ÷}ßë›hœ
-[OÓkwİÓ‰Æ­Ğx¾ñO‡Ã®‰Æ«Ğtëi&'ı®k¤éhBFãëzµå@Ó  XpvÖÌÒ–^)úu”Ù»İA\ğXî9‰şÆÅÖiÒ–4Fr 7ÄÑLP|¯A¶ŠàÂ’Ò\ÖÏ)µPšÈõG‚!ÅÜ¯ıõ—»É¤3z}:Îk”i«§í»›Ï“üsèäŸ§“×MBÎp¼,	ñû#[a‡'n;r:gB|Ïöö‘¥%2Ïïù
-ëN<gV–°]ÏÏäŒr#»İöX}öOGn#×©À³"×”F$EŸÈ-ºä8µI2?†˜jP¤	1–¡†ø´Æ¬à}·¾Èßˆ÷«oš=W¡XIÚ„øFâœsæsÑlû¥FÑöU¼Ü£—X—ß4ª5,ÅÖx•Àñ­œ<Í”A†—$&©9~MHş+¥ÚşœÓ@ğ”/$úJ‘i³#§t&Íè3ÁF¯u‡hÒ<zşùœ5
-‘g³F!„i»ğ¯$š­Â+B>b6rµ¶q©„`ZÆÑxNÒ´üY¬5“>`ÈìÍ‘uÎÖ‘’^7B>bÎ‹¿†8Jší¢qXı^ÃIÁè‚Ëfı¸~†Õ3l,÷GÔJä&§?é24£šY	½„VjŸª‡4>¨2
-ñ¹>åzx
-7–Æ¼P®‚{ÿÑÚ7Â«ø‚À9.}Ï¥ï¹ô=¡Ò·7#}gÁÓ‹[ŞFn[Äû®1Ú×4.(cWrÍÈÇT¯“)Ø9ŸÀìıh>ñíúÙ$„¯šY-#K³A$¸ü‹Êğ*Ä	èd[%	ËTÓe7ŠBnéSõJ•×å¯¹(¸<[äé¯¡t>,Ïù<_ç´Í3C·rKê¶”¾µ&8Jô±ÌpNË;g<’¶w 5ûö]vä#¥0S—C¸B¾mºÜ:8˜‘¹
-ÓRoÃùéÅxâ9Ù¹}˜WmçØÑÑûçÁQ°£ï<–Çˆò¢!î¡†˜ÏÃC‡y{_˜g•ÆP4ml¬$,F·`¸×ñ,àd`- ƒ¯QòRU`1[Æ+¢|LŒEèpç—\_ãÑ’ãÛ¦eµn¯)wm"R9Âi˜g«ÊŞe±ÁUÏU[ò°¾j=´NÏşY­ÈŸNHc”¦J¢óS¾ç+IÄU8¿E3¶—¼ãæÇqNS¸v¶2¹»9©ze1g¦òß-	,[ˆYâM]íÕç›œ®z"vú—wÁ`òıpÉGå;ç_ô]C®~öİãún“;HLœyÅtE#•2äPî’Í”ÉDğ‚d¦€˜ú½ò¹)Î­>9E,ƒ†N^Ò%Š°!rãïï“jwŒ×ú,m„T2dÕÊC‰Á=3rCØT%ó®Ú&…ÛâTÍ»¾&`KÃzn-'ÿÛ^Ô=´=Fó£™à³‡s›z¸ÂE¬ÿXÖù2ß9pÛ:Ş^æ,C¤~Á}ŠŠ€«b¾º¯Où%œ;´{ñ ›üÖÛ¤öİà|Ô«Z¥d+?K|’cŒ[ô4_b­¦±­ÆÚ1y€Xó¡f8ß‡Eš3Õ‹¬9
-oAÕ@å?ÛÔhö4‘^1™¶6£äN
-<Üşï°ÂÄáí‹¿PK    U]³H—§¤  °     xl/worksheets/sheet1.xml—ßsâ6ÇÿŸÚ‡œ!„¤ÀŒ$ÂàK;}Tì5¨gK®$Çıõ•lCRN–yÁ–¼ŸÕjù®~Œ{ ‰~d)#g/eşàº"ÚC†Å–U_Æ3,U“ï\‘sÀq	e©ë{^ßÍ0¡ÎxXömøxÈ
-™
-D‘e˜!e‡‘ÓqN[²ÛKİá‡9ŞAò-ßpÕrÏ^b’„QÄ!9Açá¥§íKƒ?	Ä§w¤gòÎØ7İXÄ#Çs´g
-èæ))ÇB’åKHäÒTùó„#I¾ÃF™œw&%Ëôw¥ÄRu%œıZ	)([Kş‹qå¤vª§øo¯sêóû)ò§2¯*OïXÀ„¥‘XîGÎÀA1$¸Hå–æPçêVû‹X*Ê_t¨l;]E…PÑÔ°Š #´zâu?½À¯ÿZ [İ ×ôj w9Â]p[·—€ß ôk øƒà®î.~0¨ÁeHMÀ}Ü_;BÇ;ıs^© ê//õ2Å‡œ×öÊŸ~)EW	|äªK/”\}%Š“cÁĞ•Ê“n»QM=Ú©9+ìY£ÅÔ@Oìô×cnsÚ)ˆˆ“\×™Ùá'Â…DAU¥s~²»UÙÂÀ=·BŒrn'· Xú½	^\¶ù¾Ø¬™„‹éºJ\g…ùg…ù¥¿ÁïùıïşÆóM:³³óùçuL
-³s!N@š’6má‚Õf9{@+BW;‚*HBÿ)øÅ'tWn$(Æ&×³+ÓĞ5IÏÎ„`Ÿ|
-¶+´\‹ğu~{[a¸x^Ï¦¿›Ôhw¬ŸgK,—ÁMæ3ıXÎŞB“2¯ËDÇ3‰²e>ec£ÚV©Eİ³<»×Esk’§-åi’õÄÎR1ŒË ı¨ji{€Ä$Rüœ‘ôˆ ¾eze:&™ÚÙš”*“Jíàäuµz[/¾ş­L[uÚäìC€­/6‹ÿé¨wÖQ¯=qïÆ¸\=ÚÙRG¦j˜Ø¹	£qI“ˆìàID[È—JF1x§”¤Õª¼¤’ <eÒ´ßÍš|èÄ>úk~Y¹•HìÔõëÏ¼5ÀE«ÅKK0L¤Ş’jAŠ~=–T*r?Íô]f…ùPRu;P÷/wêË«3|ÕP×rO®.åë^]©€kõ=aj_®ú x¾¤ÿPK    U]¡m6BÀ  Œ     xl/worksheets/sheet2.xml–ooÚ0Æ¿Ê)ïÛ„ İZR lE¢,"e}1í…!XuâÌ6¥í§ß9	uÁãñŸ{ŸDwéí¥zÑ[Do™ÈußÛSÜù¾^m1cúZ˜ÓÎZªŒšª¯…,-E™ğÃ ¸ñ3ÆsoĞ+×b5èÉ<ÇXŞeSïCrß÷ZŞaaÎ7[cüA¯`LĞ,ŠXÑÌ?º¤<Ã\s™ƒÂuß‹Zwã/~rÜë“1Ø›,¥|±“IÚ÷Ï:çïI!xyYLqmF(ù…°•á¯SXß[Jcdf÷)KÃ-­•üÀ¼<R,åRü\™Ô¦öŠê|½ãulR§ãCæßJ®ÄiÉ4¤xæ©Ùö½¯¤¸f;aærÿ€5«®õ[I¡Ë_ØW±­¶«¦lj1eñ¼z²·šñ© 8#kAøIĞ='h×‚ö'AxsFĞ©KİZP^İ¯î^‚»g†zJîAÙhr³ƒ’~õO÷=Ûw01Šv9éÌ€DØó9Ù¹¿ªUC·*–iƒhäM´Ş5uï–Í×˜Âğ½A:vKgÒ4(}Btä9…¥UxÆ*Â›«àö*è6Ñrk‰DM¼Ü²$zŒ§ã;x¦¿Hñ|¶ ¥; _Q	Vt¹=7[X	¦5ªMxİ§üª8šgO¿› »¢Ù÷ñ¢é4šÁèalÓñ"q0o™·/bŞºmbîÖZæÃ&ænÙù‰m&ÂFm<1!@óÔM˜İÆÌÉÓâşg·Ãc4ŸD0]L’FQò4ÿá@Ü9"îüq+¸
-ÚMˆİÚ³¯µ[v@<’Y!µ%¡Í	·¦–V0®šØº/z+Än£Ëû'ÕÖöéG¦6<× ¨óQ½şBZUı©šP‹-kTÕ Ëá–>PÙ Ú_KªSõÄÖôãÈà/PK    U]Iùo±  Ÿ     xl/styles.xmlİVÛ›0ıÄ”$Ö¢P%H»¨‘*µÕJ»}u‚!–|¡Æ¬’~}=˜@.U¶êSAöŸ331dÕÚ£`/{ÆltBµëxomó9IÚİIÚ~ÒS©´‘Ôº©©“¶1Œ–-¤H³YšHÊUœ¯T'7Ò¶ÑNwÊ®ãYœä«J«ÉBbopK©dÑë¸ ‚oï×RÉÅÑ›`Øi¡Md](lÏÁÒşöğÜÏ ÊAGr¥ïáÚÏ£áT ¾&¦Şºhg›şºGbÀûGëÖq!.st†|ÕPk™Q7é9½ñŠ†ñë±qIÖ†ç‹‡ønB«/Áe]œç²xHÉ—§^æŒ:ŠöùV›’™1öy|2å+Á*ëè†×{xZİÀŞikµtƒ’ÓZ+Ú'vb'»cB¼@kı¬.´Uä{äk	íÁş†. aèeüôÏÕ¼ö™,ù+Ù¨áoÚ>u.ÕÏuÚ²gÃ*~èç‡jô©Ï'õÅ•:mq|¼V’ùÜïv˜¯è‰½1cù:oç¦Ìw÷¡ÂCZü“„“a‹ÏêxQÅÑÁÑXÇ?àå &‰hÛqa¹f{^–LİÓÉ[ºuoŸ}·¾dí„}Áu<¿³’w2W=CZÃªiüšv'ÜùâªdVÃÔ“‹óâ/ \#Ó[áÁ8#€a~°0ga~ş§|–h>Ãb[‘%ÊY¢Ï
-!Ec~ÂœÌ]áL³Œ4Åv´(‚Ø¾¥)üÂjXlÀÀü€§í5^m¼CŞï¬¦ïu–)Ş‰X¦ø^Ş7`dY¸Ú˜``UÀzü‡ı@O…9„@U±Ø°Œ#Y†!Ğ‹áMSdwR¸ÃõÁN	!YF G@†ÀiÄ,ˆCé¿ƒWß£äôJ¦¿äùPK    U]—Š»À        _rels/.rels’¹nÃ0@ÅĞ0Ğ!ˆ3eñùV¢ØŠE¿¯Ú¥qy=<Üi@í8¤¶‹©ıRiZÕ¸H¶%iÎ‘B®Ô,5‡Ò@DÛcC°Z,>@.f·½d§s¤Wˆ\×¥=Û/OAo€¯:LqBiHK3ğÍÒ2÷ó5EåJ#•[xÓåşvàIÑ¡"XšEÉÓ¢¥ÇöÓé¯c"´z[èùqhT
-Üc%Œqb´ş5‚Éì~ PK    U]¥ÚA^K  ¹     xl/workbook.xmlµRËjÃ0ü£¨Óâ\š>%MÉ]–×ñ=ÌJNÒ|}×2¦Bé¥'ig—ÑÌ¬æ'G‡Ò¹Cr6ÚúB4!´³4õª#ıkÁr§vddà’ö©o	då€`tšgÙ45­XÌG®¥×… :Ë`ìNş»ß—É=–¨1|"Ş5ˆÄ Eƒ¨
-‘‰Ä7îôâ/Î©·ŠœÖ…˜P@õŞö"?dé#dù.YH!¦ÖH>Ä‰È/Yãxx¨ºàP ¥ğL®kÑî{v‘^Ùˆ9ŒçâŒş£«kT°tª3`Ã#îZß`ëEb¥B<´íMñ+«j0XÙU\4CnĞªŠÿOÏJB¨×¼ÖkEù/Šò˜ÚU5Z¨ÖÌæçµ©%ıå·w“{^O§õcoöÕÉjL~ü5‹/PK    U]÷,Z´   ‰     xl/_rels/workbook.xml.relsÅ’M
-ƒ0F¯r€ÚÒEQWİ¸-^ èøƒÑ„Ì”êíku¡.º‘®Â7!ï{0‰¨·f ¦µ$Æ^”È†ÙŞ ¨h°Wt2‡ù¦2®W<GWƒUE§j„(®àö™Æ{¦È'‹¿MUµŞMñìqà/`x×QƒÈRäÊÕÈ‰„Qoc‚åO3YŠ¬L¤ËÊPÂ¿…"O(:PˆxÒH›Íš½úóõ<¿Å­}‰ëĞßÉåã ŞÏKßPK    U]n§$¼  W     [Content_Types].xmlÅ”ÏNÃ0Æ_¥Êuj2và€Ö]€+ìÀ„Ö]£æŸbotoÛn“@£b*—Fíïçø‹²~;FÀ¬sÖc!¢ø –82Dğ©Cršø7íTÔe«w VËå½*ƒ'ğ”S¯!6ë'¨õŞRöÜñ6šà‘À¢ÈÇÄU£5¥&«ƒ¯¾QòAråƒ‰¸à¡®úÈÏ€SİëR2d[èE;ÎRUHG(§%®ôêÚ”P…rï¸DbL +l ÈY9Š.¦ÉÄ†ñ{7›?ÈL9s›BDv,Áí¸³%}uY™é#^ˆ,=û|Ğ»]AõK6÷#¤vğÕ°ÌŸñW/ú7ö±úÇ>ŞChÿúª÷«tÚø3_ïÉæPK    U]FÇMH•   Í              €    docProps/app.xmlPK    U]Oâ¼³ï   +             €Ã   docProps/core.xmlPK    U]™\œ#  œ'             €á  xl/theme/theme1.xmlPK    U]³H—§¤  °             €"  xl/worksheets/sheet1.xmlPK    U]¡m6BÀ  Œ             €ü  xl/worksheets/sheet2.xmlPK    U]Iùo±  Ÿ             €ò  xl/styles.xmlPK    U]—Š»À                €Î  _rels/.relsPK    U]¥ÚA^K  ¹             €·  xl/workbook.xmlPK    U]÷,Z´   ‰             €/  xl/_rels/workbook.xml.relsPK    U]n§$¼  W             €  [Content_Types].xmlPK    
- 
- „  j     
- 
- 
-################################################################################ 
-FILE: data\farm.xlsx 
-################################################################################ 
- 
-PK    U]FÇMH•   Í      docProps/app.xmlMÏMÂ0à¿Rv·™Š¤D=Š¼Ï.u…¶)m„úïí?nyyÈ¢.‰"&¶˜Eñ.äm32Ç@Ö#ú>ËÊ¡Š¡ä{®1İŒ±¤Ã¢m×€…18Ìâ·°éÔ.FguÏ–Bw²:Q&ÃâX4:±'«Ü
-çz%>‹K9—+ÿ‹SËSæÊoüd¿ºPK    U]Oâ¼³ï   +     docProps/core.xmlÍ’ÏJÄ0‡_Ero§éê"¡Û‹âIApAñ’Ùİ`ó‡d¤İ·7»]DÀcf~ùæ˜N¡|ÄçèF2˜®&;¸$TØ°Q IĞÊTç„ËÍVR~Æ=©>ä¡mš5X$©%I˜UXˆ¬ï´*¢$Ox­|øŒCi8 EG	xÍõóÄpœ†.€Fmú. ^ˆ¥ú'¶t€’S2KjÇz\•\ŞÃÛÓãKY·2.‘t
-ó¯dnØyòëêî~ûÀú¶i×oª–o.®oÅMû>»şğ»[¯ÍÎücã³`ßÁ¯»è¿ PK    U]™\œ#  œ'     xl/theme/theme1.xmlíZ[sÚ8~ï¯ĞxgömÆ6¶´sivÛ´™„íN…Xlyd‘„¿G6Ë–í’Mº›<,éûÎEGçè8yóî.bè†ˆ”òx`Ù/ÛÖ»·/ŞàW2$A0§¯ğÀ
-¥L^µZi Ã8}ÉÃÜ‚‹KxËÖ\à[/#Öê´ÛİV„il¡Gd`}^,h@ĞTQZo_ ´å3øËTe£WA&¹ˆ´òùlÅüÚŞ>eÏé:2n0X Îo§äNZˆáTÂÄÀjg?VkÇÑÒH€‚É}”ºIö£Ó2;:XÎv|öÄíŸŒÊÚt4màãñx8¶ËÒ‹pàQ»Âôl¿¤A	´£iĞdØöÚ®‘¦ªSOÓ÷}ßë›hœ
-[OÓkwİÓ‰Æ­Ğx¾ñO‡Ã®‰Æ«Ğtëi&'ı®k¤éhBFãëzµå@Ó  XpvÖÌÒ–^)úu”Ù»İA\ğXî9‰şÆÅÖiÒ–4Fr 7ÄÑLP|¯A¶ŠàÂ’Ò\ÖÏ)µPšÈõG‚!ÅÜ¯ıõ—»É¤3z}:Îk”i«§í»›Ï“üsèäŸ§“×MBÎp¼,	ñû#[a‡'n;r:gB|Ïöö‘¥%2Ïïù
-ëN<gV–°]ÏÏäŒr#»İöX}öOGn#×©À³"×”F$EŸÈ-ºä8µI2?†˜jP¤	1–¡†ø´Æ¬à}·¾Èßˆ÷«oš=W¡XIÚ„øFâœsæsÑlû¥FÑöU¼Ü£—X—ß4ª5,ÅÖx•Àñ­œ<Í”A†—$&©9~MHş+¥ÚşœÓ@ğ”/$úJ‘i³#§t&Íè3ÁF¯u‡hÒ<zşùœ5
-‘g³F!„i»ğ¯$š­Â+B>b6rµ¶q©„`ZÆÑxNÒ´üY¬5“>`ÈìÍ‘uÎÖ‘’^7B>bÎ‹¿†8Jší¢qXı^ÃIÁè‚Ëfı¸~†Õ3l,÷GÔJä&§?é24£šY	½„VjŸª‡4>¨2
-ñ¹>åzx
-7–Æ¼P®‚{ÿÑÚ7Â«ø‚À9.}Ï¥ï¹ô=¡Ò·7#}gÁÓ‹[ŞFn[Äû®1Ú×4.(cWrÍÈÇT¯“)Ø9ŸÀìıh>ñíúÙ$„¯šY-#K³A$¸ü‹Êğ*Ä	èd[%	ËTÓe7ŠBnéSõJ•×å¯¹(¸<[äé¯¡t>,Ïù<_ç´Í3C·rKê¶”¾µ&8Jô±ÌpNË;g<’¶w 5ûö]vä#¥0S—C¸B¾mºÜ:8˜‘¹
-ÓRoÃùéÅxâ9Ù¹}˜WmçØÑÑûçÁQ°£ï<–Çˆò¢!î¡†˜ÏÃC‡y{_˜g•ÆP4ml¬$,F·`¸×ñ,àd`- ƒ¯QòRU`1[Æ+¢|LŒEèpç—\_ãÑ’ãÛ¦eµn¯)wm"R9Âi˜g«ÊŞe±ÁUÏU[ò°¾j=´NÏşY­ÈŸNHc”¦J¢óS¾ç+IÄU8¿E3¶—¼ãæÇqNS¸v¶2¹»9©ze1g¦òß-	,[ˆYâM]íÕç›œ®z"vú—wÁ`òıpÉGå;ç_ô]C®~öİãún“;HLœyÅtE#•2äPî’Í”ÉDğ‚d¦€˜ú½ò¹)Î­>9E,ƒ†N^Ò%Š°!rãïï“jwŒ×ú,m„T2dÕÊC‰Á=3rCØT%ó®Ú&…ÛâTÍ»¾&`KÃzn-'ÿÛ^Ô=´=Fó£™à³‡s›z¸ÂE¬ÿXÖù2ß9pÛ:Ş^æ,C¤~Á}ŠŠ€«b¾º¯Où%œ;´{ñ ›üÖÛ¤öİà|Ô«Z¥d+?K|’cŒ[ô4_b­¦±­ÆÚ1y€Xó¡f8ß‡Eš3Õ‹¬9
-oAÕ@å?ÛÔhö4‘^1™¶6£äN
-<Üşï°ÂÄáí‹¿PK    U]šÁSi+  µ     xl/worksheets/sheet1.xml•—Ñr¢0@%Ã{Zí¨3hµÚjëH»ûœBTÆ@Ø$jİ¯ßRÇBLİ!pÏÍ%9Êµ{ tË6qğ™âŒõ¬çù½m³hƒRÈnI2qgEh
-¹ÒµÍrŠ`\@)¶]ÇiÙ)L2«ß-®-h¿Kv'ZPÀvi
-éq€09ô¬†õua™¬7\^°ûİ®Qˆø{¾ bdŸ²ÄIŠ2–P´êYAãşÉ—ñEÀ¯ØÙ9OòAÈV¦qÏr,™9Càæ8)æœä3´âC„±ÈçZ F<Ù£…ëY„s’Êû¢J¹¸´¢ä/ÊŠ9F"VÔ’×‚Ë$*©|Ä?ª^ëô8²¨óó¯ÊÇÅºŠuú€	şÄ|Ó³ÚˆÑ
-î0_’Ã©µjÊ|Á¬ø‡2¶áY Ú1Q‚Ei’•Gø©Öøh\ \¸×¼*à_ |ø×ÎĞT@³
-´. -´®áNw×>C[í
-à¶/ tª€{iãœ¯s
-ƒÊ-/|y€ö»” •ñ"Ÿ<)¤+ïYI&¿z!§ân"8ŞêÚ\d’c;RÔÀLÖaC3övÌuÔÃ“Q’k¨‘™Z`ÂíŠ5äØL>'˜00t×&x¼&ÁX‹N®AÃÍñiğ©_¢ˆĞÅ`pÔÀOfø…pT™Ó6”rOJ¹E÷B×q[7NçÆiéÄ2³…X ¡SËªíÒÙe(Ú@İjÌœPK[çø“/¾}¿ávíı¹>õö÷ˆI=Âÿ15W¼<f ˜Í‚0œŒäa6zuR˜…Á|1¬ğNVxWYá::+Ì¬Á
-3h°Â>Ãl½%ÙZç…™”^x:/¼Ú–Ê¥øæE=¤ªÎ¤RQgj.o,§˜½OÃ ƒğmùªsÂœãG'ü“şÏN4œÇ×9afK'\fĞà„|İR¨óÁLIš:üÚNvn›!ê1­Šõ¯šej.ğ?~*Ì‰.kaŸõ'²¡ŸCºN2°h‘E3~{'Z9Z6²å@ôâÅ{ªì¤‹Óø_¨÷WD¼«Ô@vA§*ıPK    U]Iùo±  Ÿ     xl/styles.xmlİVÛ›0ıÄ”$Ö¢P%H»¨‘*µÕJ»}u‚!–|¡Æ¬’~}=˜@.U¶êSAöŸ331dÕÚ£`/{ÆltBµëxomó9IÚİIÚ~ÒS©´‘Ôº©©“¶1Œ–-¤H³YšHÊUœ¯T'7Ò¶ÑNwÊ®ãYœä«J«ÉBbopK©dÑë¸ ‚oï×RÉÅÑ›`Øi¡Md](lÏÁÒşöğÜÏ ÊAGr¥ïáÚÏ£áT ¾&¦Şºhg›şºGbÀûGëÖq!.st†|ÕPk™Q7é9½ñŠ†ñë±qIÖ†ç‹‡ønB«/Áe]œç²xHÉ—§^æŒ:ŠöùV›’™1öy|2å+Á*ëè†×{xZİÀŞikµtƒ’ÓZ+Ú'vb'»cB¼@kı¬.´Uä{äk	íÁş†. aèeüôÏÕ¼ö™,ù+Ù¨áoÚ>u.ÕÏuÚ²gÃ*~èç‡jô©Ï'õÅ•:mq|¼V’ùÜïv˜¯è‰½1cù:oç¦Ìw÷¡ÂCZü“„“a‹ÏêxQÅÑÁÑXÇ?àå &‰hÛqa¹f{^–LİÓÉ[ºuoŸ}·¾dí„}Áu<¿³’w2W=CZÃªiüšv'ÜùâªdVÃÔ“‹óâ/ \#Ó[áÁ8#€a~°0ga~ş§|–h>Ãb[‘%ÊY¢Ï
-!Ec~ÂœÌ]áL³Œ4Åv´(‚Ø¾¥)üÂjXlÀÀü€§í5^m¼CŞï¬¦ïu–)Ş‰X¦ø^Ş7`dY¸Ú˜``UÀzü‡ı@O…9„@U±Ø°Œ#Y†!Ğ‹áMSdwR¸ÃõÁN	!YF G@†ÀiÄ,ˆCé¿ƒWß£äôJ¦¿äùPK    U]—Š»À        _rels/.rels’¹nÃ0@ÅĞ0Ğ!ˆ3eñùV¢ØŠE¿¯Ú¥qy=<Üi@í8¤¶‹©ıRiZÕ¸H¶%iÎ‘B®Ô,5‡Ò@DÛcC°Z,>@.f·½d§s¤Wˆ\×¥=Û/OAo€¯:LqBiHK3ğÍÒ2÷ó5EåJ#•[xÓåşvàIÑ¡"XšEÉÓ¢¥ÇöÓé¯c"´z[èùqhT
-Üc%Œqb´ş5‚Éì~ PK    U]tœQŞ5  $     xl/workbook.xmlQÑnÂ0ü•*°–iC¢¼±!¡‰÷ĞºÔ"‰+Ç…¯ŸÛªÒ^ö”ÜÙºÜ]æâÓè”|ybnj‘f–¦±¨ÁÛxGTÄŞŠB>¦±a°e¬Ä»ô>Ë¦©·Ìb>jm9½$PRP²#ö—ø;ï`rÆˆt(ß¹éïLâ1 Ç+”¹ÉLkº¼ã•‚X·+˜œËÍdì‹?ô®3ùi±gÄ>¬ÉÍ4SÁ
-9J¿Ñë[õx]P+´B'ÀK+ğÂÔ6Œ¦Hobô=ŒçPâŒÿS#U°¤¢õdè‘ÁuC¬±‰&	ÖCnV–ı†]"}b]éDmİtÅ3Ô¯ËÁàèª„
-”o*•×†Š-'İÑëÜ?<N´‰Ö¹gåŞÃ†l9†?hñPK    U]$›¢­   ø     xl/_rels/workbook.xml.relsµ‘=ƒ0…¯å 5P©CL]X+.ó#Å®
-·/…:ta²-ïÉNŸhwn ¶ó$FkÊdËìï ¤[´Š.Îã0Oj¬âY†¼Ò½j’(ºAØ3dî™¢œ<şCtuİi|8ı²8ğ0¼]è©Ed)JäLÂh¶6ÁRâËL–¢¨2Š*–pZ âÉ miV}°ON´çy7÷E®Íã	®ßpxtşPK    U]ey’  Ï     [Content_Types].xml­“MNÃ0…¯e[%.,X ¦`]pcO«ş“gZÒÛ3NÚJ …M¬xŞ¼Ï—¬Ş°èõØ”Q|UNb"x®´!9Iüš¶"Jµ“[÷ËåƒPÁxª({”ëÕ3´ro©xéyMğM™ÀbY<ÂÌjJ£5J×ÅÁë”êD¨¹sĞ`g".XPŠ«„\ùpê{;@JFC±‘‰^¥c•è­@:ZÀzÚâÊCÛ:¨½ã–c©± gëÑt1M&0ŒÏ»ÙüÁf
-ÈÊM
-9±Ç#ÉİUd#Hd¦¯x!²õìûAN[ƒ¾‘Íãıi7äbXæÏø{ÆÿÎñÂî¿?±¼ÖNæ‹á?^PK    U]FÇMH•   Í              €    docProps/app.xmlPK    U]Oâ¼³ï   +             €Ã   docProps/core.xmlPK    U]™\œ#  œ'             €á  xl/theme/theme1.xmlPK    U]šÁSi+  µ             €"  xl/worksheets/sheet1.xmlPK    U]Iùo±  Ÿ             €ƒ  xl/styles.xmlPK    U]—Š»À                €_  _rels/.relsPK    U]tœQŞ5  $             €H  xl/workbook.xmlPK    U]$›¢­   ø             €ª  xl/_rels/workbook.xml.relsPK    U]ey’  Ï             €  [Content_Types].xmlPK    	 	 >  Ù     
- 
- 
-################################################################################ 
-FILE: data\fund.xlsx 
-################################################################################ 
- 
-PK    U]FÇMH•   Í      docProps/app.xmlMÏMÂ0à¿Rv·™Š¤D=Š¼Ï.u…¶)m„úïí?nyyÈ¢.‰"&¶˜Eñ.äm32Ç@Ö#ú>ËÊ¡Š¡ä{®1İŒ±¤Ã¢m×€…18Ìâ·°éÔ.FguÏ–Bw²:Q&ÃâX4:±'«Ü
-çz%>‹K9—+ÿ‹SËSæÊoüd¿ºPK    U]Oâ¼³ï   +     docProps/core.xmlÍ’ÏJÄ0‡_Ero§éê"¡Û‹âIApAñ’Ùİ`ó‡d¤İ·7»]DÀcf~ùæ˜N¡|ÄçèF2˜®&;¸$TØ°Q IĞÊTç„ËÍVR~Æ=©>ä¡mš5X$©%I˜UXˆ¬ï´*¢$Ox­|øŒCi8 EG	xÍõóÄpœ†.€Fmú. ^ˆ¥ú'¶t€’S2KjÇz\•\ŞÃÛÓãKY·2.‘t
-ó¯dnØyòëêî~ûÀú¶i×oª–o.®oÅMû>»şğ»[¯ÍÎücã³`ßÁ¯»è¿ PK    U]™\œ#  œ'     xl/theme/theme1.xmlíZ[sÚ8~ï¯ĞxgömÆ6¶´sivÛ´™„íN…Xlyd‘„¿G6Ë–í’Mº›<,éûÎEGçè8yóî.bè†ˆ”òx`Ù/ÛÖ»·/ŞàW2$A0§¯ğÀ
-¥L^µZi Ã8}ÉÃÜ‚‹KxËÖ\à[/#Öê´ÛİV„il¡Gd`}^,h@ĞTQZo_ ´å3øËTe£WA&¹ˆ´òùlÅüÚŞ>eÏé:2n0X Îo§äNZˆáTÂÄÀjg?VkÇÑÒH€‚É}”ºIö£Ó2;:XÎv|öÄíŸŒÊÚt4màãñx8¶ËÒ‹pàQ»Âôl¿¤A	´£iĞdØöÚ®‘¦ªSOÓ÷}ßë›hœ
-[OÓkwİÓ‰Æ­Ğx¾ñO‡Ã®‰Æ«Ğtëi&'ı®k¤éhBFãëzµå@Ó  XpvÖÌÒ–^)úu”Ù»İA\ğXî9‰şÆÅÖiÒ–4Fr 7ÄÑLP|¯A¶ŠàÂ’Ò\ÖÏ)µPšÈõG‚!ÅÜ¯ıõ—»É¤3z}:Îk”i«§í»›Ï“üsèäŸ§“×MBÎp¼,	ñû#[a‡'n;r:gB|Ïöö‘¥%2Ïïù
-ëN<gV–°]ÏÏäŒr#»İöX}öOGn#×©À³"×”F$EŸÈ-ºä8µI2?†˜jP¤	1–¡†ø´Æ¬à}·¾Èßˆ÷«oš=W¡XIÚ„øFâœsæsÑlû¥FÑöU¼Ü£—X—ß4ª5,ÅÖx•Àñ­œ<Í”A†—$&©9~MHş+¥ÚşœÓ@ğ”/$úJ‘i³#§t&Íè3ÁF¯u‡hÒ<zşùœ5
-‘g³F!„i»ğ¯$š­Â+B>b6rµ¶q©„`ZÆÑxNÒ´üY¬5“>`ÈìÍ‘uÎÖ‘’^7B>bÎ‹¿†8Jší¢qXı^ÃIÁè‚Ëfı¸~†Õ3l,÷GÔJä&§?é24£šY	½„VjŸª‡4>¨2
-ñ¹>åzx
-7–Æ¼P®‚{ÿÑÚ7Â«ø‚À9.}Ï¥ï¹ô=¡Ò·7#}gÁÓ‹[ŞFn[Äû®1Ú×4.(cWrÍÈÇT¯“)Ø9ŸÀìıh>ñíúÙ$„¯šY-#K³A$¸ü‹Êğ*Ä	èd[%	ËTÓe7ŠBnéSõJ•×å¯¹(¸<[äé¯¡t>,Ïù<_ç´Í3C·rKê¶”¾µ&8Jô±ÌpNË;g<’¶w 5ûö]vä#¥0S—C¸B¾mºÜ:8˜‘¹
-ÓRoÃùéÅxâ9Ù¹}˜WmçØÑÑûçÁQ°£ï<–Çˆò¢!î¡†˜ÏÃC‡y{_˜g•ÆP4ml¬$,F·`¸×ñ,àd`- ƒ¯QòRU`1[Æ+¢|LŒEèpç—\_ãÑ’ãÛ¦eµn¯)wm"R9Âi˜g«ÊŞe±ÁUÏU[ò°¾j=´NÏşY­ÈŸNHc”¦J¢óS¾ç+IÄU8¿E3¶—¼ãæÇqNS¸v¶2¹»9©ze1g¦òß-	,[ˆYâM]íÕç›œ®z"vú—wÁ`òıpÉGå;ç_ô]C®~öİãún“;HLœyÅtE#•2äPî’Í”ÉDğ‚d¦€˜ú½ò¹)Î­>9E,ƒ†N^Ò%Š°!rãïï“jwŒ×ú,m„T2dÕÊC‰Á=3rCØT%ó®Ú&…ÛâTÍ»¾&`KÃzn-'ÿÛ^Ô=´=Fó£™à³‡s›z¸ÂE¬ÿXÖù2ß9pÛ:Ş^æ,C¤~Á}ŠŠ€«b¾º¯Où%œ;´{ñ ›üÖÛ¤öİà|Ô«Z¥d+?K|’cŒ[ô4_b­¦±­ÆÚ1y€Xó¡f8ß‡Eš3Õ‹¬9
-oAÕ@å?ÛÔhö4‘^1™¶6£äN
-<Üşï°ÂÄáí‹¿PK    U]'«½]3  2     xl/worksheets/sheet1.xml•–]sâ †ÿ
-“«İ‹61QëvÔëGÛ™ÖqL»{M#*SY µî¯ßC’º®!ØŞ(„ó¼9ğ8ı¯jKˆFï)ãjàmµÎ®}_%[’bu)2Âad-dŠ5tåÆW™$xU@)óÃ èú)¦Üö‹g9ì‹\3ÊÉB"•§)–ûÂÄnàµ¼KºÙjóÀö3¼!1ÑÏÙBBÏ?¨¬hJ¸¢‚#IÖoÔº¾k›ø"à'%;uÔFf&/B¼šÎıjàQæíãŒÑâ]H‹ì¬õ˜0z¡‡p¢éY@ØÀ{Z‹ÔŒC–kx´–âáÅ;	#¹dµàR¤5Sü]åë¦c’:nd>+ÖÖé+2ì]éíÀëyhEÖ8gz)vw¤Z«ÑKSÅ/Ú•±­ÈCI® ›
-†RÊËü^­ñ1Ğj Â
-O€0h ¢
-ˆN€vĞ®€ögSêT@çè6 İ
-è QSJWpu:é^Ğ«€^ániGáåk<ìK±CÒDƒši¢Ü|róYÄZÂ(N"}_ƒ’éûIEİ¸©§}f£ÆnjïÚ¹·“3Y•Hš™ıo§nx”Šœk7ssËœsÊ7è3ÌÛ|oÏDÈY¡Û”ïÜğ\h¢şÇ|ğö`px08,tÂ0»Á‹ g³ÙÍŞóD¤V£İ\œËŒå
-Å˜Î¡tû>z\<L¯ÑB’³€ÅéôJ´BJ°•më™‹àmØ	‚ ï¿»ı™ [wf³çù=-§£øy9]¢oÏóQßßÎ§“ï6‡›ÄjfF3£O™†63İìô®ReuÓÆy˜İÈ3dedœlœlªBp›#¸àÃÒ¦:jNµÂšõ ¨W³Óßí<³¾\	;V£L(j.eÄóô…HÇwÜ>Xß>o}+¸:6ëİ¬Ãz7ø$1W™PØŞ‰›ÿØ XE¡¸±Ÿ§ÓvÍÓš¥³zLTÿŒİi}Ñ÷&±^úG°©&±ÜP®ƒú*ÁË+¨#dYE•(‹£¿,ãŠæŠZ"M Œ¯ÿUÇ\ó‡2yøPK    U]Iùo±  Ÿ     xl/styles.xmlİVÛ›0ıÄ”$Ö¢P%H»¨‘*µÕJ»}u‚!–|¡Æ¬’~}=˜@.U¶êSAöŸ331dÕÚ£`/{ÆltBµëxomó9IÚİIÚ~ÒS©´‘Ôº©©“¶1Œ–-¤H³YšHÊUœ¯T'7Ò¶ÑNwÊ®ãYœä«J«ÉBbopK©dÑë¸ ‚oï×RÉÅÑ›`Øi¡Md](lÏÁÒşöğÜÏ ÊAGr¥ïáÚÏ£áT ¾&¦Şºhg›şºGbÀûGëÖq!.st†|ÕPk™Q7é9½ñŠ†ñë±qIÖ†ç‹‡ønB«/Áe]œç²xHÉ—§^æŒ:ŠöùV›’™1öy|2å+Á*ëè†×{xZİÀŞikµtƒ’ÓZ+Ú'vb'»cB¼@kı¬.´Uä{äk	íÁş†. aèeüôÏÕ¼ö™,ù+Ù¨áoÚ>u.ÕÏuÚ²gÃ*~èç‡jô©Ï'õÅ•:mq|¼V’ùÜïv˜¯è‰½1cù:oç¦Ìw÷¡ÂCZü“„“a‹ÏêxQÅÑÁÑXÇ?àå &‰hÛqa¹f{^–LİÓÉ[ºuoŸ}·¾dí„}Áu<¿³’w2W=CZÃªiüšv'ÜùâªdVÃÔ“‹óâ/ \#Ó[áÁ8#€a~°0ga~ş§|–h>Ãb[‘%ÊY¢Ï
-!Ec~ÂœÌ]áL³Œ4Åv´(‚Ø¾¥)üÂjXlÀÀü€§í5^m¼CŞï¬¦ïu–)Ş‰X¦ø^Ş7`dY¸Ú˜``UÀzü‡ı@O…9„@U±Ø°Œ#Y†!Ğ‹áMSdwR¸ÃõÁN	!YF G@†ÀiÄ,ˆCé¿ƒWß£äôJ¦¿äùPK    U]—Š»À        _rels/.rels’¹nÃ0@ÅĞ0Ğ!ˆ3eñùV¢ØŠE¿¯Ú¥qy=<Üi@í8¤¶‹©ıRiZÕ¸H¶%iÎ‘B®Ô,5‡Ò@DÛcC°Z,>@.f·½d§s¤Wˆ\×¥=Û/OAo€¯:LqBiHK3ğÍÒ2÷ó5EåJ#•[xÓåşvàIÑ¡"XšEÉÓ¢¥ÇöÓé¯c"´z[èùqhT
-Üc%Œqb´ş5‚Éì~ PK    U]L×4  #     xl/workbook.xmlQÑnÂ0ü•*°´!Q^†¶!¡‰÷ĞºÔ"‰+Ç…¯ŸÛªÒ^ö”ÜÙºÜ]âÓè”|ybnj‘f¦±¨ÁÛxGTÄŞŠB>¦±a°e¬Ä»tše³Ô[f¹µ¶œŞ()(Ù{„Küw09cÄ:”ïÜôw&ñĞãÊÜd&‰5]^‰ñJA¬ÛLÎåf2öÀ‚Åz×™ü´‡Ø3bVäf–©`…¥ßèõ­z<ƒ.¨zF'À++ğÂÔ6Œ¦Hobô=ŒçPâœÿS#U°¢¢õdè‘ÁuC¬±‰&	ÖCn6P»@úÂºÂ‰ºº©Šç¨^—ƒ¿ÑT	(ßT'*¯[Nº£×™Ş?LµˆÖ¹'åŞÃ†l9fÿgùPK    U]$›¢­   ø     xl/_rels/workbook.xml.relsµ‘=ƒ0…¯å 5P©CL]X+.ó#Å®
-·/…:ta²-ïÉNŸhwn ¶ó$FkÊdËìï ¤[´Š.Îã0Oj¬âY†¼Ò½j’(ºAØ3dî™¢œ<şCtuİi|8ı²8ğ0¼]è©Ed)JäLÂh¶6ÁRâËL–¢¨2Š*–pZ âÉ miV}°ON´çy7÷E®Íã	®ßpxtşPK    U]ey’  Ï     [Content_Types].xml­“MNÃ0…¯e[%.,X ¦`]pcO«ş“gZÒÛ3NÚJ …M¬xŞ¼Ï—¬Ş°èõØ”Q|UNb"x®´!9Iüš¶"Jµ“[÷ËåƒPÁxª({”ëÕ3´ro©xéyMğM™ÀbY<ÂÌjJ£5J×ÅÁë”êD¨¹sĞ`g".XPŠ«„\ùpê{;@JFC±‘‰^¥c•è­@:ZÀzÚâÊCÛ:¨½ã–c©± gëÑt1M&0ŒÏ»ÙüÁf
-ÈÊM
-9±Ç#ÉİUd#Hd¦¯x!²õìûAN[ƒ¾‘Íãıi7äbXæÏø{ÆÿÎñÂî¿?±¼ÖNæ‹á?^PK    U]FÇMH•   Í              €    docProps/app.xmlPK    U]Oâ¼³ï   +             €Ã   docProps/core.xmlPK    U]™\œ#  œ'             €á  xl/theme/theme1.xmlPK    U]'«½]3  2             €"  xl/worksheets/sheet1.xmlPK    U]Iùo±  Ÿ             €‹  xl/styles.xmlPK    U]—Š»À                €g  _rels/.relsPK    U]L×4  #             €P  xl/workbook.xmlPK    U]$›¢­   ø             €±  xl/_rels/workbook.xml.relsPK    U]ey’  Ï             €–  [Content_Types].xmlPK    	 	 >  à     
- 
- 
-################################################################################ 
-FILE: data\people.xlsx 
-################################################################################ 
- 
-PK    U]FÇMH•   Í      docProps/app.xmlMÏMÂ0à¿Rv·™Š¤D=Š¼Ï.u…¶)m„úïí?nyyÈ¢.‰"&¶˜Eñ.äm32Ç@Ö#ú>ËÊ¡Š¡ä{®1İŒ±¤Ã¢m×€…18Ìâ·°éÔ.FguÏ–Bw²:Q&ÃâX4:±'«Ü
-çz%>‹K9—+ÿ‹SËSæÊoüd¿ºPK    U]Oâ¼³ï   +     docProps/core.xmlÍ’ÏJÄ0‡_Ero§éê"¡Û‹âIApAñ’Ùİ`ó‡d¤İ·7»]DÀcf~ùæ˜N¡|ÄçèF2˜®&;¸$TØ°Q IĞÊTç„ËÍVR~Æ=©>ä¡mš5X$©%I˜UXˆ¬ï´*¢$Ox­|øŒCi8 EG	xÍõóÄpœ†.€Fmú. ^ˆ¥ú'¶t€’S2KjÇz\•\ŞÃÛÓãKY·2.‘t
-ó¯dnØyòëêî~ûÀú¶i×oª–o.®oÅMû>»şğ»[¯ÍÎücã³`ßÁ¯»è¿ PK    U]™\œ#  œ'     xl/theme/theme1.xmlíZ[sÚ8~ï¯ĞxgömÆ6¶´sivÛ´™„íN…Xlyd‘„¿G6Ë–í’Mº›<,éûÎEGçè8yóî.bè†ˆ”òx`Ù/ÛÖ»·/ŞàW2$A0§¯ğÀ
-¥L^µZi Ã8}ÉÃÜ‚‹KxËÖ\à[/#Öê´ÛİV„il¡Gd`}^,h@ĞTQZo_ ´å3øËTe£WA&¹ˆ´òùlÅüÚŞ>eÏé:2n0X Îo§äNZˆáTÂÄÀjg?VkÇÑÒH€‚É}”ºIö£Ó2;:XÎv|öÄíŸŒÊÚt4màãñx8¶ËÒ‹pàQ»Âôl¿¤A	´£iĞdØöÚ®‘¦ªSOÓ÷}ßë›hœ
-[OÓkwİÓ‰Æ­Ğx¾ñO‡Ã®‰Æ«Ğtëi&'ı®k¤éhBFãëzµå@Ó  XpvÖÌÒ–^)úu”Ù»İA\ğXî9‰şÆÅÖiÒ–4Fr 7ÄÑLP|¯A¶ŠàÂ’Ò\ÖÏ)µPšÈõG‚!ÅÜ¯ıõ—»É¤3z}:Îk”i«§í»›Ï“üsèäŸ§“×MBÎp¼,	ñû#[a‡'n;r:gB|Ïöö‘¥%2Ïïù
-ëN<gV–°]ÏÏäŒr#»İöX}öOGn#×©À³"×”F$EŸÈ-ºä8µI2?†˜jP¤	1–¡†ø´Æ¬à}·¾Èßˆ÷«oš=W¡XIÚ„øFâœsæsÑlû¥FÑöU¼Ü£—X—ß4ª5,ÅÖx•Àñ­œ<Í”A†—$&©9~MHş+¥ÚşœÓ@ğ”/$úJ‘i³#§t&Íè3ÁF¯u‡hÒ<zşùœ5
-‘g³F!„i»ğ¯$š­Â+B>b6rµ¶q©„`ZÆÑxNÒ´üY¬5“>`ÈìÍ‘uÎÖ‘’^7B>bÎ‹¿†8Jší¢qXı^ÃIÁè‚Ëfı¸~†Õ3l,÷GÔJä&§?é24£šY	½„VjŸª‡4>¨2
-ñ¹>åzx
-7–Æ¼P®‚{ÿÑÚ7Â«ø‚À9.}Ï¥ï¹ô=¡Ò·7#}gÁÓ‹[ŞFn[Äû®1Ú×4.(cWrÍÈÇT¯“)Ø9ŸÀìıh>ñíúÙ$„¯šY-#K³A$¸ü‹Êğ*Ä	èd[%	ËTÓe7ŠBnéSõJ•×å¯¹(¸<[äé¯¡t>,Ïù<_ç´Í3C·rKê¶”¾µ&8Jô±ÌpNË;g<’¶w 5ûö]vä#¥0S—C¸B¾mºÜ:8˜‘¹
-ÓRoÃùéÅxâ9Ù¹}˜WmçØÑÑûçÁQ°£ï<–Çˆò¢!î¡†˜ÏÃC‡y{_˜g•ÆP4ml¬$,F·`¸×ñ,àd`- ƒ¯QòRU`1[Æ+¢|LŒEèpç—\_ãÑ’ãÛ¦eµn¯)wm"R9Âi˜g«ÊŞe±ÁUÏU[ò°¾j=´NÏşY­ÈŸNHc”¦J¢óS¾ç+IÄU8¿E3¶—¼ãæÇqNS¸v¶2¹»9©ze1g¦òß-	,[ˆYâM]íÕç›œ®z"vú—wÁ`òıpÉGå;ç_ô]C®~öİãún“;HLœyÅtE#•2äPî’Í”ÉDğ‚d¦€˜ú½ò¹)Î­>9E,ƒ†N^Ò%Š°!rãïï“jwŒ×ú,m„T2dÕÊC‰Á=3rCØT%ó®Ú&…ÛâTÍ»¾&`KÃzn-'ÿÛ^Ô=´=Fó£™à³‡s›z¸ÂE¬ÿXÖù2ß9pÛ:Ş^æ,C¤~Á}ŠŠ€«b¾º¯Où%œ;´{ñ ›üÖÛ¤öİà|Ô«Z¥d+?K|’cŒ[ô4_b­¦±­ÆÚ1y€Xó¡f8ß‡Eš3Õ‹¬9
-oAÕ@å?ÛÔhö4‘^1™¶6£äN
-<Üşï°ÂÄáí‹¿PK    U]è1ı²‰  S     xl/worksheets/sheet1.xml—[£6†ÿŠÅEÕ^t!‡9ì6‰Äf‚DHÄ¡«Õj/<à$ÖLmÓìô××Ò)nlïû}~b{u¥ì¿ $ÀÏ”d|­]„È?é:/(…üÍQ&GN”¥PÈ&;ë<g&•(%úÜ0îõâLÛ¬ª¾#Û¬h!ÎĞ‘^¤)d¯Ÿ¡×µ6ÓŞ:||¾ˆ²Cß¬rxFQ~d²¥·.	NQÆ1Í C§µfÎ>Ù3£Tbtå7Ï œÊ¥?Ê†“¬5C+­3^ƒœà*4wÑIXˆi8× ŒşeØZ{¡BĞ´—e
-(d×‰ÑPVåDÉXYLş¿àÚ¤1-çøWS°ÖÎ§,êöù­ò§
-¬õ9²(ù‚qYkHĞ	DøôºC¬»Ò/¦„WŸàZÇ.dp\pYM#–¤8«¿áÏò`v? ˜7‚ù{Ár@°h‹÷‚¡’–`95Ã]#¨¦®×s¯Àm¡€›£WÀÊhéV>Tôë_z­á¬\„`rKØ<„ ¦h¥iWvêq#ı¬–ú”ô©,µjG.”$ÀÙö¨·jµE3!×VĞVÃ×ü]±º$Õâš·¸æ•Í|ÀÆôm˜®kzÀÚÙå—kGA<µQLÓz	I;J£¶:½ÕŸş?L-“…Òkoú	ÜÈ	L`™Aèúp¨=”8†¤Ñ[~
-e‹c©ôz2ı=pÓ	ø5òÌ p={û[µÁsšõ1vLF#luò#qµQSP¹k©Ü©	öûÈsÂ¯r¿˜ÛQ.j³˜R–à
-ÊúØ‰;6£¶º€ilî[6÷J·íÁŠö¶š¡sğ¦ñQ&4.äAA¾°qÿê’w„F#lu	Ó=´„Ô{*ò¶ ôm3ˆ|Û¥£6ò°Æö¾°šÌ´#3a«ÓO#óØ’yTº¹‡g'+ ¿À4ÿ„‡ƒöò_x&µ3¡gÌy¦!i‡i4ÂV§Ÿ†éc‹é£Òí[`î®‚0ÚÊö½‡Ú‹"‘[ª†Z¸ÛınFßQgH×!R;±äUxfFw4&:šşŸ‡²>#Âa@ƒÂ›SŸÚû	ŠKÿÒoÎÌåukÙgy‘7¥òÀê[Fİ¥êxY_sªÇ‹¼õ!VÈñ¥â­QÌÛ{äæ_PK    U]Iùo±  Ÿ     xl/styles.xmlİVÛ›0ıÄ”$Ö¢P%H»¨‘*µÕJ»}u‚!–|¡Æ¬’~}=˜@.U¶êSAöŸ331dÕÚ£`/{ÆltBµëxomó9IÚİIÚ~ÒS©´‘Ôº©©“¶1Œ–-¤H³YšHÊUœ¯T'7Ò¶ÑNwÊ®ãYœä«J«ÉBbopK©dÑë¸ ‚oï×RÉÅÑ›`Øi¡Md](lÏÁÒşöğÜÏ ÊAGr¥ïáÚÏ£áT ¾&¦Şºhg›şºGbÀûGëÖq!.st†|ÕPk™Q7é9½ñŠ†ñë±qIÖ†ç‹‡ønB«/Áe]œç²xHÉ—§^æŒ:ŠöùV›’™1öy|2å+Á*ëè†×{xZİÀŞikµtƒ’ÓZ+Ú'vb'»cB¼@kı¬.´Uä{äk	íÁş†. aèeüôÏÕ¼ö™,ù+Ù¨áoÚ>u.ÕÏuÚ²gÃ*~èç‡jô©Ï'õÅ•:mq|¼V’ùÜïv˜¯è‰½1cù:oç¦Ìw÷¡ÂCZü“„“a‹ÏêxQÅÑÁÑXÇ?àå &‰hÛqa¹f{^–LİÓÉ[ºuoŸ}·¾dí„}Áu<¿³’w2W=CZÃªiüšv'ÜùâªdVÃÔ“‹óâ/ \#Ó[áÁ8#€a~°0ga~ş§|–h>Ãb[‘%ÊY¢Ï
-!Ec~ÂœÌ]áL³Œ4Åv´(‚Ø¾¥)üÂjXlÀÀü€§í5^m¼CŞï¬¦ïu–)Ş‰X¦ø^Ş7`dY¸Ú˜``UÀzü‡ı@O…9„@U±Ø°Œ#Y†!Ğ‹áMSdwR¸ÃõÁN	!YF G@†ÀiÄ,ˆCé¿ƒWß£äôJ¦¿äùPK    U]—Š»À        _rels/.rels’¹nÃ0@ÅĞ0Ğ!ˆ3eñùV¢ØŠE¿¯Ú¥qy=<Üi@í8¤¶‹©ıRiZÕ¸H¶%iÎ‘B®Ô,5‡Ò@DÛcC°Z,>@.f·½d§s¤Wˆ\×¥=Û/OAo€¯:LqBiHK3ğÍÒ2÷ó5EåJ#•[xÓåşvàIÑ¡"XšEÉÓ¢¥ÇöÓé¯c"´z[èùqhT
-Üc%Œqb´ş5‚Éì~ PK    U]Ïıã3  #     xl/workbook.xmlQÑNÃ0ü•*@;“˜Ö½0“Lí=mİÕZW»Á¾·UÅ$^xJîÎºœ/Ë3ñ± :&_Ş…˜›F¤]¤i,ğ6ŞPA•šØ[QÈ‡4¶¶Š€x—ŞfÙ<õƒY-'¯-§×€JA
-JöÄáõ&'ŒX CùÎÍpw`=^ ÊMf’ØĞù…/Äº]Éä\nf£°,ÿĞ»>ä§-âÀˆ->¬ÉÍ<SÃ9Ê01ø[ÍxQ'ô„N€×Và™©k1zİ"½Zcèa:ÇüŸ©®±„5•‡ c®bƒm4I°r³jû:†6Õ¸œhª«ªx*ğ¦óM¡*¨1@õ¦>Qy-¨ÜrÒƒÏíİıìA‹èœ{Tî=¼’­¦§ÿYı PK    U]$›¢­   ø     xl/_rels/workbook.xml.relsµ‘=ƒ0…¯å 5P©CL]X+.ó#Å®
-·/…:ta²-ïÉNŸhwn ¶ó$FkÊdËìï ¤[´Š.Îã0Oj¬âY†¼Ò½j’(ºAØ3dî™¢œ<şCtuİi|8ı²8ğ0¼]è©Ed)JäLÂh¶6ÁRâËL–¢¨2Š*–pZ âÉ miV}°ON´çy7÷E®Íã	®ßpxtşPK    U]ey’  Ï     [Content_Types].xml­“MNÃ0…¯e[%.,X ¦`]pcO«ş“gZÒÛ3NÚJ …M¬xŞ¼Ï—¬Ş°èõØ”Q|UNb"x®´!9Iüš¶"Jµ“[÷ËåƒPÁxª({”ëÕ3´ro©xéyMğM™ÀbY<ÂÌjJ£5J×ÅÁë”êD¨¹sĞ`g".XPŠ«„\ùpê{;@JFC±‘‰^¥c•è­@:ZÀzÚâÊCÛ:¨½ã–c©± gëÑt1M&0ŒÏ»ÙüÁf
-ÈÊM
-9±Ç#ÉİUd#Hd¦¯x!²õìûAN[ƒ¾‘Íãıi7äbXæÏø{ÆÿÎñÂî¿?±¼ÖNæ‹á?^PK    U]FÇMH•   Í              €    docProps/app.xmlPK    U]Oâ¼³ï   +             €Ã   docProps/core.xmlPK    U]™\œ#  œ'             €á  xl/theme/theme1.xmlPK    U]è1ı²‰  S             €"  xl/worksheets/sheet1.xmlPK    U]Iùo±  Ÿ             €á  xl/styles.xmlPK    U]—Š»À                €½  _rels/.relsPK    U]Ïıã3  #             €¦  xl/workbook.xmlPK    U]$›¢­   ø             €  xl/_rels/workbook.xml.relsPK    U]ey’  Ï             €ë  [Content_Types].xmlPK    	 	 >  5     
- 
- 
-################################################################################ 
-FILE: data\scholar-journal.xlsx 
-################################################################################ 
- 
-PK    U]FÇMH•   Í      docProps/app.xmlMÏMÂ0à¿Rv·™Š¤D=Š¼Ï.u…¶)m„úïí?nyyÈ¢.‰"&¶˜Eñ.äm32Ç@Ö#ú>ËÊ¡Š¡ä{®1İŒ±¤Ã¢m×€…18Ìâ·°éÔ.FguÏ–Bw²:Q&ÃâX4:±'«Ü
-çz%>‹K9—+ÿ‹SËSæÊoüd¿ºPK    U]Oâ¼³ï   +     docProps/core.xmlÍ’ÏJÄ0‡_Ero§éê"¡Û‹âIApAñ’Ùİ`ó‡d¤İ·7»]DÀcf~ùæ˜N¡|ÄçèF2˜®&;¸$TØ°Q IĞÊTç„ËÍVR~Æ=©>ä¡mš5X$©%I˜UXˆ¬ï´*¢$Ox­|øŒCi8 EG	xÍõóÄpœ†.€Fmú. ^ˆ¥ú'¶t€’S2KjÇz\•\ŞÃÛÓãKY·2.‘t
-ó¯dnØyòëêî~ûÀú¶i×oª–o.®oÅMû>»şğ»[¯ÍÎücã³`ßÁ¯»è¿ PK    U]™\œ#  œ'     xl/theme/theme1.xmlíZ[sÚ8~ï¯ĞxgömÆ6¶´sivÛ´™„íN…Xlyd‘„¿G6Ë–í’Mº›<,éûÎEGçè8yóî.bè†ˆ”òx`Ù/ÛÖ»·/ŞàW2$A0§¯ğÀ
-¥L^µZi Ã8}ÉÃÜ‚‹KxËÖ\à[/#Öê´ÛİV„il¡Gd`}^,h@ĞTQZo_ ´å3øËTe£WA&¹ˆ´òùlÅüÚŞ>eÏé:2n0X Îo§äNZˆáTÂÄÀjg?VkÇÑÒH€‚É}”ºIö£Ó2;:XÎv|öÄíŸŒÊÚt4màãñx8¶ËÒ‹pàQ»Âôl¿¤A	´£iĞdØöÚ®‘¦ªSOÓ÷}ßë›hœ
-[OÓkwİÓ‰Æ­Ğx¾ñO‡Ã®‰Æ«Ğtëi&'ı®k¤éhBFãëzµå@Ó  XpvÖÌÒ–^)úu”Ù»İA\ğXî9‰şÆÅÖiÒ–4Fr 7ÄÑLP|¯A¶ŠàÂ’Ò\ÖÏ)µPšÈõG‚!ÅÜ¯ıõ—»É¤3z}:Îk”i«§í»›Ï“üsèäŸ§“×MBÎp¼,	ñû#[a‡'n;r:gB|Ïöö‘¥%2Ïïù
-ëN<gV–°]ÏÏäŒr#»İöX}öOGn#×©À³"×”F$EŸÈ-ºä8µI2?†˜jP¤	1–¡†ø´Æ¬à}·¾Èßˆ÷«oš=W¡XIÚ„øFâœsæsÑlû¥FÑöU¼Ü£—X—ß4ª5,ÅÖx•Àñ­œ<Í”A†—$&©9~MHş+¥ÚşœÓ@ğ”/$úJ‘i³#§t&Íè3ÁF¯u‡hÒ<zşùœ5
-‘g³F!„i»ğ¯$š­Â+B>b6rµ¶q©„`ZÆÑxNÒ´üY¬5“>`ÈìÍ‘uÎÖ‘’^7B>bÎ‹¿†8Jší¢qXı^ÃIÁè‚Ëfı¸~†Õ3l,÷GÔJä&§?é24£šY	½„VjŸª‡4>¨2
-ñ¹>åzx
-7–Æ¼P®‚{ÿÑÚ7Â«ø‚À9.}Ï¥ï¹ô=¡Ò·7#}gÁÓ‹[ŞFn[Äû®1Ú×4.(cWrÍÈÇT¯“)Ø9ŸÀìıh>ñíúÙ$„¯šY-#K³A$¸ü‹Êğ*Ä	èd[%	ËTÓe7ŠBnéSõJ•×å¯¹(¸<[äé¯¡t>,Ïù<_ç´Í3C·rKê¶”¾µ&8Jô±ÌpNË;g<’¶w 5ûö]vä#¥0S—C¸B¾mºÜ:8˜‘¹
-ÓRoÃùéÅxâ9Ù¹}˜WmçØÑÑûçÁQ°£ï<–Çˆò¢!î¡†˜ÏÃC‡y{_˜g•ÆP4ml¬$,F·`¸×ñ,àd`- ƒ¯QòRU`1[Æ+¢|LŒEèpç—\_ãÑ’ãÛ¦eµn¯)wm"R9Âi˜g«ÊŞe±ÁUÏU[ò°¾j=´NÏşY­ÈŸNHc”¦J¢óS¾ç+IÄU8¿E3¶—¼ãæÇqNS¸v¶2¹»9©ze1g¦òß-	,[ˆYâM]íÕç›œ®z"vú—wÁ`òıpÉGå;ç_ô]C®~öİãún“;HLœyÅtE#•2äPî’Í”ÉDğ‚d¦€˜ú½ò¹)Î­>9E,ƒ†N^Ò%Š°!rãïï“jwŒ×ú,m„T2dÕÊC‰Á=3rCØT%ó®Ú&…ÛâTÍ»¾&`KÃzn-'ÿÛ^Ô=´=Fó£™à³‡s›z¸ÂE¬ÿXÖù2ß9pÛ:Ş^æ,C¤~Á}ŠŠ€«b¾º¯Où%œ;´{ñ ›üÖÛ¤öİà|Ô«Z¥d+?K|’cŒ[ô4_b­¦±­ÆÚ1y€Xó¡f8ß‡Eš3Õ‹¬9
-oAÕ@å?ÛÔhö4‘^1™¶6£äN
-<Üşï°ÂÄáí‹¿PK    U]+êG°  á     xl/worksheets/sheet1.xml–]oÛ †ÿ
-â~µc;iWÅ–Ò|Ki5ív1í‚Ú$FÅÆÒ´ûõìZ)şè´›„÷9ŞƒÀããÏ"ÅX‚×Œæ"„©”Åµãˆ8Å¬À¹šÙ3!©ºüàˆ‚c”(£çº#'C$‡ÑØŒmy4fGII·ˆc–!şvƒ);…p ßîÉ!•zÀ‰Æ:à–Å–«SGIH†sAX8Ş‡p2¸^Zoß	>‰³6Ğ;ybìYwÖI]¨#ç¼í
-JÌZ@²bƒ÷rŠ)Uñ<P,ÉŞ*YŸ˜”,Óó*K‰¤ÚsöçfML±Òª\Š†¸RÕ[ü]åëíè¤ÎÛï™/Œ¯Ê§'$ğ”Ñ$‘i¯ Hğ©¼g§®¼êx1£Âü‚S©ÄG¡²©`•AFòò½VŸŞUàU€g·ğ+À·AT@ğ¯À°†Ğµ…Q¥Yú¯úËJiJUzk
-3CEcÎN€kµ
-¦¦ºåI
-!ÉõßI®f‰âd´bGSF°©"êq'®è›~z+ñpÚNb”àŒÄ-ä¬Ÿœ²,;æD¾µ ó~t£î ÌEJŠvñÉNŸ	¥¢…[ös[Äq.ıH:ªJu©¼ºT	åu•jõÅuİ¶"õs?w“Ûífv³ùİÃ¯¶jGĞ×âK4R+½œ—¥)ñ-É¼)ñ,É¢)X’e‹dXK>8ç×Îùÿé\?W;·¾Ù¬ï–­Îùl¿ÚÎ5%ÁĞr®Eb;×”xV”eSâw8ÔÎŸ;7hs®Ÿ«›®¾m&÷­ÎŸ–YSbŸ–ySb¹²h*ì×»Lé›svÅêÇÿñÉ ê9U÷Å¥ºöyùè•õn›[¡|uM35÷¨ù=cò½£/òú«&úPK    U]Iùo±  Ÿ     xl/styles.xmlİVÛ›0ıÄ”$Ö¢P%H»¨‘*µÕJ»}u‚!–|¡Æ¬’~}=˜@.U¶êSAöŸ331dÕÚ£`/{ÆltBµëxomó9IÚİIÚ~ÒS©´‘Ôº©©“¶1Œ–-¤H³YšHÊUœ¯T'7Ò¶ÑNwÊ®ãYœä«J«ÉBbopK©dÑë¸ ‚oï×RÉÅÑ›`Øi¡Md](lÏÁÒşöğÜÏ ÊAGr¥ïáÚÏ£áT ¾&¦Şºhg›şºGbÀûGëÖq!.st†|ÕPk™Q7é9½ñŠ†ñë±qIÖ†ç‹‡ønB«/Áe]œç²xHÉ—§^æŒ:ŠöùV›’™1öy|2å+Á*ëè†×{xZİÀŞikµtƒ’ÓZ+Ú'vb'»cB¼@kı¬.´Uä{äk	íÁş†. aèeüôÏÕ¼ö™,ù+Ù¨áoÚ>u.ÕÏuÚ²gÃ*~èç‡jô©Ï'õÅ•:mq|¼V’ùÜïv˜¯è‰½1cù:oç¦Ìw÷¡ÂCZü“„“a‹ÏêxQÅÑÁÑXÇ?àå &‰hÛqa¹f{^–LİÓÉ[ºuoŸ}·¾dí„}Áu<¿³’w2W=CZÃªiüšv'ÜùâªdVÃÔ“‹óâ/ \#Ó[áÁ8#€a~°0ga~ş§|–h>Ãb[‘%ÊY¢Ï
-!Ec~ÂœÌ]áL³Œ4Åv´(‚Ø¾¥)üÂjXlÀÀü€§í5^m¼CŞï¬¦ïu–)Ş‰X¦ø^Ş7`dY¸Ú˜``UÀzü‡ı@O…9„@U±Ø°Œ#Y†!Ğ‹áMSdwR¸ÃõÁN	!YF G@†ÀiÄ,ˆCé¿ƒWß£äôJ¦¿äùPK    U]—Š»À        _rels/.rels’¹nÃ0@ÅĞ0Ğ!ˆ3eñùV¢ØŠE¿¯Ú¥qy=<Üi@í8¤¶‹©ıRiZÕ¸H¶%iÎ‘B®Ô,5‡Ò@DÛcC°Z,>@.f·½d§s¤Wˆ\×¥=Û/OAo€¯:LqBiHK3ğÍÒ2÷ó5EåJ#•[xÓåşvàIÑ¡"XšEÉÓ¢¥ÇöÓé¯c"´z[èùqhT
-Üc%Œqb´ş5‚Éì~ PK    U]SoœU4  #     xl/workbook.xmlQÑnÂ0ü•*°´!Q^†¶!M‚‰÷ĞºÔ"‰+Ç…¯ŸÛªÒ^ö”ÜÙºÜ]âÓè”|ybnj‘f¦±¨ÁÛxGTÄŞŠB>¦±a°e¬Ä»tše³Ô[f¹µ6œŞ()(Ù{„Küw09cÄ:”ïÜôw&ñĞãÊÜd&‰5]^‰ñJA¬ÛLÎåf2öÀ‚Åz×™ü´‡Ø3b[«Fr3ËT°BÒoôúV=A—Ô
-=£à•xajÇNFS¤71úÆs(qÎÿ©‘ª
-XQÑz2ôÈà:ƒ!ÖØD“ë!7[Šj£¤/¬Ë!œ¨«›ªx:àu9øM•Pa€ò]u¢òZP±á¤;zéıÃäQ‹h{Rî#¼‘-ÇŒãÿ, PK    U]$›¢­   ø     xl/_rels/workbook.xml.relsµ‘=ƒ0…¯å 5P©CL]X+.ó#Å®
-·/…:ta²-ïÉNŸhwn ¶ó$FkÊdËìï ¤[´Š.Îã0Oj¬âY†¼Ò½j’(ºAØ3dî™¢œ<şCtuİi|8ı²8ğ0¼]è©Ed)JäLÂh¶6ÁRâËL–¢¨2Š*–pZ âÉ miV}°ON´çy7÷E®Íã	®ßpxtşPK    U]ey’  Ï     [Content_Types].xml­“MNÃ0…¯e[%.,X ¦`]pcO«ş“gZÒÛ3NÚJ …M¬xŞ¼Ï—¬Ş°èõØ”Q|UNb"x®´!9Iüš¶"Jµ“[÷ËåƒPÁxª({”ëÕ3´ro©xéyMğM™ÀbY<ÂÌjJ£5J×ÅÁë”êD¨¹sĞ`g".XPŠ«„\ùpê{;@JFC±‘‰^¥c•è­@:ZÀzÚâÊCÛ:¨½ã–c©± gëÑt1M&0ŒÏ»ÙüÁf
-ÈÊM
-9±Ç#ÉİUd#Hd¦¯x!²õìûAN[ƒ¾‘Íãıi7äbXæÏø{ÆÿÎñÂî¿?±¼ÖNæ‹á?^PK    U]FÇMH•   Í              €    docProps/app.xmlPK    U]Oâ¼³ï   +             €Ã   docProps/core.xmlPK    U]™\œ#  œ'             €á  xl/theme/theme1.xmlPK    U]+êG°  á             €"  xl/worksheets/sheet1.xmlPK    U]Iùo±  Ÿ             €  xl/styles.xmlPK    U]—Š»À                €ä  _rels/.relsPK    U]SoœU4  #             €Í  xl/workbook.xmlPK    U]$›¢­   ø             €.  xl/_rels/workbook.xml.relsPK    U]ey’  Ï             €  [Content_Types].xmlPK    	 	 >  ]     
- 
- 
-################################################################################ 
-FILE: data\tools.xlsx 
-################################################################################ 
- 
-PK    U]FÇMH•   Í      docProps/app.xmlMÏMÂ0à¿Rv·™Š¤D=Š¼Ï.u…¶)m„úïí?nyyÈ¢.‰"&¶˜Eñ.äm32Ç@Ö#ú>ËÊ¡Š¡ä{®1İŒ±¤Ã¢m×€…18Ìâ·°éÔ.FguÏ–Bw²:Q&ÃâX4:±'«Ü
-çz%>‹K9—+ÿ‹SËSæÊoüd¿ºPK    U]Oâ¼³ï   +     docProps/core.xmlÍ’ÏJÄ0‡_Ero§éê"¡Û‹âIApAñ’Ùİ`ó‡d¤İ·7»]DÀcf~ùæ˜N¡|ÄçèF2˜®&;¸$TØ°Q IĞÊTç„ËÍVR~Æ=©>ä¡mš5X$©%I˜UXˆ¬ï´*¢$Ox­|øŒCi8 EG	xÍõóÄpœ†.€Fmú. ^ˆ¥ú'¶t€’S2KjÇz\•\ŞÃÛÓãKY·2.‘t
-ó¯dnØyòëêî~ûÀú¶i×oª–o.®oÅMû>»şğ»[¯ÍÎücã³`ßÁ¯»è¿ PK    U]™\œ#  œ'     xl/theme/theme1.xmlíZ[sÚ8~ï¯ĞxgömÆ6¶´sivÛ´™„íN…Xlyd‘„¿G6Ë–í’Mº›<,éûÎEGçè8yóî.bè†ˆ”òx`Ù/ÛÖ»·/ŞàW2$A0§¯ğÀ
-¥L^µZi Ã8}ÉÃÜ‚‹KxËÖ\à[/#Öê´ÛİV„il¡Gd`}^,h@ĞTQZo_ ´å3øËTe£WA&¹ˆ´òùlÅüÚŞ>eÏé:2n0X Îo§äNZˆáTÂÄÀjg?VkÇÑÒH€‚É}”ºIö£Ó2;:XÎv|öÄíŸŒÊÚt4màãñx8¶ËÒ‹pàQ»Âôl¿¤A	´£iĞdØöÚ®‘¦ªSOÓ÷}ßë›hœ
-[OÓkwİÓ‰Æ­Ğx¾ñO‡Ã®‰Æ«Ğtëi&'ı®k¤éhBFãëzµå@Ó  XpvÖÌÒ–^)úu”Ù»İA\ğXî9‰şÆÅÖiÒ–4Fr 7ÄÑLP|¯A¶ŠàÂ’Ò\ÖÏ)µPšÈõG‚!ÅÜ¯ıõ—»É¤3z}:Îk”i«§í»›Ï“üsèäŸ§“×MBÎp¼,	ñû#[a‡'n;r:gB|Ïöö‘¥%2Ïïù
-ëN<gV–°]ÏÏäŒr#»İöX}öOGn#×©À³"×”F$EŸÈ-ºä8µI2?†˜jP¤	1–¡†ø´Æ¬à}·¾Èßˆ÷«oš=W¡XIÚ„øFâœsæsÑlû¥FÑöU¼Ü£—X—ß4ª5,ÅÖx•Àñ­œ<Í”A†—$&©9~MHş+¥ÚşœÓ@ğ”/$úJ‘i³#§t&Íè3ÁF¯u‡hÒ<zşùœ5
-‘g³F!„i»ğ¯$š­Â+B>b6rµ¶q©„`ZÆÑxNÒ´üY¬5“>`ÈìÍ‘uÎÖ‘’^7B>bÎ‹¿†8Jší¢qXı^ÃIÁè‚Ëfı¸~†Õ3l,÷GÔJä&§?é24£šY	½„VjŸª‡4>¨2
-ñ¹>åzx
-7–Æ¼P®‚{ÿÑÚ7Â«ø‚À9.}Ï¥ï¹ô=¡Ò·7#}gÁÓ‹[ŞFn[Äû®1Ú×4.(cWrÍÈÇT¯“)Ø9ŸÀìıh>ñíúÙ$„¯šY-#K³A$¸ü‹Êğ*Ä	èd[%	ËTÓe7ŠBnéSõJ•×å¯¹(¸<[äé¯¡t>,Ïù<_ç´Í3C·rKê¶”¾µ&8Jô±ÌpNË;g<’¶w 5ûö]vä#¥0S—C¸B¾mºÜ:8˜‘¹
-ÓRoÃùéÅxâ9Ù¹}˜WmçØÑÑûçÁQ°£ï<–Çˆò¢!î¡†˜ÏÃC‡y{_˜g•ÆP4ml¬$,F·`¸×ñ,àd`- ƒ¯QòRU`1[Æ+¢|LŒEèpç—\_ãÑ’ãÛ¦eµn¯)wm"R9Âi˜g«ÊŞe±ÁUÏU[ò°¾j=´NÏşY­ÈŸNHc”¦J¢óS¾ç+IÄU8¿E3¶—¼ãæÇqNS¸v¶2¹»9©ze1g¦òß-	,[ˆYâM]íÕç›œ®z"vú—wÁ`òıpÉGå;ç_ô]C®~öİãún“;HLœyÅtE#•2äPî’Í”ÉDğ‚d¦€˜ú½ò¹)Î­>9E,ƒ†N^Ò%Š°!rãïï“jwŒ×ú,m„T2dÕÊC‰Á=3rCØT%ó®Ú&…ÛâTÍ»¾&`KÃzn-'ÿÛ^Ô=´=Fó£™à³‡s›z¸ÂE¬ÿXÖù2ß9pÛ:Ş^æ,C¤~Á}ŠŠ€«b¾º¯Où%œ;´{ñ ›üÖÛ¤öİà|Ô«Z¥d+?K|’cŒ[ô4_b­¦±­ÆÚ1y€Xó¡f8ß‡Eš3Õ‹¬9
-oAÕ@å?ÛÔhö4‘^1™¶6£äN
-<Üşï°ÂÄáí‹¿PK    U],Û öô        xl/worksheets/sheet1.xml–]Sâ0†ÿJ¦÷ÚR>D¦0£(àŒî°²®×±4C›ÓM‚èşú=I+Ãb½&9Ï›“¼ùJö ·*gL“·²jäZW£0TiÎJªÎ¡b[Ö Kª±(7¡ª$£™…Ê"Œ£h–”‹`’Øº¥œ$°Ól)‰Ú•%•ï×¬€ı8è|“kSN’ŠnØŠé§j)±T2^2¡8"Ùz\uF‹‰·¿9Û«£obFò°5…»lDQŒ¼¯ª‚Û¾ˆ†ê­õ”êÅ¡©æ¯l‰aãà´†Ò´c–šj¬ZKøË„í“c1—êSp-Òˆš!şiòÃ1Id>³óŠóôB›BñÌ3ƒa@2¶¦»B?Â~Áš¹ê½
-eÉ¾qéNa6Œ”\Ôÿô­™ã# 3hâˆONĞm€î	pÙßkâ{§´¡ß ıïaĞ ƒS ß\4ÀÅ	[€a­¹µÖÊªé$‘°'ÒD£šù°ë¡^{ã€³+VZb+GNOî4+“P£’)‡iC]û©).ÎÈw9õ“?wTh®]äŸ|\;¨Û/2‘q³mèÌŞCJ[Èù$UšLs–nYæ ~úh¦şÇBtõ`m|°6¶:q‹Î‚ŠŒh„Xárø;0àêry|Ìšs÷uÒ‰“ğõØL¿|•ºtoıĞÀ53?õApƒ¸Ğ¹£xpÖ‰Î¢ËE?»ºzXŞßzlìlìz…q¯I.6$¥®¥xí§ï¤ä›¶e<í~òqpb£_½ÅF?4£\ºlôS^ı¨ßF?[Û8"€÷xN¡¤`të±µw°µçBY%s¹ê‡ìš îÍÙûdj¸êWW4İ:}õcmÛÓO­4H|~	àºˆæ~ÚZ]ÅC—µ_ôÜºCÃ£ûÔ¼¨Üp¡Ğú5*Eçx™ËúMTğYgÏóúQf?s|¢2i°}x¦7sk½“PK    U]Iùo±  Ÿ     xl/styles.xmlİVÛ›0ıÄ”$Ö¢P%H»¨‘*µÕJ»}u‚!–|¡Æ¬’~}=˜@.U¶êSAöŸ331dÕÚ£`/{ÆltBµëxomó9IÚİIÚ~ÒS©´‘Ôº©©“¶1Œ–-¤H³YšHÊUœ¯T'7Ò¶ÑNwÊ®ãYœä«J«ÉBbopK©dÑë¸ ‚oï×RÉÅÑ›`Øi¡Md](lÏÁÒşöğÜÏ ÊAGr¥ïáÚÏ£áT ¾&¦Şºhg›şºGbÀûGëÖq!.st†|ÕPk™Q7é9½ñŠ†ñë±qIÖ†ç‹‡ønB«/Áe]œç²xHÉ—§^æŒ:ŠöùV›’™1öy|2å+Á*ëè†×{xZİÀŞikµtƒ’ÓZ+Ú'vb'»cB¼@kı¬.´Uä{äk	íÁş†. aèeüôÏÕ¼ö™,ù+Ù¨áoÚ>u.ÕÏuÚ²gÃ*~èç‡jô©Ï'õÅ•:mq|¼V’ùÜïv˜¯è‰½1cù:oç¦Ìw÷¡ÂCZü“„“a‹ÏêxQÅÑÁÑXÇ?àå &‰hÛqa¹f{^–LİÓÉ[ºuoŸ}·¾dí„}Áu<¿³’w2W=CZÃªiüšv'ÜùâªdVÃÔ“‹óâ/ \#Ó[áÁ8#€a~°0ga~ş§|–h>Ãb[‘%ÊY¢Ï
-!Ec~ÂœÌ]áL³Œ4Åv´(‚Ø¾¥)üÂjXlÀÀü€§í5^m¼CŞï¬¦ïu–)Ş‰X¦ø^Ş7`dY¸Ú˜``UÀzü‡ı@O…9„@U±Ø°Œ#Y†!Ğ‹áMSdwR¸ÃõÁN	!YF G@†ÀiÄ,ˆCé¿ƒWß£äôJ¦¿äùPK    U]—Š»À        _rels/.rels’¹nÃ0@ÅĞ0Ğ!ˆ3eñùV¢ØŠE¿¯Ú¥qy=<Üi@í8¤¶‹©ıRiZÕ¸H¶%iÎ‘B®Ô,5‡Ò@DÛcC°Z,>@.f·½d§s¤Wˆ\×¥=Û/OAo€¯:LqBiHK3ğÍÒ2÷ó5EåJ#•[xÓåşvàIÑ¡"XšEÉÓ¢¥ÇöÓé¯c"´z[èùqhT
-Üc%Œqb´ş5‚Éì~ PK    U]ëŠË6  &     xl/workbook.xmlQÑnÂ0ü•*°´!Q^†¶!Mï¡u©EWƒ¯ŸÛªÒ^ö”ÜÙºÜ]gâãè˜|{bnj‘f¦±¨ÁÛxGTÄŞŠB>¤±a°e¬Ä»tše³Ô[f¹µ6œŞ()(Ù;„süw09aÄ=:”Knú»“xèñ
-en2“ÄšÎ¯Äx¥ Öm&çr3;`Áâ½íL~Ù}ì±ûO«Fr3ËT°BÒoôúV=@—Ô
-=£à•xaj‡NFS¤71úÆs(qÎÿ©‘ª
-XQÑz2ôÈà:ƒ!ÖØD“ë!7ëpÒâK—IY—C>Qc7mñuÀër°8ú*¡Â å»JEåµ£bÃIwô:Óû‡É£vÑ:÷¤ÜGx#[1Ç/Zş PK    U]$›¢­   ø     xl/_rels/workbook.xml.relsµ‘=ƒ0…¯å 5P©CL]X+.ó#Å®
-·/…:ta²-ïÉNŸhwn ¶ó$FkÊdËìï ¤[´Š.Îã0Oj¬âY†¼Ò½j’(ºAØ3dî™¢œ<şCtuİi|8ı²8ğ0¼]è©Ed)JäLÂh¶6ÁRâËL–¢¨2Š*–pZ âÉ miV}°ON´çy7÷E®Íã	®ßpxtşPK    U]ey’  Ï     [Content_Types].xml­“MNÃ0…¯e[%.,X ¦`]pcO«ş“gZÒÛ3NÚJ …M¬xŞ¼Ï—¬Ş°èõØ”Q|UNb"x®´!9Iüš¶"Jµ“[÷ËåƒPÁxª({”ëÕ3´ro©xéyMğM™ÀbY<ÂÌjJ£5J×ÅÁë”êD¨¹sĞ`g".XPŠ«„\ùpê{;@JFC±‘‰^¥c•è­@:ZÀzÚâÊCÛ:¨½ã–c©± gëÑt1M&0ŒÏ»ÙüÁf
-ÈÊM
-9±Ç#ÉİUd#Hd¦¯x!²õìûAN[ƒ¾‘Íãıi7äbXæÏø{ÆÿÎñÂî¿?±¼ÖNæ‹á?^PK    U]FÇMH•   Í              €    docProps/app.xmlPK    U]Oâ¼³ï   +             €Ã   docProps/core.xmlPK    U]™\œ#  œ'             €á  xl/theme/theme1.xmlPK    U],Û öô                €"  xl/worksheets/sheet1.xmlPK    U]Iùo±  Ÿ             €L  xl/styles.xmlPK    U]—Š»À                €(  _rels/.relsPK    U]ëŠË6  &             €  xl/workbook.xmlPK    U]$›¢­   ø             €t  xl/_rels/workbook.xml.relsPK    U]ey’  Ï             €Y  [Content_Types].xmlPK    	 	 >  £     
- 
