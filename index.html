@@ -2,6 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><title>Sweat Equity Tracker</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Flex:wght@300;800&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{box-sizing:border-box;--bg:#000;--s1:#15101c;--s2:#1f1830;--line:#352a4d;--p:#b388ff;--pc:#4a148c;--on:#ede7f6;--mut:#a99bc4;--warn:#ffd54f;--bad:#ff8a80;color-scheme:dark}
 *,*::before,*::after{box-sizing:inherit}
@@ -14,7 +15,7 @@ nav{display:flex;gap:4px;overflow-x:auto;margin-top:8px;min-height:8px}
 nav button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mut);font:500 14px Roboto;padding:10px 14px;cursor:pointer;white-space:nowrap}
 nav button.on{color:var(--p);border-color:var(--p)}
 main{max-width:1100px;margin:0 auto;padding:20px}
-.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
 .card{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 8px #0008}
 .card.hero{background:linear-gradient(135deg,var(--pc),#1a0933);border:0}
 .big{font:800 44px/1 "Roboto Flex",Roboto,sans-serif;letter-spacing:-.02em}
@@ -33,11 +34,12 @@ button.btn{background:var(--p);color:#1a0933;border:0;border-radius:20px;padding
 button.btn.o{background:none;color:var(--p);border:1px solid var(--line);box-shadow:none}
 button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .prev{background:var(--s2);border-left:4px solid var(--p);border-radius:8px;padding:12px;margin:12px 0}
-.ladder{display:grid;gap:8px;margin-top:10px}.step{display:flex;justify-content:space-between;padding:10px 14px;border-radius:12px;background:var(--s2);border:1px solid var(--line)}
+.ladder{display:grid;gap:8px;margin-top:10px}.step{display:flex;justify-content:space-between;padding:8px 14px;border-radius:12px;background:var(--s2);border:1px solid var(--line);font-size:14px}
 .step.hit{background:var(--pc);border-color:var(--p)}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--p);color:#1a0933;border-radius:8px;padding:12px 20px;font-weight:500;z-index:9}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--p);color:#1a0933;border-radius:8px;padding:12px 20px;font-weight:500;z-index:9;max-width:90vw}
 .scroll{overflow-x:auto}.err{color:var(--bad);min-height:20px;margin-top:8px}
 .login{max-width:760px;margin:40px auto}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0}dt{color:var(--mut);font-size:13px}dd{margin:0;word-break:break-word}
 .rg{fill:none;stroke:var(--line)}.rp{fill:#b388ff55;stroke:var(--p);stroke-width:2}.rd{fill:var(--p)}.rt{fill:var(--on);font:12px Roboto}.rv{fill:var(--mut);font:11px Roboto}
 @media(max-width:600px){main{padding:12px}.big{font-size:36px}}
 </style></head><body>
@@ -46,52 +48,57 @@ button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 <button class="btn o" id="out" hidden onclick="FB.logout()">Sign out</button></div><nav id="nav"></nav></header>
 <main id="main"></main>
 <script>
-const D="H01 7,H02 11,H03 12,H04 8,H04 10,H05 10,H05 12,H06 12,H07 12,H08 9,H08 12,H09 12,H10 8,H11 12,H12 9,H13 7,H14 8,H15 8,H16 7,H17 7,H17 8,H18 8,H19 8,H20 8,H21 7,H22 7,H23 7,H24 7,H25 8,H26 8,H27 8,H28 12,H29 8,H30 12,H31 12,H32 12,H33 11,H34 7,H35 11,H36 7".split(',').map((r,i)=>{const[h,g]=r.split(' ');return{id:'S'+String(i+1).padStart(3,'0'),hh:h,g:+g}});
 const CAP={academic:999,community:75,leadership:90,skills:45,parental:50},REF={academic:340,community:75,leadership:90,skills:45,bonus:40,parental:50},AREAS={academic:'Academic',community:'Community',leadership:'Leadership',skills:'Skills',bonus:'Talent bonus',parental:'Parental'};
 const TIERS={'Top (98–100)':100,'High Diligent (95–97.9)':80,'Diligent (90–94.9)':60,'Average (85–89.9)':40};
 const ACT={academic:[['Report card tier','tier'],['Tutor',60],['Tutee',30],['Presentation',50],['Junior concept',20],['Project Phase 1',30],['Project Phase 2',30],['Project Phase 3 (clears gate)',20,'p3'],['Contest win bonus',20],['Publish bonus',30],['Ongoing business',50]],
 community:[['Service instance',15],['Organized an event',25],['Mentoring (per mentee)',20]],leadership:[['Holding a position',40],['Leading a project',30],['Facilitating a workshop',20]],
 skills:[['Internship',25],['Course',15],['Workshop',5],['Participation / training term',10]],bonus:[['Win',5],['Podium',2],['Representative selection',5],['Juried work',20]],parental:[['Volunteering',20],['Workshop',15],['Attended an event',10]]};
 const LAD=[[800,1,30000],[600,.75,22500],[400,.5,15000],[200,.25,7500],[0,0,0]];
-let ME=null,NAMES={},S={years:[2026],year:2026,logs:[]},tab='scholar',sel=null,q='',F={a:'academic',i:0,raw:100,id:'S001'},C={pts:450,g:7,p3:false};
+// Personal fields (database only). Parent skills is stored but never shown.
+const FLD=[['last','Last name'],['first','First name'],['middle','Middle name'],['barangay','Barangay'],['address','Address'],['gender','Gender'],['citizenship','Citizenship'],['religion','Religion'],['fatherName',"Father's name"],['fatherJob',"Father's occupation"],['motherName',"Mother's name"],['motherJob',"Mother's occupation"],['email','Email'],['contact','Contact number']];
+const HMAP={scholarid:'id',id:'id',householdid:'hh',household:'hh',entrygrade:'g0',entryyear:'y0',gradelevel:'grade',grade:'grade',lastname:'last',firstname:'first',middlename:'middle',barangay:'barangay',address:'address',gender:'gender',citizenship:'citizenship',religion:'religion',fathersname:'fatherName',fathersoccupation:'fatherJob',mothersname:'motherName',mothersoccupation:'motherJob',emailaddress:'email',email:'email',contactnumber:'contact',contact:'contact',parentskills:'parentSkills'};
+let ME=null,SC=[],INFO={},S={years:[2026],year:2026,logs:[]},tab='work',sel=null,q='',editing=false,PEND=null,F={a:'academic',i:0,raw:100,id:null},W={add:0,p3:false,pts:450,g:7};
 const isA=()=>ME==='admin',peso=n=>'₱'+n.toLocaleString('en-PH'),P=n=>isA()?peso(n):'',wt=g=>g<=8?.75:1,cem=p=>LAD.find(r=>p>=r[0]),f1=n=>Math.round(n*100)/100;
-const gIn=(s,y)=>s.g+(y-2026),yl=y=>`SY${y}-${y+1}`,rate=c=>c[1]*100+'%'+(isA()?' · '+peso(c[2]):'');
-const nm=s=>(isA()&&!hide.checked&&NAMES[s.id])?`${NAMES[s.id].f} ${NAMES[s.id].l}`:'';
-const lab=s=>[s.id,nm(s),'G'+s.g].filter(Boolean).join(' · ');
-const authMsg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/invalid-email':'Enter a valid email.','auth/operation-not-allowed':'This sign-in method is off. Enable it in Firebase Authentication.','auth/unauthorized-domain':'Add this site’s domain under Authentication → Settings → Authorized domains.','auth/too-many-requests':'Too many tries. Wait a few minutes.'}[e.code]||e.message);
+const gIn=(s,y)=>s.g0+(y-s.y0),yl=y=>`SY${y}-${y+1}`,rate=c=>c[1]*100+'%'+(isA()?' · '+peso(c[2]):''),norm=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]/g,''),esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nm=s=>{const i=INFO[s.id];return isA()&&!hide.checked&&i&&(i.first||i.last)?`${i.first||''} ${i.last||''}`.trim():''};
+const gl=s=>{const g=gIn(s,S.year);return g>12?'Grad':'G'+g};
+const lab=s=>[s.id,nm(s),gl(s)].filter(Boolean).join(' · ');
+const authMsg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/invalid-email':'Enter a valid email.','auth/admin-restricted-operation':'Viewer sign-in is turned off. In Firebase, open Authentication → Sign-in method and enable Anonymous.','auth/operation-not-allowed':'This sign-in method is off. Enable it in Firebase Authentication → Sign-in method.','auth/unauthorized-domain':'Add this site’s domain under Authentication → Settings → Authorized domains.','auth/too-many-requests':'Too many tries. Wait a few minutes.'}[e.code]||e.message);
 const fbErr=e=>toast(e.code==='permission-denied'?'Not allowed. Only the admin can do that.':e.message);
-function setMe(r){ME=r;if(!r){S.logs=[];NAMES={};sel=null}else tab=r==='admin'?'dash':'scholar';draw()}
+function setMe(r){ME=r;if(!r){S.logs=[];SC=[];INFO={};sel=null;PEND=null}else tab=r==='admin'?'dash':'work';draw()}
 function calc(s){let base=0,bon=0,rows=[];
- for(const y of S.years){const g=gIn(s,y);if(g>12)continue;const w=wt(g),by={};
+ for(const y of S.years){const g=gIn(s,y);if(g>12||g<7)continue;const w=wt(g),by={};
   S.logs.filter(l=>l.sid===s.id&&l.y===y&&!l.v).forEach(l=>by[l.area]=(by[l.area]||0)+l.raw);
   let cp=0;for(const a in CAP)cp+=Math.min(by[a]||0,CAP[a]);const b=Math.min(by.bonus||0,40);
   rows.push({y,g,w,by,base:cp*w,bonus:b*w});base+=cp*w;bon+=b*w}
- const bc=Math.min(bon,120),cum=f1(base+bc),p3=S.logs.some(l=>l.sid===s.id&&l.p3&&!l.v),gate=s.g<=8,held=gate&&!p3&&cum>=800,gt=held?799:cum;
+ const bc=Math.min(bon,120),cum=f1(base+bc),p3=S.logs.some(l=>l.sid===s.id&&l.p3&&!l.v),gate=s.g0<=8,held=gate&&!p3&&cum>=800,gt=held?799:cum;
  return{rows,cum,gt,p3,gate,held,bc,c:cem(gt)}}
 const cc=c=>c>=1?'c4':c>=.75?'c3':c>=.5?'c2':c>0?'c1':'';
-const all=()=>D.map(s=>({s,t:calc(s)}));
+const all=()=>SC.map(s=>({s,t:calc(s)}));
+function pick(id){sel=id||null;editing=false;W.add=0;const s=SC.find(x=>x.id===id);W.p3=s?calc(s).p3:false;draw()}
 function draw(){yr.textContent=yl(S.year);out.hidden=!ME;hl.hidden=!isA();
  if(!ME){nav.innerHTML='';main.innerHTML=loginV();return}
- const T=isA()?{dash:'Dashboard',scholar:'Scholar',award:'Award points',calc:'Grant calculator',data:'Data & years'}:{scholar:'Find a scholar',calc:'Grant calculator'};
- if(!T[tab])tab='scholar';
+ const T=isA()?{dash:'Dashboard',work:'Scholars & calculator',award:'Award points',data:'Data & years'}:{work:'Scholars & calculator'};
+ if(!T[tab])tab='work';
  nav.innerHTML=Object.entries(T).map(([k,v])=>`<button class="${k===tab?'on':''}" onclick="tab='${k}';draw()">${v}</button>`).join('');
- main.innerHTML=({dash,scholar,award,calc:calcV,data})[tab]();if(tab==='award')prev()}
+ main.innerHTML=({dash,work,award,data})[tab]();if(tab==='award')prev()}
 function loginV(){return`<div class="login grid"><div class="card"><h2 style="margin-top:0">Admin</h2><p class="mut">Full access with your password.</p>
  <div class="field"><label>Email</label><input id="lem" type="email" value="admin@lla.edu" autocomplete="username"></div><div class="field"><label>Password</label><input id="lpw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdmin()"></div>
  <button class="btn" onclick="doAdmin()">Sign in</button></div>
  <div class="card"><h2 style="margin-top:0">Viewer</h2><p class="mut">No password. Look up a scholar by ID to see points and grant rate. Names are not shown.</p><button class="btn o" onclick="doViewer()">Continue as viewer</button></div></div><div class="err" id="err" style="text-align:center"></div>`}
 function doAdmin(){err.textContent='';FB.login(lem.value.trim(),lpw.value).catch(e=>err.textContent=authMsg(e))}
 function doViewer(){err.textContent='';FB.viewer().catch(e=>err.textContent=authMsg(e))}
-function dash(){const a=all().sort((x,y)=>y.t.gt-x.t.gt),tot=a.reduce((n,x)=>n+x.t.cum,0),t100=a.filter(x=>x.t.c[1]>=1).length,held=a.filter(x=>x.t.held).length,pay=a.reduce((n,x)=>n+x.t.c[2],0);
+const empty=()=>`<div class="card">${isA()?'No scholars in the database yet. Open <b>Data & years</b> and import your scholars Excel file.':'No scholar data yet. Ask the admin to load it.'}</div>`;
+function dash(){if(!SC.length)return empty();const a=all().sort((x,y)=>y.t.gt-x.t.gt),tot=a.reduce((n,x)=>n+x.t.cum,0),t100=a.filter(x=>x.t.c[1]>=1).length,held=a.filter(x=>x.t.held).length,pay=a.reduce((n,x)=>n+x.t.c[2],0),hh=new Set(SC.map(s=>s.hh)).size,lo=SC.filter(s=>gIn(s,S.year)<=8).length;
  return`<div class="grid"><div class="card hero"><div class="mut" style="color:#d1c4e9">Cumulative points awarded</div><div class="big">${f1(tot).toLocaleString()}</div></div>
- <div class="card"><div class="mut">Scholars · households</div><div class="big">40 · 36</div></div>
+ <div class="card"><div class="mut">Scholars · households</div><div class="big">${SC.length} · ${hh}</div></div>
  <div class="card"><div class="mut">At 100% grant</div><div class="big">${t100}</div></div>
  <div class="card"><div class="mut">Held by project gate</div><div class="big">${held}</div></div>
  <div class="card"><div class="mut">Grant value at current points</div><div class="big" style="font-size:30px">${peso(pay)}</div></div></div>
- <div class="card" style="margin-top:14px"><b>Grades 7–8 carry a ×0.75 weight.</b> <span class="mut">22 of 40 scholars are in these grades, so their totals run lower than their raw points. That is the program rule, not a bug.</span></div>
+ <div class="card" style="margin-top:14px"><b>Grades 7–8 carry a ×0.75 weight.</b> <span class="mut">${lo} of ${SC.length} scholars are in these grades this year, so their totals run lower than their raw points. That is the program rule, not a bug.</span></div>
  <h2>Leaderboard</h2><div class="card scroll"><table><thead><tr><th>ID</th><th>Name</th><th>Grade</th><th class="num">Cumulative</th><th>Grant</th></tr></thead><tbody>
- ${a.map(({s,t})=>{const g=gIn(s,S.year);return`<tr class="cl" onclick="sel='${s.id}';tab='scholar';draw()"><td>${s.id}</td><td>${nm(s)||'—'}</td><td>${g>12?'Graduated':g+` (×${wt(g)})`}</td><td class="num">${t.gt}${t.held?' <span class="chip w">gate</span>':''}</td><td><span class="chip ${cc(t.c[1])}">${rate(t.c)}</span></td></tr>`}).join('')}</tbody></table></div>`}
-function radar(by,w){const ks=Object.keys(AREAS),cx=150,cy=140,R=90,pt=(i,f)=>{const a=(-90+60*i)*Math.PI/180;return[cx+R*f*Math.cos(a),cy+R*f*Math.sin(a)]};
+ ${a.map(({s,t})=>{const g=gIn(s,S.year);return`<tr class="cl" onclick="tab='work';pick('${s.id}')"><td>${s.id}</td><td>${esc(nm(s))||'—'}</td><td>${g>12?'Graduated':g+` (×${wt(g)})`}</td><td class="num">${t.gt}${t.held?' <span class="chip w">gate</span>':''}</td><td><span class="chip ${cc(t.c[1])}">${rate(t.c)}</span></td></tr>`}).join('')}</tbody></table></div>`}
+function radar(by){const ks=Object.keys(AREAS),cx=150,cy=140,R=90,pt=(i,f)=>{const a=(-90+60*i)*Math.PI/180;return[cx+R*f*Math.cos(a),cy+R*f*Math.sin(a)]};
  const val=k=>Math.min(by[k]||0,k==='bonus'?40:CAP[k]);
  const poly=ks.map((k,i)=>pt(i,Math.min(1,val(k)/REF[k])).map(n=>n.toFixed(1)).join(',')).join(' ');
  return`<svg viewBox="0 0 300 290" role="img" aria-label="Radar chart of points by area" style="width:100%;max-width:420px;display:block;margin:auto">
@@ -100,50 +107,93 @@ function radar(by,w){const ks=Object.keys(AREAS),cx=150,cy=140,R=90,pt=(i,f)=>{c
  <polygon class="rp" points="${poly}"/>
  ${ks.map((k,i)=>{const[x,y]=pt(i,Math.min(1,val(k)/REF[k])),[lx,ly]=pt(i,1.3),an=lx<cx-5?'end':lx>cx+5?'start':'middle';return`<circle class="rd" cx="${x}" cy="${y}" r="3.5"/><text class="rt" x="${lx}" y="${ly}" text-anchor="${an}">${AREAS[k]}</text><text class="rv" x="${lx}" y="${ly+13}" text-anchor="${an}">${val(k)}/${k==='academic'?999:REF[k]}</text>`}).join('')}</svg>`}
 function results(){const m=q.trim().toLowerCase();if(!m)return'<span class="mut">Type a scholar ID, like S004.</span>';
- const r=D.filter(x=>x.id.toLowerCase().includes(m)).slice(0,12);return r.length?r.map(x=>`<button class="chip" onclick="sel='${x.id}';draw()">${x.id} · Grade ${x.g}</button>`).join(' '):'<span class="mut">No scholar with that ID. Check the ID and try again.</span>'}
-function scholar(){
- const find=isA()?`<div class="field"><label>Scholar</label><select onchange="sel=this.value;draw()"><option value="">Choose…</option>${D.map(x=>`<option value="${x.id}" ${x.id===sel?'selected':''}>${lab(x)}</option>`).join('')}</select></div>`
- :`<div class="field"><label>Scholar ID</label><input value="${q}" placeholder="S004" oninput="q=this.value;res.innerHTML=results()"></div></div><div class="row" id="res" style="margin:6px 0 10px">${results()}</div><div hidden>`;
- const head=`<div class="row">${find}</div>`;
- const s=D.find(x=>x.id===sel);if(!s)return head+(isA()?'<p class="mut">Choose a scholar to see their points.</p>':'');
- const t=calc(s),r=t.rows.find(x=>x.y===S.year),g=gIn(s,S.year),by=r?r.by:{};
- const logs=S.logs.filter(l=>l.sid===s.id&&l.y===S.year).slice().sort((a,b)=>b.date>a.date?1:-1);
- return head+`<div class="grid"><div class="card hero"><div class="mut" style="color:#d1c4e9">${s.id}${nm(s)?' · '+nm(s):''}${isA()?' · '+s.hh:''}</div><div class="big">${t.gt}<span style="font-size:20px">/800</span></div><div>Grade ${g>12?'—':g+' (×'+wt(g)+')'} · entered at Grade ${s.g}</div></div>
- <div class="card"><div class="mut">Grant</div><div class="big">${t.c[1]*100}%</div><div>${P(t.c[2])}</div></div>
- <div class="card"><div class="mut">Project gate</div><div style="margin-top:8px"><span class="chip ${t.held?'w':'c4'}">${!t.gate?'Not applicable (entry Grade 9+)':t.p3?'Cleared · Phase 3 on record':t.held?'Held at 799 · needs Phase 3':'Pending · needs Phase 3 before 800'}</span></div></div></div>
+ const r=SC.filter(x=>x.id.toLowerCase().includes(m)).slice(0,12);return r.length?r.map(x=>`<button class="chip" onclick="pick('${x.id}')">${x.id} · ${gl(x)}</button>`).join(' '):'<span class="mut">No scholar with that ID. Check the ID and try again.</span>'}
+function resH(){const s=SC.find(x=>x.id===sel),t=s&&calc(s),base=s?t.cum:W.pts,gate=(s?s.g0:W.g)<=8,pts=f1(base+W.add),held=gate&&!W.p3&&pts>=800,gt=held?799:pts,c=cem(gt),nx=LAD.slice().reverse().find(r=>r[0]>gt);
+ return`<div class="mut">Grant at ${gt} points</div><div class="big">${c[1]*100}%</div>${isA()?`<div style="font-size:22px">${peso(c[2])}</div>`:''}${s&&(W.add>0||W.p3!==t.p3)?`<div class="mut">Now: ${rate(t.c)}</div>`:''}
+ <p>${held?'The project gate holds this scholar at 799. Completing Phase 3 releases the 100% grant.':nx?`${f1(nx[0]-gt)} more points reach ${nx[1]*100}%${isA()?' ('+peso(nx[2])+')':''}.`:'Top tier reached.'}</p>
+ <div class="ladder">${LAD.map(r=>`<div class="step ${r===c?'hit':''}"><span>${r[0]}${r[0]===800?'+':'–'+(r[0]===0?199:r[0]+199)} points</span><span>${r[1]*100}%${isA()?' · '+peso(r[2]):''}</span></div>`).join('')}</div><p class="mut">A step function: 799 points earns 75%, 800 earns 100%.</p>`}
+function work(){
+ if(!SC.length)return empty();
+ const pickr=isA()?`<div class="field"><label>Scholar</label><select onchange="pick(this.value)"><option value="">Manual what-if (no scholar)</option>${SC.map(x=>`<option value="${x.id}" ${x.id===sel?'selected':''}>${esc(lab(x))}</option>`).join('')}</select></div><button class="btn o" onclick="newScholar()">Add scholar</button>`
+ :`<div class="field"><label>Scholar ID</label><input value="${esc(q)}" placeholder="S004" oninput="q=this.value;res.innerHTML=results()"></div></div><div class="row" id="res" style="margin:6px 0 10px">${results()}</div><div class="row" hidden>`;
+ const top=`<div class="row">${pickr}</div>`,s=SC.find(x=>x.id===sel),t=s&&calc(s);
+ const calcCard=`<div class="card"><h2 style="margin-top:0">Grant calculator</h2>${s?`<div class="mut">Starting from ${t.cum} points earned</div>`:`<div class="field"><label>Cumulative points</label><input type="number" min="0" value="${W.pts}" oninput="W.pts=+this.value||0;cres.innerHTML=resH()"></div><div class="field"><label>Entry grade</label><select onchange="W.g=+this.value;cres.innerHTML=resH()">${[7,8,9,10,11,12].map(g=>`<option ${g===W.g?'selected':''}>${g}</option>`).join('')}</select></div>`}
+ <div class="field"><label>What if they earn more? <b id="addv">+${W.add}</b> points</label><input type="range" min="0" max="400" step="5" value="${W.add}" oninput="W.add=+this.value;addv.textContent='+'+this.value;cres.innerHTML=resH()" style="padding:0;accent-color:#b388ff"></div>
+ <label class="row"><input type="checkbox" style="width:auto" ${W.p3?'checked':''} onchange="W.p3=this.checked;cres.innerHTML=resH()"> Phase 3 project completed</label><div id="cres">${resH()}</div></div>`;
+ if(!s)return top+`<div class="grid">${calcCard}</div>`;
+ const g=gIn(s,S.year),r=t.rows.find(x=>x.y===S.year),by=r?r.by:{},logs=S.logs.filter(l=>l.sid===s.id&&l.y===S.year).slice().sort((a,b)=>b.date>a.date?1:-1);
+ const hero=`<div class="card hero"><div class="mut" style="color:#d1c4e9">${s.id}${nm(s)?' · '+esc(nm(s)):''}${isA()?' · '+s.hh:''}</div><div class="big">${t.gt}<span style="font-size:20px">/800</span></div><div>${g>12?'Graduated':'Grade '+g+' (×'+wt(g)+')'} · entered at Grade ${s.g0} in ${yl(s.y0)}</div>
+ <div style="margin-top:10px"><span class="chip ${t.held?'w':'c4'}">${!t.gate?'Gate not applicable (entry Grade 9+)':t.p3?'Gate cleared · Phase 3 on record':t.held?'Held at 799 · needs Phase 3':'Needs Phase 3 before 800'}</span></div></div>`;
+ return top+`<div class="grid">${hero}${calcCard}</div>
  <h2>${yl(S.year)} stat graph</h2><div class="card">${radar(by)}<p class="mut" style="text-align:center">Each axis shows points against its annual cap. Academic is scaled to about 340, the realistic yearly maximum.</p></div>
  <h2>Year by year</h2><div class="card scroll"><table><thead><tr><th>Year</th><th>Grade</th><th class="num">Base</th><th class="num">Talent bonus</th><th class="num">Year total</th></tr></thead><tbody>${t.rows.map(x=>`<tr><td>${yl(x.y)}</td><td>${x.g} (×${x.w})</td><td class="num">${f1(x.base)}</td><td class="num">${f1(x.bonus)}</td><td class="num">${f1(x.base+x.bonus)}</td></tr>`).join('')}</tbody></table><p class="mut">Talent bonus lifetime cap is 120. Counted: ${f1(t.bc)}.</p></div>
- <h2>Log history</h2><div class="card scroll">${logs.length?`<table><thead><tr><th>Date</th><th>Area</th><th>Activity</th><th class="num">Raw</th>${isA()?'<th></th>':''}</tr></thead><tbody>${logs.map(l=>`<tr style="${l.v?'opacity:.4;text-decoration:line-through':''}"><td>${l.date}</td><td>${AREAS[l.area]}</td><td>${l.act}${l.hh?' <span class="chip">household</span>':''}</td><td class="num">${l.raw}</td>${isA()?`<td>${l.v?'':`<button class="btn o" onclick="voidLog('${l.id}')">Void</button>`}</td>`:''}</tr>`).join('')}</tbody></table>`:`<p class="mut">No logs for ${s.id} yet this year.${isA()?' Award the first points from the Award points tab.':''}</p>`}</div>`}
+ <h2>Log history</h2><div class="card scroll">${logs.length?`<table><thead><tr><th>Date</th><th>Area</th><th>Activity</th><th class="num">Raw</th>${isA()?'<th></th>':''}</tr></thead><tbody>${logs.map(l=>`<tr style="${l.v?'opacity:.4;text-decoration:line-through':''}"><td>${l.date}</td><td>${AREAS[l.area]}</td><td>${esc(l.act)}${l.hh?' <span class="chip">household</span>':''}</td><td class="num">${l.raw}</td>${isA()?`<td>${l.v?'':`<button class="btn o" onclick="voidLog('${l.id}')">Void</button>`}</td>`:''}</tr>`).join('')}</tbody></table>`:`<p class="mut">No logs for ${s.id} yet this year.${isA()?' Award the first points from the Award points tab.':''}</p>`}</div>`+(isA()?infoV(s):'')}
+function infoV(s){const i=INFO[s.id]||{};
+ if(hide.checked)return`<h2>Scholar information</h2><div class="card mut">Hidden. Untick “Hide names” to view.</div>`;
+ if(editing)return`<h2>Edit scholar</h2><div class="card"><div class="row">${FLD.map(([k,l])=>`<div class="field"><label>${l}</label><input id="e_${k}" value="${esc(i[k])}"></div>`).join('')}
+ <div class="field"><label>Household ID</label><input id="e_hh" value="${esc(s.hh)}"></div><div class="field"><label>Entry grade (7–12)</label><input id="e_g0" type="number" min="7" max="12" value="${s.g0}"></div><div class="field"><label>Entry school year (start)</label><input id="e_y0" type="number" value="${s.y0}"></div></div>
+ <div class="row"><button class="btn" onclick="saveEdit()">Save changes</button><button class="btn o" onclick="editing=false;draw()">Cancel</button></div></div>`;
+ const ex=Object.entries(i.extra||{});
+ return`<h2>Scholar information</h2><div class="card"><dl>${FLD.map(([k,l])=>`<dt>${l}</dt><dd>${esc(i[k])||'—'}</dd>`).join('')}<dt>Household</dt><dd>${s.hh}</dd><dt>Entry</dt><dd>Grade ${s.g0} · ${yl(s.y0)}</dd>${ex.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+ <div class="row" style="margin-top:14px"><button class="btn o" onclick="editing=true;draw()">Edit information</button></div></div>`}
+function saveEdit(){const info={};FLD.forEach(([k])=>info[k]=document.getElementById('e_'+k).value.trim());
+ const g0=+e_g0.value,y0=+e_y0.value;if(!(g0>=7&&g0<=12)||!y0){toast('Entry grade must be 7 to 12 and the year a number like 2026.');return}
+ FB.saveScholar(sel,{hh:e_hh.value.trim(),g0,y0},info).then(()=>{editing=false;toast('Saved')}).catch(fbErr)}
+function nextId(){return'S'+String(Math.max(0,...SC.map(s=>+s.id.slice(1)))+1).padStart(3,'0')}
+function nextHH(){return'H'+String(Math.max(0,...SC.map(s=>+s.hh.slice(1)||0))+1).padStart(2,'0')}
+function newScholar(){const id=nextId();FB.saveScholar(id,{hh:nextHH(),g0:7,y0:S.year},{first:'',last:''}).then(()=>{sel=id;editing=true;W.add=0;W.p3=false;toast('Fill in the details and save')}).catch(fbErr)}
 function voidLog(id){if(confirm('Void this log? It stays on record but stops counting.'))FB.voidLog(id).then(()=>toast('Log voided')).catch(fbErr)}
-function award(){const A=ACT[F.a],it=A[F.i]||A[0];
- return`<div class="card"><div class="row"><div class="field"><label>Scholar (for Parental: any scholar in the household)</label><select onchange="F.id=this.value;draw()">${D.map(x=>`<option value="${x.id}" ${x.id===F.id?'selected':''}>${lab(x)}</option>`).join('')}</select></div>
+function award(){const A=ACT[F.a],it=A[F.i]||A[0];if(!SC.length)return empty();if(!F.id)F.id=SC[0].id;
+ return`<div class="card"><div class="row"><div class="field"><label>Scholar (for Parental: any scholar in the household)</label><select onchange="F.id=this.value;draw()">${SC.map(x=>`<option value="${x.id}" ${x.id===F.id?'selected':''}>${esc(lab(x))}</option>`).join('')}</select></div>
  <div class="field"><label>Area</label><select onchange="F.a=this.value;F.i=0;F.raw=ACT[F.a][0][1]==='tier'?100:ACT[F.a][0][1];draw()">${Object.entries(AREAS).map(([k,v])=>`<option value="${k}" ${k===F.a?'selected':''}>${v}</option>`).join('')}</select></div>
  <div class="field"><label>Activity</label><select onchange="F.i=+this.value;const v=ACT[F.a][F.i][1];F.raw=v==='tier'?100:v;draw()">${A.map((x,i)=>`<option value="${i}" ${i===F.i?'selected':''}>${x[0]}</option>`).join('')}</select></div></div>
  <div class="row">${it[1]==='tier'?`<div class="field"><label>Report card tier</label><select onchange="F.raw=+this.value;draw()">${Object.entries(TIERS).map(([k,v])=>`<option value="${v}" ${v===F.raw?'selected':''}>${k} → ${v}</option>`).join('')}</select></div>`:`<div class="field"><label>Raw points</label><input type="number" min="0" value="${F.raw}" oninput="F.raw=+this.value;prev()"></div>`}
  <div class="field"><label>Date</label><input type="date" id="dt" value="${new Date().toISOString().slice(0,10)}"></div><div class="field"><label>Note</label><input id="nt"></div></div>
  <div class="prev" id="prev"></div><button class="btn" onclick="saveAward()">Award points</button></div>`}
-function targets(){const s=D.find(x=>x.id===F.id);return F.a==='parental'?D.filter(x=>x.hh===s.hh&&gIn(x,S.year)<=12):[s]}
+function targets(){const s=SC.find(x=>x.id===F.id);return!s?[]:F.a==='parental'?SC.filter(x=>x.hh===s.hh&&gIn(x,S.year)<=12):[s]}
 function prev(){const e=document.getElementById('prev');if(!e)return;const a=F.a,cap=a==='bonus'?40:CAP[a];e.innerHTML=targets().map(s=>{const w=wt(gIn(s,S.year)),c=Math.min(F.raw,cap);return`<div><b>${s.id}</b> · raw ${F.raw} → capped ${c} → ×${w} → <b>${f1(c*w)}</b> weighted${F.raw>cap?' <span class="chip w">over annual cap</span>':''}</div>`}).join('')+(a==='parental'?'<div class="mut">One log per active sibling, each weighted to that sibling’s grade.</div>':'')+(a==='bonus'?'<div class="mut">Annual cap 40 and lifetime cap 120 apply to the total, not each entry.</div>':'')}
 function saveAward(){const it=ACT[F.a][F.i];if(!(F.raw>=0)){toast('Enter points of 0 or more.');return}
  const arr=targets().map(s=>({sid:s.id,y:S.year,area:F.a,act:it[0],raw:F.raw,date:dt.value,note:nt.value,hh:F.a==='parental',p3:it[2]==='p3',v:false}));
  FB.addLogs(arr).then(()=>toast('Points awarded')).catch(fbErr)}
-function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
-function calcV(){const gate=C.g<=8,held=gate&&!C.p3&&C.pts>=800,p=held?799:C.pts,c=cem(p),nx=LAD.slice().reverse().find(r=>r[0]>p);
- return`<div class="grid"><div class="card"><h2 style="margin-top:0">Grant calculator</h2><div class="field"><label>Cumulative points</label><input type="number" min="0" value="${C.pts}" oninput="C.pts=+this.value||0;calcU()"></div><input type="range" min="0" max="1200" value="${Math.min(C.pts,1200)}" oninput="C.pts=+this.value;draw()" style="padding:0;accent-color:#b388ff;width:100%">
- <div class="field"><label>Entry grade</label><select onchange="C.g=+this.value;draw()">${[7,8,9,10,11,12].map(g=>`<option ${g===C.g?'selected':''}>${g}</option>`).join('')}</select></div>
- <label class="row"><input type="checkbox" style="width:auto" ${C.p3?'checked':''} onchange="C.p3=this.checked;draw()"> Phase 3 project completed</label>
- <div class="field"><label>Or load a scholar</label><select onchange="const x=D.find(x=>x.id===this.value);if(x){C.pts=calc(x).cum;C.g=x.g;draw()}"><option value="">Choose…</option>${D.map(x=>`<option value="${x.id}">${lab(x)}</option>`).join('')}</select></div></div>
- <div class="card hero"><div class="mut" style="color:#d1c4e9">Grant at ${p} points</div><div class="big">${c[1]*100}%</div>${isA()?`<div style="font-size:22px;margin-top:6px">${peso(c[2])}</div>`:''}
- <p>${held?'The project gate holds this scholar at 799. Completing Phase 3 releases the 100% grant.':nx?`${nx[0]-p} more points reach ${nx[1]*100}%${isA()?' ('+peso(nx[2])+')':''}.`:'Top tier reached.'}</p></div></div>
- <h2>Grant ladder</h2><div class="ladder">${LAD.map(r=>`<div class="step ${r===c?'hit':''}"><span>${r[0]}${r[0]===800?'+':'–'+(r[0]===0?199:r[0]+199)} points</span><span>${r[1]*100}%${isA()?' · '+peso(r[2]):''}</span></div>`).join('')}</div><p class="mut">A step function: 799 points earns 75%, 800 earns 100%. Released when the scholar enrolls in college.</p>`}
-function calcU(){draw();const i=main.querySelector('input[type=number]');i.focus();i.setSelectionRange(99,99)}
-function data(){return`<div class="grid"><div class="card"><h2 style="margin-top:0">School years</h2><p>Active: <b>${yl(S.year)}</b>. Scholars advance one grade each year; grades above 12 graduate and keep their points.</p><div class="field"><label>Switch year</label><select onchange="FB.setConfig({years:S.years,year:+this.value}).catch(fbErr)">${S.years.map(y=>`<option value="${y}" ${y===S.year?'selected':''}>${yl(y)}</option>`).join('')}</select></div><button class="btn" onclick="newYear()">Start ${yl(Math.max(...S.years)+1)}</button></div>
- <div class="card"><h2 style="margin-top:0">Scholar names</h2><p class="mut">${Object.keys(NAMES).length} names loaded. Import scholars_private.csv (columns id, first, last). Names go to the admin-only database area and never into this page.</p><div class="field"><label>Import names CSV</label><input type="file" accept=".csv" onchange="impNames(this.files[0])"></div></div>
- <div class="card"><h2 style="margin-top:0">Export</h2><p class="mut">Download every log as a spreadsheet file.</p><button class="btn" onclick="dl()">Download CSV</button></div></div>`}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3200)}
+function data(){return`<div class="grid"><div class="card"><h2 style="margin-top:0">Import scholars from Excel</h2><p class="mut">Reads the columns by name, so extra or reordered columns are fine. Scholars already in the database are matched by Scholar ID, or by name, and updated. New names are added.</p>
+ <div class="field"><label>School year of this file</label><select id="iy">${S.years.map(y=>`<option value="${y}" ${y===S.year?'selected':''}>${yl(y)}</option>`).join('')}</select></div>
+ <div class="field"><label>Excel file (.xlsx)</label><input type="file" accept=".xlsx,.xls" onchange="readXlsx(this.files[0])"></div></div>
+ <div class="card"><h2 style="margin-top:0">Export to Excel</h2><p class="mut">One file with three sheets: Scholars (all saved information), Points and Logs. The Scholars sheet can be imported again.</p><button class="btn" onclick="exportXlsx()">Download Excel</button></div>
+ <div class="card"><h2 style="margin-top:0">School years</h2><p>Active: <b>${yl(S.year)}</b>. Scholars advance one grade each year; grades above 12 graduate and keep their points.</p><div class="field"><label>Switch year</label><select onchange="FB.setConfig({years:S.years,year:+this.value}).catch(fbErr)">${S.years.map(y=>`<option value="${y}" ${y===S.year?'selected':''}>${yl(y)}</option>`).join('')}</select></div><button class="btn" onclick="newYear()">Start ${yl(Math.max(...S.years)+1)}</button></div></div>${pendV()}`}
 function newYear(){const y=Math.max(...S.years)+1;if(confirm(`Start ${yl(y)}? Every scholar advances one grade. All logs stay on record.`))FB.setConfig({years:[...S.years,y],year:y}).then(()=>toast(yl(y)+' started')).catch(fbErr)}
-function dl(){const b='scholar,year,area,activity,raw,date,note,voided\n'+S.logs.map(l=>[l.sid,l.y,l.area,`"${l.act}"`,l.raw,l.date,`"${(l.note||'').replace(/"/g,'""')}"`,!!l.v].join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([b]));a.download=`sweatlogs_${yl(S.year)}.csv`;a.click()}
-function impNames(f){if(!f)return;f.text().then(x=>{const r=x.trim().split(/\r?\n/).slice(1).map(l=>l.split(',')).filter(c=>/^S\d{3}$/.test(c[0])).map(c=>({id:c[0],f:c[1].trim(),l:c.slice(2).join(',').trim()}));
- if(!r.length){toast('No rows found. Use the columns id, first, last.');return}FB.setNames(r).then(()=>toast(r.length+' names imported')).catch(fbErr)})}
+function readXlsx(f){if(!f)return;if(!window.XLSX){toast('The Excel library did not load. Check your connection and reload.');return}
+ const yr0=+iy.value;f.arrayBuffer().then(b=>{const wb=XLSX.read(b);let rows=null;
+  for(const n of wb.SheetNames){const r=XLSX.utils.sheet_to_json(wb.Sheets[n],{defval:'',raw:false});if(r.length&&Object.keys(r[0]).some(h=>norm(h)==='lastname')){rows=r;break}}
+  if(!rows){toast('No sheet with “Last Name” and “First Name” columns was found.');return}
+  PEND=plan(rows,yr0);draw()}).catch(e=>toast('Could not read that file: '+e.message))}
+function plan(rows,y){const byName={},fam={};let nid=Math.max(0,...SC.map(s=>+s.id.slice(1))),nh=Math.max(0,...SC.map(s=>+s.hh.slice(1)||0));
+ SC.forEach(s=>{const i=INFO[s.id]||{};byName[norm(i.last)+norm(i.first)+norm(i.middle)]=s.id;fam[norm(i.last)+'|'+norm(i.barangay)]=s.hh});
+ const items=[];let mis=0;
+ for(const row of rows){const rec={},extra={};
+  for(const[h,v]of Object.entries(row)){const val=String(v??'').trim();if(!val)continue;const k=HMAP[norm(h)];if(k)rec[k]=val;else if(norm(h)!=='no'&&norm(h)!=='')extra[h]=val}
+  if(!rec.last&&!rec.first)continue;
+  const nk=norm(rec.last)+norm(rec.first)+norm(rec.middle),fk=norm(rec.last)+'|'+norm(rec.barangay);
+  const id=rec.id||byName[nk]||'S'+String(++nid).padStart(3,'0'),old=SC.find(s=>s.id===id);
+  const hh=rec.hh||(old&&old.hh)||fam[fk]||'H'+String(++nh).padStart(2,'0');fam[fk]=fam[fk]||hh;byName[nk]=id;
+  const gn=parseInt(String(rec.grade||'').replace(/\D/g,''))||null,info={};
+  FLD.forEach(([k])=>{if(rec[k])info[k]=rec[k]});if(rec.parentSkills)info.parentSkills=rec.parentSkills;if(Object.keys(extra).length)info.extra=extra;
+  const pub=old?{}:{hh,g0:+rec.g0||gn||7,y0:+rec.y0||y};if(old&&rec.hh)pub.hh=rec.hh;if(old&&rec.g0)pub.g0=+rec.g0;if(old&&rec.y0)pub.y0=+rec.y0;
+  let changed=!old;if(old){const oi=INFO[id]||{};changed=Object.entries(info).some(([k,v])=>k==='extra'?JSON.stringify(v)!==JSON.stringify(oi.extra||{}):oi[k]!==v)||Object.keys(pub).length>0;if(gn&&gIn(old,y)!==gn)mis++}
+  items.push({id,pub,info,isNew:!old,changed,name:`${rec.first||''} ${rec.last||''}`.trim(),grade:gn,hh})}
+ return{items,mis,year:y}}
+function pendV(){if(!PEND)return'';const n=PEND.items.filter(x=>x.isNew).length,u=PEND.items.filter(x=>!x.isNew&&x.changed).length,same=PEND.items.length-n-u;
+ return`<h2>Review import</h2><div class="card"><p><b>${PEND.items.length}</b> scholars found: <span class="chip c4">${n} new</span> <span class="chip c3">${u} updated</span> <span class="chip c1">${same} unchanged</span>${PEND.mis?` <span class="chip w">${PEND.mis} grade${PEND.mis>1?'s':''} differ from the database</span>`:''}</p>
+ ${PEND.mis?'<p class="mut">Grades in the database move forward with each school year, so the file’s grade is not used to change existing scholars. Fix any grade by editing the scholar.</p>':''}
+ <div class="scroll"><table><thead><tr><th>ID</th><th>Name</th><th>Grade</th><th>Household</th><th>Status</th></tr></thead><tbody>${PEND.items.slice(0,60).map(x=>`<tr><td>${x.id}</td><td>${esc(x.name)}</td><td>${x.grade||'—'}</td><td>${x.hh}</td><td>${x.isNew?'New':x.changed?'Updated':'Unchanged'}</td></tr>`).join('')}</tbody></table></div>
+ <div class="row" style="margin-top:14px"><button class="btn" onclick="commitImport()">Save to database</button><button class="btn o" onclick="PEND=null;draw()">Cancel</button></div></div>`}
+function commitImport(){const n=PEND.items.length;FB.saveScholars(PEND.items.filter(x=>x.changed)).then(()=>{PEND=null;toast(n+' scholars saved to the database');draw()}).catch(fbErr)}
+function exportXlsx(){if(!window.XLSX){toast('The Excel library did not load. Reload and try again.');return}
+ const sc=SC.map(s=>{const i=INFO[s.id]||{},o={'Scholar ID':s.id,'Household ID':s.hh,'Entry Year':s.y0,'Entry Grade':s.g0,'Grade Level':gIn(s,S.year)>12?'Graduated':'Grade '+gIn(s,S.year),'Barangay':i.barangay||'','Last Name':i.last||'','First Name':i.first||'','Middle Name':i.middle||'','Address':i.address||'','Gender':i.gender||'','Citizenship':i.citizenship||'','Religion':i.religion||'',"Father's Name":i.fatherName||'',"Father's Occupation":i.fatherJob||'',"Mother's Name":i.motherName||'',"Mother's Occupation":i.motherJob||'','E-mail Address':i.email||'','Contact Number':i.contact||'','Parent Skills':i.parentSkills||''};return Object.assign(o,i.extra||{})});
+ const pts=SC.map(s=>{const t=calc(s),i=INFO[s.id]||{},o={'Scholar ID':s.id,Name:`${i.first||''} ${i.last||''}`.trim(),Grade:gIn(s,S.year),'Cumulative points':t.cum,'Counted total':t.gt,'Grant %':t.c[1]*100,'Grant (PHP)':t.c[2],'Project gate':t.held?'Held':t.p3?'Cleared':t.gate?'Pending':'N/A'};t.rows.forEach(r=>o[yl(r.y)]=f1(r.base+r.bonus));return o});
+ const lg=S.logs.map(l=>({'Scholar ID':l.sid,Year:yl(l.y),Date:l.date,Area:AREAS[l.area],Activity:l.act,'Raw points':l.raw,Household:l.hh?'yes':'',Note:l.note||'',Voided:l.v?'yes':''}));
+ const wb=XLSX.utils.book_new();[['Scholars',sc],['Points',pts],['Logs',lg]].forEach(([n,d])=>XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d),n));
+ XLSX.writeFile(wb,`sweat-equity_${new Date().toISOString().slice(0,10)}.xlsx`)}
 draw();
 </script>
 <script type="module">
@@ -152,6 +202,7 @@ import{getAuth,signInAnonymously,signInWithEmailAndPassword,signOut,onAuthStateC
 import{getFirestore,collection,doc,onSnapshot,updateDoc,setDoc,writeBatch}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyCHASICndfzOKOoP2FA9b9N-tv21Y2CXHo",authDomain:"sweatequity-dac96.firebaseapp.com",projectId:"sweatequity-dac96",storageBucket:"sweatequity-dac96.firebasestorage.app",messagingSenderId:"618283070090",appId:"1:618283070090:web:4c11812b5c3525af9af373"});
 const auth=getAuth(app),db=getFirestore(app);let unsubs=[];
+const put=(b,it)=>{if(Object.keys(it.pub).length)b.set(doc(db,'scholars',it.id),it.pub,{merge:true});b.set(doc(db,'scholarInfo',it.id),it.info,{merge:true})};
 window.FB={
  login:(e,p)=>signInWithEmailAndPassword(auth,e,p),
  viewer:()=>signInAnonymously(auth),
@@ -159,13 +210,15 @@ window.FB={
  voidLog:id=>updateDoc(doc(db,'logs',id),{v:true}),
  setConfig:c=>setDoc(doc(db,'config','program'),c,{merge:true}),
  addLogs:arr=>{const b=writeBatch(db);arr.forEach(l=>b.set(doc(collection(db,'logs')),l));return b.commit()},
- setNames:arr=>{const b=writeBatch(db);arr.forEach(n=>b.set(doc(db,'names',n.id),{f:n.f,l:n.l}));return b.commit()}
+ saveScholar:(id,pub,info)=>{const b=writeBatch(db);put(b,{id,pub,info});return b.commit()},
+ saveScholars:async items=>{for(let i=0;i<items.length;i+=200){const b=writeBatch(db);items.slice(i,i+200).forEach(it=>put(b,it));await b.commit()}}
 };
 onAuthStateChanged(auth,u=>{unsubs.forEach(f=>f());unsubs=[];
  if(!u){setMe(null);return}
  const admin=!u.isAnonymous;setMe(admin?'admin':'viewer');
  unsubs.push(onSnapshot(collection(db,'logs'),s=>{S.logs=s.docs.map(d=>({id:d.id,...d.data()}));draw()},fbErr));
  unsubs.push(onSnapshot(doc(db,'config','program'),s=>{if(s.exists()){const d=s.data();if(d.years)S.years=d.years;if(d.year)S.year=d.year;draw()}},fbErr));
- if(admin)unsubs.push(onSnapshot(collection(db,'names'),s=>{NAMES={};s.docs.forEach(d=>NAMES[d.id]=d.data());draw()},fbErr));
+ unsubs.push(onSnapshot(collection(db,'scholars'),s=>{SC=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.id<b.id?-1:1);if(sel&&!SC.find(x=>x.id===sel))sel=null;draw()},fbErr));
+ if(admin)unsubs.push(onSnapshot(collection(db,'scholarInfo'),s=>{INFO={};s.docs.forEach(d=>INFO[d.id]=d.data());draw()},fbErr));
 });
 </script></body></html>
