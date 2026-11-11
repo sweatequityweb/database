@@ -41,6 +41,8 @@ button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .login{max-width:760px;margin:40px auto}
 dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0}dt{color:var(--mut);font-size:13px}dd{margin:0;word-break:break-word}
 .rg{fill:none;stroke:var(--line)}.rp{fill:#b388ff55;stroke:var(--p);stroke-width:2}.rd{fill:var(--p)}.rt{fill:var(--on);font:12px Roboto}.rv{fill:var(--mut);font:11px Roboto}
+.tick{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:2px solid var(--line);border-radius:5px;color:var(--p);font-weight:700;font-size:12px;line-height:1}
+tr.on .tick{border-color:var(--p)}
 @media(max-width:600px){main{padding:12px}.big{font-size:36px}}
 </style></head><body>
 <header><div class="bar"><h1>Sweat Equity Tracker</h1><span class="yr" id="yr"></span>
@@ -57,7 +59,7 @@ const LAD=[[800,1,30000],[600,.75,22500],[400,.5,15000],[200,.25,7500],[0,0,0]];
 // Personal fields (database only). Parent skills is stored but never shown.
 const FLD=[['last','Last name'],['first','First name'],['middle','Middle name'],['barangay','Barangay'],['address','Address'],['gender','Gender'],['citizenship','Citizenship'],['religion','Religion'],['fatherName',"Father's name"],['fatherJob',"Father's occupation"],['motherName',"Mother's name"],['motherJob',"Mother's occupation"],['email','Email'],['contact','Contact number']];
 const HMAP={scholarid:'id',id:'id',householdid:'hh',household:'hh',entrygrade:'g0',entryyear:'y0',gradelevel:'grade',grade:'grade',lastname:'last',firstname:'first',middlename:'middle',barangay:'barangay',address:'address',gender:'gender',citizenship:'citizenship',religion:'religion',fathersname:'fatherName',fathersoccupation:'fatherJob',mothersname:'motherName',mothersoccupation:'motherJob',emailaddress:'email',email:'email',contactnumber:'contact',contact:'contact',parentskills:'parentSkills'};
-let ME=null,SC=[],INFO={},S={years:[2026],year:2026,logs:[]},tab='scholars',sel=null,q='',editing=false,PEND=null,F={a:'academic',i:0,raw:100,id:null,date:'',note:''},W={add:0,p3:false,pts:450,g:7};
+let ME=null,SC=[],INFO={},S={years:[2026],year:2026,logs:[]},tab='scholars',sel=null,q='',editing=false,PEND=null,RM='cap',F={a:'academic',i:0,raw:100,id:null,date:'',note:''},W={add:0,p3:false,pts:450,g:7};
 const isA=()=>ME==='admin',peso=n=>'₱'+n.toLocaleString('en-PH'),P=n=>isA()?peso(n):'',wt=g=>g<=8?.75:1,cem=p=>LAD.find(r=>p>=r[0]),f1=n=>Math.round(n*100)/100;
 const today=()=>new Date().toISOString().slice(0,10);
 const gIn=(s,y)=>s.g0+(y-s.y0),yl=y=>`SY${y}-${y+1}`,rate=c=>c[1]*100+'%'+(isA()?' · '+peso(c[2]):''),norm=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]/g,''),esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -104,33 +106,70 @@ function dash(){if(!SC.length)return empty();const a=all().sort((x,y)=>y.t.gt-x.
  <div class="card" style="margin-top:14px"><b>Grades 7–8 carry a ×0.75 weight.</b> <span class="mut">${lo} of ${SC.length} scholars are in these grades this year, so their totals run lower than their raw points. That is the program rule, not a bug.</span></div>
  <h2>Leaderboard</h2><div class="card scroll"><table><thead><tr><th>ID</th><th>Name</th><th>Grade</th><th class="num">Cumulative</th><th>Grant</th></tr></thead><tbody>
  ${a.map(({s,t})=>{const g=gIn(s,S.year);return`<tr class="cl" onclick="tab='scholars';pick('${s.id}')"><td>${s.id}</td><td>${esc(nm(s))||'—'}</td><td>${g>12?'Graduated':g+` (×${wt(g)})`}</td><td class="num">${t.gt}${t.held?' <span class="chip w">gate</span>':''}</td><td><span class="chip ${cc(t.c[1])}">${rate(t.c)}</span></td></tr>`}).join('')}</tbody></table></div>`}
-function radar(by){const ks=Object.keys(AREAS),cx=150,cy=140,R=90,pt=(i,f)=>{const a=(-90+60*i)*Math.PI/180;return[cx+R*f*Math.cos(a),cy+R*f*Math.sin(a)]};
- const val=k=>Math.min(by[k]||0,k==='bonus'?40:CAP[k]);
- const poly=ks.map((k,i)=>pt(i,Math.min(1,val(k)/REF[k])).map(n=>n.toFixed(1)).join(',')).join(' ');
- return`<svg viewBox="0 0 300 290" role="img" aria-label="Radar chart of points by area" style="width:100%;max-width:420px;display:block;margin:auto">
- ${[.25,.5,.75,1].map(f=>`<polygon class="rg" points="${ks.map((_,i)=>pt(i,f).join(',')).join(' ')}"/>`).join('')}
- ${ks.map((_,i)=>`<line class="rg" x1="${cx}" y1="${cy}" x2="${pt(i,1)[0]}" y2="${pt(i,1)[1]}"/>`).join('')}
+/* ---- Radar: 5 spokes, Talent bonus folded into Skills ---- */
+const R5=[['academic','Academic',340],['skills','Skills + bonus',85],['leadership','Leadership',90],['community','Community',75],['parental','Parental',50]];
+function radar(by){
+ const cx=200,cy=160,R=90,LR=113;
+ const vals=R5.map(([k])=>k==='skills'?Math.min(by.skills||0,CAP.skills)+Math.min(by.bonus||0,40):Math.min(by[k]||0,CAP[k]));
+ const tot=vals.reduce((a,b)=>a+b,0);
+ const frac=i=>RM==='share'?(tot?vals[i]/tot:0):Math.min(1,vals[i]/R5[i][2]);
+ const pt=(i,f)=>{const a=(-90+72*i)*Math.PI/180;return[cx+R*f*Math.cos(a),cy+R*f*Math.sin(a)]};
+ const at=i=>{const a=(-90+72*i)*Math.PI/180;return[cx+LR*Math.cos(a),cy+LR*Math.sin(a)]};
+ const poly=R5.map((_,i)=>pt(i,frac(i)).map(n=>n.toFixed(1)).join(',')).join(' ');
+ return`<svg viewBox="0 0 400 320" role="img" aria-label="Radar chart of points by area" style="width:100%;max-width:460px;display:block;margin:auto">
+ ${[.25,.5,.75,1].map(f=>`<polygon class="rg" points="${R5.map((_,i)=>pt(i,f).map(n=>n.toFixed(1)).join(',')).join(' ')}"/>`).join('')}
+ ${R5.map((_,i)=>{const[x,y]=pt(i,1);return`<line class="rg" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`}).join('')}
  <polygon class="rp" points="${poly}"/>
- ${ks.map((k,i)=>{const[x,y]=pt(i,Math.min(1,val(k)/REF[k])),[lx,ly]=pt(i,1.3),an=lx<cx-5?'end':lx>cx+5?'start':'middle';return`<circle class="rd" cx="${x}" cy="${y}" r="3.5"/><text class="rt" x="${lx}" y="${ly}" text-anchor="${an}">${AREAS[k]}</text><text class="rv" x="${lx}" y="${ly+13}" text-anchor="${an}">${val(k)}/${k==='academic'?999:REF[k]}</text>`}).join('')}</svg>`}
-function results(){const m=q.trim().toLowerCase();if(!m)return'<span class="mut">Type a scholar ID, like S004.</span>';
- const r=SC.filter(x=>x.id.toLowerCase().includes(m)).slice(0,12);return r.length?r.map(x=>`<button class="chip" onclick="pick('${x.id}')">${x.id} · ${gl(x)}</button>`).join(' '):'<span class="mut">No scholar with that ID. Check the ID and try again.</span>'}
+ ${R5.map((_,i)=>{const[x,y]=pt(i,frac(i));return`<circle class="rd" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.5"/>`}).join('')}
+ ${R5.map((_,i)=>{const[x,y]=at(i),an=x<cx-6?'end':x>cx+6?'start':'middle';return`<text class="rt" x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="${an}">${R5[i][1]}</text>`}).join('')}</svg>`}
+function radarCard(by){
+ return`<div class="card">
+ <div class="row" style="justify-content:flex-end;gap:6px;margin:-4px 0 6px">
+  <button class="chip ${RM==='cap'?'c3':'c1'}" onclick="RM='cap';draw()">Own cap</button>
+  <button class="chip ${RM==='share'?'c3':'c1'}" onclick="RM='share';draw()">Share of total</button>
+ </div>
+ ${radar(by)}
+ <p class="mut" style="text-align:center;margin-bottom:0">${RM==='cap'?'Each spoke is measured against its own realistic annual maximum, so every dimension can reach the rim. Talent bonus is folded into Skills.':'Each spoke shows that dimension’s share of the year’s total, so the five spokes add to 100%. Talent bonus is folded into Skills.'}</p></div>`;
+}
 function resH(){const s=SC.find(x=>x.id===sel),t=s&&calc(s),base=s?t.cum:W.pts,gate=(s?s.g0:W.g)<=8,pts=f1(base+W.add),held=gate&&!W.p3&&pts>=800,gt=held?799:pts,c=cem(gt),nx=LAD.slice().reverse().find(r=>r[0]>gt);
  return`<div class="mut">Grant at ${gt} points</div><div class="big">${c[1]*100}%</div>${isA()?`<div style="font-size:22px">${peso(c[2])}</div>`:''}${s&&(W.add>0||W.p3!==t.p3)?`<div class="mut">Now: ${rate(t.c)}</div>`:''}
  <p>${held?'The project gate holds this scholar at 799. Completing Phase 3 releases the 100% grant.':nx?`${f1(nx[0]-gt)} more points reach ${nx[1]*100}%${isA()?' ('+peso(nx[2])+')':''}.`:'Top tier reached.'}</p>
  <div class="ladder">${LAD.map(r=>`<div class="step ${r===c?'hit':''}"><span>${r[0]}${r[0]===800?'+':'–'+(r[0]===0?199:r[0]+199)} points</span><span>${r[1]*100}%${isA()?' · '+peso(r[2]):''}</span></div>`).join('')}</div><p class="mut">A step function: 799 points earns 75%, 800 earns 100%.</p>`}
-function pickerV(){
- if(isA())return `<div class="field"><label>Scholar</label><select onchange="pick(this.value)"><option value="">Manual what-if (no scholar)</option>${SC.map(x=>`<option value="${x.id}" ${x.id===sel?'selected':''}>${esc(lab(x))}</option>`).join('')}</select></div>${tab==='scholars'?`<button class="btn o" onclick="newScholar()">Add scholar</button>`:''}`;
- return `<div class="field"><label>Scholar ID</label><input value="${esc(q)}" placeholder="S004" oninput="q=this.value;document.getElementById('res').innerHTML=results()"></div><div class="row" id="res" style="margin:6px 0 10px">${results()}</div>`;
+// Searchable checklist picker
+const searchList=()=>{const m=q.trim().toLowerCase();return SC.filter(x=>!m||x.id.toLowerCase().includes(m)||(nm(x)||'').toLowerCase().includes(m)||gl(x).toLowerCase().includes(m))};
+function pickerRows(list){
+ if(!list.length)return`<p class="mut" style="margin:0;padding:8px">${q?`No scholar matches “${esc(q)}”.`:'No scholars loaded.'}</p>`;
+ const shown=list.slice(0,80);
+ return`<table><tbody>${shown.map(x=>{const on=x.id===sel,t=calc(x);return`<tr class="cl ${on?'on':''}" onclick="pick('${x.id}')" style="${on?'background:var(--s2)':''}">
+ <td style="width:32px"><span class="tick">${on?'✓':''}</span></td>
+ <td><b>${x.id}</b>${nm(x)?' · '+esc(nm(x)):''}</td>
+ <td>${gl(x)}</td>
+ <td class="num"><span class="chip ${cc(t.c[1])}">${t.gt} · ${t.c[1]*100}%</span></td>
+ </tr>`}).join('')}</tbody></table>${list.length>80?`<p class="mut" style="padding:8px;margin:0">Showing 80 of ${list.length}. Type more to narrow.</p>`:''}`;
+}
+function refreshPicker(){const e=document.getElementById('plist');if(e)e.innerHTML=pickerRows(searchList())}
+function pickerV(kind){
+ const sel0=SC.find(x=>x.id===sel);
+ return`<div class="card" style="padding:14px">
+ <div class="row" style="align-items:flex-end">
+  <div class="field" style="margin:0;flex:1;min-width:200px"><label>Search &amp; tick a scholar</label>
+   <input value="${esc(q)}" placeholder="Type an ID${isA()?' or name':''}…" oninput="q=this.value;refreshPicker()"></div>
+  ${kind==='scholars'&&isA()?`<button class="btn o" onclick="newScholar()">Add scholar</button>`:''}
+  ${kind==='calc'&&isA()?`<button class="btn o" onclick="pick('')">Manual what-if</button>`:''}
+ </div>
+ ${sel0?`<p class="mut" style="margin:8px 0 0">Selected <span class="chip c3">${esc(lab(sel0))}</span></p>`:''}
+ <div class="scroll" id="plist" style="max-height:260px;margin-top:8px">${pickerRows(searchList())}</div>
+ </div>`;
 }
 function scholarsTab(){
  if(!SC.length)return empty();
- const s=SC.find(x=>x.id===sel),t=s&&calc(s),top=`<div class="row">${pickerV()}</div>`;
- if(!s)return top+`<div class="card mut">${isA()?'Choose a scholar to open their record.':'Type a scholar ID to see points and grant rate.'}</div>`;
+ const s=SC.find(x=>x.id===sel),t=s&&calc(s),top=pickerV('scholars');
+ if(!s)return top+`<div class="card mut" style="margin-top:14px">${isA()?'Tick a scholar above to open their record.':'Tick a scholar above to see points and grant rate.'}</div>`;
  const g=gIn(s,S.year),r=t.rows.find(x=>x.y===S.year),by=r?r.by:{},logs=S.logs.filter(l=>l.sid===s.id&&l.y===S.year).slice().sort((a,b)=>(b.date||'')>(a.date||'')?1:-1);
  const hero=`<div class="card hero"><div class="mut" style="color:#d1c4e9">${s.id}${nm(s)?' · '+esc(nm(s)):''}${isA()?' · '+s.hh:''}</div><div class="big">${t.gt}<span style="font-size:20px">/800</span></div><div>${g>12?'Graduated':'Grade '+g+' (×'+wt(g)+')'} · entered at Grade ${s.g0} in ${yl(s.y0)}</div>
  <div style="margin-top:10px"><span class="chip ${t.held?'w':'c4'}">${!t.gate?'Gate not applicable (entry Grade 9+)':t.p3?'Gate cleared · Phase 3 on record':t.held?'Held at 799 · needs Phase 3':'Needs Phase 3 before 800'}</span></div></div>`;
- return top+`<div class="grid">${hero}</div>`+cumCard(t)
- +`<h2>${yl(S.year)} stat graph</h2><div class="card">${radar(by)}<p class="mut" style="text-align:center">Each axis shows points against its annual cap. Academic is scaled to about 340, the realistic yearly maximum.</p></div>`
+ return top+`<div class="grid" style="margin-top:14px">${hero}</div>`+cumCard(t)
+ +`<h2>${yl(S.year)} stat graph</h2>`+radarCard(by)
  +`<h2>Year by year</h2><div class="card scroll"><table><thead><tr><th>Year</th><th>Grade</th><th class="num">Base</th><th class="num">Talent bonus</th><th class="num">Year total</th></tr></thead><tbody>${t.rows.map(x=>`<tr><td>${yl(x.y)}</td><td>${x.g} (×${x.w})</td><td class="num">${f1(x.base)}</td><td class="num">${f1(x.bonus)}</td><td class="num">${f1(x.base+x.bonus)}</td></tr>`).join('')}</tbody></table><p class="mut">Talent bonus lifetime cap is 120. Counted: ${f1(t.bc)}.</p></div>`
  +`<h2>Log history · ${yl(S.year)}</h2><div class="card scroll">${logs.length?`<table><thead><tr><th>Date</th><th>Area</th><th>Activity</th><th>Note</th><th class="num">Raw</th>${isA()?'<th></th>':''}</tr></thead><tbody>${logs.map(l=>`<tr style="${l.v?'opacity:.4;text-decoration:line-through':''}"><td>${l.date}</td><td>${AREAS[l.area]}</td><td>${esc(l.act)}${l.hh?' <span class="chip">household</span>':''}${l.p3?' <span class="chip c3">P3</span>':''}</td><td>${esc(l.note)||'—'}</td><td class="num">${l.raw}</td>${isA()?`<td>${l.v?'<span class="chip c1">voided</span>':`<button class="btn o" onclick="voidLog('${l.id}')">Void</button>`}</td>`:''}</tr>`).join('')}</tbody></table>`:`<p class="mut">No logs for ${s.id} yet this year.${isA()?' Award points from the Award points tab.':''}</p>`}</div>`
  +(isA()?infoV(s):'')}
@@ -151,13 +190,13 @@ function cumCard(t){
  <p class="mut">Every year's weighted points are added here. Annual caps and the ×0.75 for Grades 7–8 are already applied; talent bonus is shown after the lifetime cap of 120.</p></div>`;
 }
 function calcTab(){
- if(!isA()&&!SC.length)return empty();
+ if(!SC.length)return empty();
  const s=SC.find(x=>x.id===sel),t=s&&calc(s);
- const top=SC.length?`<div class="row">${pickerV()}</div>`:'';
+ const top=pickerV('calc');
  const calcCard=`<div class="card"><h2 style="margin-top:0">Grant calculator</h2>${s?`<div class="mut">Starting from ${t.cum} points earned${t.held?' · gate holds counted total at 799':''}</div>`:`<div class="field"><label>Cumulative points</label><input type="number" min="0" value="${W.pts}" oninput="W.pts=+this.value||0;cres.innerHTML=resH()"></div><div class="field"><label>Entry grade</label><select onchange="W.g=+this.value;cres.innerHTML=resH()">${[7,8,9,10,11,12].map(g=>`<option ${g===W.g?'selected':''}>${g}</option>`).join('')}</select></div>`}
  <div class="field"><label>What if they earn more? <b id="addv">+${W.add}</b> points</label><input type="range" min="0" max="400" step="5" value="${W.add}" oninput="W.add=+this.value;addv.textContent='+'+this.value;cres.innerHTML=resH()" style="padding:0;accent-color:#b388ff"></div>
  <label class="row"><input type="checkbox" style="width:auto" ${W.p3?'checked':''} onchange="W.p3=this.checked;cres.innerHTML=resH()"> Phase 3 project completed</label><div id="cres">${resH()}</div></div>`;
- return top+`<div class="grid">${calcCard}</div>`+(s?`<div class="card row" style="margin-top:14px"><span class="mut">${esc(lab(s))}</span><button class="btn o" onclick="tab='scholars';draw()">Open full record</button></div>`:'');
+ return top+`<div class="grid" style="margin-top:14px">${calcCard}</div>`+(s?`<div class="card row" style="margin-top:14px"><span class="mut">${esc(lab(s))}</span><button class="btn o" onclick="tab='scholars';draw()">Open full record</button></div>`:'');
 }
 function award(){
  if(!SC.length)return empty();
