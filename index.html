@@ -57,31 +57,37 @@ const LAD=[[800,1,30000],[600,.75,22500],[400,.5,15000],[200,.25,7500],[0,0,0]];
 // Personal fields (database only). Parent skills is stored but never shown.
 const FLD=[['last','Last name'],['first','First name'],['middle','Middle name'],['barangay','Barangay'],['address','Address'],['gender','Gender'],['citizenship','Citizenship'],['religion','Religion'],['fatherName',"Father's name"],['fatherJob',"Father's occupation"],['motherName',"Mother's name"],['motherJob',"Mother's occupation"],['email','Email'],['contact','Contact number']];
 const HMAP={scholarid:'id',id:'id',householdid:'hh',household:'hh',entrygrade:'g0',entryyear:'y0',gradelevel:'grade',grade:'grade',lastname:'last',firstname:'first',middlename:'middle',barangay:'barangay',address:'address',gender:'gender',citizenship:'citizenship',religion:'religion',fathersname:'fatherName',fathersoccupation:'fatherJob',mothersname:'motherName',mothersoccupation:'motherJob',emailaddress:'email',email:'email',contactnumber:'contact',contact:'contact',parentskills:'parentSkills'};
-let ME=null,SC=[],INFO={},S={years:[2026],year:2026,logs:[]},tab='work',sel=null,q='',editing=false,PEND=null,F={a:'academic',i:0,raw:100,id:null},W={add:0,p3:false,pts:450,g:7};
+let ME=null,SC=[],INFO={},S={years:[2026],year:2026,logs:[]},tab='scholars',sel=null,q='',editing=false,PEND=null,F={a:'academic',i:0,raw:100,id:null,date:'',note:''},W={add:0,p3:false,pts:450,g:7};
 const isA=()=>ME==='admin',peso=n=>'₱'+n.toLocaleString('en-PH'),P=n=>isA()?peso(n):'',wt=g=>g<=8?.75:1,cem=p=>LAD.find(r=>p>=r[0]),f1=n=>Math.round(n*100)/100;
+const today=()=>new Date().toISOString().slice(0,10);
 const gIn=(s,y)=>s.g0+(y-s.y0),yl=y=>`SY${y}-${y+1}`,rate=c=>c[1]*100+'%'+(isA()?' · '+peso(c[2]):''),norm=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]/g,''),esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const nm=s=>{const i=INFO[s.id];return isA()&&!hide.checked&&i&&(i.first||i.last)?`${i.first||''} ${i.last||''}`.trim():''};
 const gl=s=>{const g=gIn(s,S.year);return g>12?'Grad':'G'+g};
 const lab=s=>[s.id,nm(s),gl(s)].filter(Boolean).join(' · ');
 const authMsg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/invalid-email':'Enter a valid email.','auth/admin-restricted-operation':'Viewer sign-in is turned off. In Firebase, open Authentication → Sign-in method and enable Anonymous.','auth/operation-not-allowed':'This sign-in method is off. Enable it in Firebase Authentication → Sign-in method.','auth/unauthorized-domain':'Add this site’s domain under Authentication → Settings → Authorized domains.','auth/too-many-requests':'Too many tries. Wait a few minutes.'}[e.code]||e.message);
 const fbErr=e=>toast(e.code==='permission-denied'?'Not allowed. Only the admin can do that.':e.message);
-function setMe(r){ME=r;if(!r){S.logs=[];SC=[];INFO={};sel=null;PEND=null}else tab=r==='admin'?'dash':'work';draw()}
-function calc(s){let base=0,bon=0,rows=[];
+function setMe(r){ME=r;if(!r){S.logs=[];SC=[];INFO={};sel=null;PEND=null}else tab=r==='admin'?'dash':'scholars';draw()}
+function calc(s,extra){
+ const lg=extra&&extra.length?S.logs.concat(extra):S.logs;
+ let base=0,bon=0,rows=[],byAll={};
  for(const y of S.years){const g=gIn(s,y);if(g>12||g<7)continue;const w=wt(g),by={};
-  S.logs.filter(l=>l.sid===s.id&&l.y===y&&!l.v).forEach(l=>by[l.area]=(by[l.area]||0)+l.raw);
-  let cp=0;for(const a in CAP)cp+=Math.min(by[a]||0,CAP[a]);const b=Math.min(by.bonus||0,40);
+  lg.filter(l=>l.sid===s.id&&l.y===y&&!l.v).forEach(l=>by[l.area]=(by[l.area]||0)+l.raw);
+  let cp=0;for(const a in CAP){const v=Math.min(by[a]||0,CAP[a]);cp+=v;byAll[a]=(byAll[a]||0)+v*w}
+  const b=Math.min(by.bonus||0,40);byAll.bonus=(byAll.bonus||0)+b*w;
   rows.push({y,g,w,by,base:cp*w,bonus:b*w});base+=cp*w;bon+=b*w}
- const bc=Math.min(bon,120),cum=f1(base+bc),p3=S.logs.some(l=>l.sid===s.id&&l.p3&&!l.v),gate=s.g0<=8,held=gate&&!p3&&cum>=800,gt=held?799:cum;
- return{rows,cum,gt,p3,gate,held,bc,c:cem(gt)}}
+ const bc=Math.min(bon,120),cum=f1(base+bc),p3=lg.some(l=>l.sid===s.id&&l.p3&&!l.v),gate=s.g0<=8,held=gate&&!p3&&cum>=800,gt=held?799:cum;
+ return{rows,cum,gt,p3,gate,held,bc,c:cem(gt),byAll}
+}
 const cc=c=>c>=1?'c4':c>=.75?'c3':c>=.5?'c2':c>0?'c1':'';
 const all=()=>SC.map(s=>({s,t:calc(s)}));
-function pick(id){sel=id||null;editing=false;W.add=0;const s=SC.find(x=>x.id===id);W.p3=s?calc(s).p3:false;draw()}
+function pick(id){sel=id||null;editing=false;W.add=0;const s=SC.find(x=>x.id===id);W.p3=s?calc(s).p3:false;if(id)F.id=id;draw()}
 function draw(){yr.textContent=yl(S.year);out.hidden=!ME;hl.hidden=!isA();
  if(!ME){nav.innerHTML='';main.innerHTML=loginV();return}
- const T=isA()?{dash:'Dashboard',work:'Scholars & calculator',award:'Award points',data:'Data & years'}:{work:'Scholars & calculator'};
- if(!T[tab])tab='work';
+ const T=isA()?{dash:'Dashboard',scholars:'Scholars',calc:'Calculator',award:'Award points',data:'Data & years'}:{scholars:'Scholars',calc:'Calculator'};
+ if(!T[tab])tab='scholars';
  nav.innerHTML=Object.entries(T).map(([k,v])=>`<button class="${k===tab?'on':''}" onclick="tab='${k}';draw()">${v}</button>`).join('');
- main.innerHTML=({dash,work,award,data})[tab]();if(tab==='award')prev()}
+ main.innerHTML=({dash,scholars:scholarsTab,calc:calcTab,award,data})[tab]();
+ if(tab==='award')prev()}
 function loginV(){return`<div class="login grid"><div class="card"><h2 style="margin-top:0">Admin</h2><p class="mut">Full access with your password.</p>
  <div class="field"><label>Email</label><input id="lem" type="email" value="admin@lla.edu" autocomplete="username"></div><div class="field"><label>Password</label><input id="lpw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdmin()"></div>
  <button class="btn" onclick="doAdmin()">Sign in</button></div>
@@ -97,7 +103,7 @@ function dash(){if(!SC.length)return empty();const a=all().sort((x,y)=>y.t.gt-x.
  <div class="card"><div class="mut">Grant value at current points</div><div class="big" style="font-size:30px">${peso(pay)}</div></div></div>
  <div class="card" style="margin-top:14px"><b>Grades 7–8 carry a ×0.75 weight.</b> <span class="mut">${lo} of ${SC.length} scholars are in these grades this year, so their totals run lower than their raw points. That is the program rule, not a bug.</span></div>
  <h2>Leaderboard</h2><div class="card scroll"><table><thead><tr><th>ID</th><th>Name</th><th>Grade</th><th class="num">Cumulative</th><th>Grant</th></tr></thead><tbody>
- ${a.map(({s,t})=>{const g=gIn(s,S.year);return`<tr class="cl" onclick="tab='work';pick('${s.id}')"><td>${s.id}</td><td>${esc(nm(s))||'—'}</td><td>${g>12?'Graduated':g+` (×${wt(g)})`}</td><td class="num">${t.gt}${t.held?' <span class="chip w">gate</span>':''}</td><td><span class="chip ${cc(t.c[1])}">${rate(t.c)}</span></td></tr>`}).join('')}</tbody></table></div>`}
+ ${a.map(({s,t})=>{const g=gIn(s,S.year);return`<tr class="cl" onclick="tab='scholars';pick('${s.id}')"><td>${s.id}</td><td>${esc(nm(s))||'—'}</td><td>${g>12?'Graduated':g+` (×${wt(g)})`}</td><td class="num">${t.gt}${t.held?' <span class="chip w">gate</span>':''}</td><td><span class="chip ${cc(t.c[1])}">${rate(t.c)}</span></td></tr>`}).join('')}</tbody></table></div>`}
 function radar(by){const ks=Object.keys(AREAS),cx=150,cy=140,R=90,pt=(i,f)=>{const a=(-90+60*i)*Math.PI/180;return[cx+R*f*Math.cos(a),cy+R*f*Math.sin(a)]};
  const val=k=>Math.min(by[k]||0,k==='bonus'?40:CAP[k]);
  const poly=ks.map((k,i)=>pt(i,Math.min(1,val(k)/REF[k])).map(n=>n.toFixed(1)).join(',')).join(' ');
@@ -112,22 +118,104 @@ function resH(){const s=SC.find(x=>x.id===sel),t=s&&calc(s),base=s?t.cum:W.pts,g
  return`<div class="mut">Grant at ${gt} points</div><div class="big">${c[1]*100}%</div>${isA()?`<div style="font-size:22px">${peso(c[2])}</div>`:''}${s&&(W.add>0||W.p3!==t.p3)?`<div class="mut">Now: ${rate(t.c)}</div>`:''}
  <p>${held?'The project gate holds this scholar at 799. Completing Phase 3 releases the 100% grant.':nx?`${f1(nx[0]-gt)} more points reach ${nx[1]*100}%${isA()?' ('+peso(nx[2])+')':''}.`:'Top tier reached.'}</p>
  <div class="ladder">${LAD.map(r=>`<div class="step ${r===c?'hit':''}"><span>${r[0]}${r[0]===800?'+':'–'+(r[0]===0?199:r[0]+199)} points</span><span>${r[1]*100}%${isA()?' · '+peso(r[2]):''}</span></div>`).join('')}</div><p class="mut">A step function: 799 points earns 75%, 800 earns 100%.</p>`}
-function work(){
+function pickerV(){
+ if(isA())return `<div class="field"><label>Scholar</label><select onchange="pick(this.value)"><option value="">Manual what-if (no scholar)</option>${SC.map(x=>`<option value="${x.id}" ${x.id===sel?'selected':''}>${esc(lab(x))}</option>`).join('')}</select></div>${tab==='scholars'?`<button class="btn o" onclick="newScholar()">Add scholar</button>`:''}`;
+ return `<div class="field"><label>Scholar ID</label><input value="${esc(q)}" placeholder="S004" oninput="q=this.value;document.getElementById('res').innerHTML=results()"></div><div class="row" id="res" style="margin:6px 0 10px">${results()}</div>`;
+}
+function scholarsTab(){
  if(!SC.length)return empty();
- const pickr=isA()?`<div class="field"><label>Scholar</label><select onchange="pick(this.value)"><option value="">Manual what-if (no scholar)</option>${SC.map(x=>`<option value="${x.id}" ${x.id===sel?'selected':''}>${esc(lab(x))}</option>`).join('')}</select></div><button class="btn o" onclick="newScholar()">Add scholar</button>`
- :`<div class="field"><label>Scholar ID</label><input value="${esc(q)}" placeholder="S004" oninput="q=this.value;res.innerHTML=results()"></div></div><div class="row" id="res" style="margin:6px 0 10px">${results()}</div><div class="row" hidden>`;
- const top=`<div class="row">${pickr}</div>`,s=SC.find(x=>x.id===sel),t=s&&calc(s);
- const calcCard=`<div class="card"><h2 style="margin-top:0">Grant calculator</h2>${s?`<div class="mut">Starting from ${t.cum} points earned</div>`:`<div class="field"><label>Cumulative points</label><input type="number" min="0" value="${W.pts}" oninput="W.pts=+this.value||0;cres.innerHTML=resH()"></div><div class="field"><label>Entry grade</label><select onchange="W.g=+this.value;cres.innerHTML=resH()">${[7,8,9,10,11,12].map(g=>`<option ${g===W.g?'selected':''}>${g}</option>`).join('')}</select></div>`}
- <div class="field"><label>What if they earn more? <b id="addv">+${W.add}</b> points</label><input type="range" min="0" max="400" step="5" value="${W.add}" oninput="W.add=+this.value;addv.textContent='+'+this.value;cres.innerHTML=resH()" style="padding:0;accent-color:#b388ff"></div>
- <label class="row"><input type="checkbox" style="width:auto" ${W.p3?'checked':''} onchange="W.p3=this.checked;cres.innerHTML=resH()"> Phase 3 project completed</label><div id="cres">${resH()}</div></div>`;
- if(!s)return top+`<div class="grid">${calcCard}</div>`;
- const g=gIn(s,S.year),r=t.rows.find(x=>x.y===S.year),by=r?r.by:{},logs=S.logs.filter(l=>l.sid===s.id&&l.y===S.year).slice().sort((a,b)=>b.date>a.date?1:-1);
+ const s=SC.find(x=>x.id===sel),t=s&&calc(s),top=`<div class="row">${pickerV()}</div>`;
+ if(!s)return top+`<div class="card mut">${isA()?'Choose a scholar to open their record.':'Type a scholar ID to see points and grant rate.'}</div>`;
+ const g=gIn(s,S.year),r=t.rows.find(x=>x.y===S.year),by=r?r.by:{},logs=S.logs.filter(l=>l.sid===s.id&&l.y===S.year).slice().sort((a,b)=>(b.date||'')>(a.date||'')?1:-1);
  const hero=`<div class="card hero"><div class="mut" style="color:#d1c4e9">${s.id}${nm(s)?' · '+esc(nm(s)):''}${isA()?' · '+s.hh:''}</div><div class="big">${t.gt}<span style="font-size:20px">/800</span></div><div>${g>12?'Graduated':'Grade '+g+' (×'+wt(g)+')'} · entered at Grade ${s.g0} in ${yl(s.y0)}</div>
  <div style="margin-top:10px"><span class="chip ${t.held?'w':'c4'}">${!t.gate?'Gate not applicable (entry Grade 9+)':t.p3?'Gate cleared · Phase 3 on record':t.held?'Held at 799 · needs Phase 3':'Needs Phase 3 before 800'}</span></div></div>`;
- return top+`<div class="grid">${hero}${calcCard}</div>
- <h2>${yl(S.year)} stat graph</h2><div class="card">${radar(by)}<p class="mut" style="text-align:center">Each axis shows points against its annual cap. Academic is scaled to about 340, the realistic yearly maximum.</p></div>
- <h2>Year by year</h2><div class="card scroll"><table><thead><tr><th>Year</th><th>Grade</th><th class="num">Base</th><th class="num">Talent bonus</th><th class="num">Year total</th></tr></thead><tbody>${t.rows.map(x=>`<tr><td>${yl(x.y)}</td><td>${x.g} (×${x.w})</td><td class="num">${f1(x.base)}</td><td class="num">${f1(x.bonus)}</td><td class="num">${f1(x.base+x.bonus)}</td></tr>`).join('')}</tbody></table><p class="mut">Talent bonus lifetime cap is 120. Counted: ${f1(t.bc)}.</p></div>
- <h2>Log history</h2><div class="card scroll">${logs.length?`<table><thead><tr><th>Date</th><th>Area</th><th>Activity</th><th class="num">Raw</th>${isA()?'<th></th>':''}</tr></thead><tbody>${logs.map(l=>`<tr style="${l.v?'opacity:.4;text-decoration:line-through':''}"><td>${l.date}</td><td>${AREAS[l.area]}</td><td>${esc(l.act)}${l.hh?' <span class="chip">household</span>':''}</td><td class="num">${l.raw}</td>${isA()?`<td>${l.v?'':`<button class="btn o" onclick="voidLog('${l.id}')">Void</button>`}</td>`:''}</tr>`).join('')}</tbody></table>`:`<p class="mut">No logs for ${s.id} yet this year.${isA()?' Award the first points from the Award points tab.':''}</p>`}</div>`+(isA()?infoV(s):'')}
+ return top+`<div class="grid">${hero}</div>`+cumCard(t)
+ +`<h2>${yl(S.year)} stat graph</h2><div class="card">${radar(by)}<p class="mut" style="text-align:center">Each axis shows points against its annual cap. Academic is scaled to about 340, the realistic yearly maximum.</p></div>`
+ +`<h2>Year by year</h2><div class="card scroll"><table><thead><tr><th>Year</th><th>Grade</th><th class="num">Base</th><th class="num">Talent bonus</th><th class="num">Year total</th></tr></thead><tbody>${t.rows.map(x=>`<tr><td>${yl(x.y)}</td><td>${x.g} (×${x.w})</td><td class="num">${f1(x.base)}</td><td class="num">${f1(x.bonus)}</td><td class="num">${f1(x.base+x.bonus)}</td></tr>`).join('')}</tbody></table><p class="mut">Talent bonus lifetime cap is 120. Counted: ${f1(t.bc)}.</p></div>`
+ +`<h2>Log history · ${yl(S.year)}</h2><div class="card scroll">${logs.length?`<table><thead><tr><th>Date</th><th>Area</th><th>Activity</th><th>Note</th><th class="num">Raw</th>${isA()?'<th></th>':''}</tr></thead><tbody>${logs.map(l=>`<tr style="${l.v?'opacity:.4;text-decoration:line-through':''}"><td>${l.date}</td><td>${AREAS[l.area]}</td><td>${esc(l.act)}${l.hh?' <span class="chip">household</span>':''}${l.p3?' <span class="chip c3">P3</span>':''}</td><td>${esc(l.note)||'—'}</td><td class="num">${l.raw}</td>${isA()?`<td>${l.v?'<span class="chip c1">voided</span>':`<button class="btn o" onclick="voidLog('${l.id}')">Void</button>`}</td>`:''}</tr>`).join('')}</tbody></table>`:`<p class="mut">No logs for ${s.id} yet this year.${isA()?' Award points from the Award points tab.':''}</p>`}</div>`
+ +(isA()?infoV(s):'')}
+function cumCard(t){
+ const rows=Object.keys(AREAS).map(k=>({k,v:k==='bonus'?Math.min(t.byAll[k]||0,120):(t.byAll[k]||0)}));
+ const tot=rows.reduce((n,r)=>n+r.v,0);
+ const bar=v=>`<div style="background:var(--s2);height:8px;border-radius:6px;overflow:hidden"><div style="height:100%;width:${tot?Math.max(0,Math.min(100,v/tot*100)):0}%;background:var(--p)"></div></div>`;
+ return`<h2>Cumulative · all years</h2><div class="card">
+ <div class="row" style="justify-content:space-between;align-items:flex-end">
+  <div><div class="mut">Points earned (caps and ×0.75 applied)</div><div class="big" style="font-size:36px">${f1(t.cum)}</div></div>
+  <div style="text-align:right"><div class="mut">Counted toward grant</div><div class="big" style="font-size:36px">${t.gt}</div></div>
+  <div style="text-align:right"><span class="chip ${cc(t.c[1])}">${rate(t.c)}</span>${t.held?' <span class="chip w">gate</span>':''}${t.bc>=120?' <span class="chip c2">bonus capped</span>':''}</div>
+ </div>
+ <div class="scroll" style="margin-top:12px"><table><thead><tr><th>Area</th><th class="num">Points</th><th style="width:45%">Share</th></tr></thead><tbody>
+ ${rows.map(r=>`<tr><td>${AREAS[r.k]}</td><td class="num">${f1(r.v)}</td><td>${bar(r.v)}</td></tr>`).join('')}
+ <tr><td><b>Total</b></td><td class="num"><b>${f1(t.cum)}</b></td><td></td></tr>
+ </tbody></table></div>
+ <p class="mut">Every year's weighted points are added here. Annual caps and the ×0.75 for Grades 7–8 are already applied; talent bonus is shown after the lifetime cap of 120.</p></div>`;
+}
+function calcTab(){
+ if(!isA()&&!SC.length)return empty();
+ const s=SC.find(x=>x.id===sel),t=s&&calc(s);
+ const top=SC.length?`<div class="row">${pickerV()}</div>`:'';
+ const calcCard=`<div class="card"><h2 style="margin-top:0">Grant calculator</h2>${s?`<div class="mut">Starting from ${t.cum} points earned${t.held?' · gate holds counted total at 799':''}</div>`:`<div class="field"><label>Cumulative points</label><input type="number" min="0" value="${W.pts}" oninput="W.pts=+this.value||0;cres.innerHTML=resH()"></div><div class="field"><label>Entry grade</label><select onchange="W.g=+this.value;cres.innerHTML=resH()">${[7,8,9,10,11,12].map(g=>`<option ${g===W.g?'selected':''}>${g}</option>`).join('')}</select></div>`}
+ <div class="field"><label>What if they earn more? <b id="addv">+${W.add}</b> points</label><input type="range" min="0" max="400" step="5" value="${W.add}" oninput="W.add=+this.value;addv.textContent='+'+this.value;cres.innerHTML=resH()" style="padding:0;accent-color:#b388ff"></div>
+ <label class="row"><input type="checkbox" style="width:auto" ${W.p3?'checked':''} onchange="W.p3=this.checked;cres.innerHTML=resH()"> Phase 3 project completed</label><div id="cres">${resH()}</div></div>`;
+ return top+`<div class="grid">${calcCard}</div>`+(s?`<div class="card row" style="margin-top:14px"><span class="mut">${esc(lab(s))}</span><button class="btn o" onclick="tab='scholars';draw()">Open full record</button></div>`:'');
+}
+function award(){
+ if(!SC.length)return empty();
+ const A=ACT[F.a],it=A[F.i]||A[0];
+ if(!F.id||!SC.find(x=>x.id===F.id))F.id=SC[0].id;
+ if(!F.date)F.date=today();
+ return`<div class="grid">
+ <div class="card"><h2 style="margin-top:0">Award points</h2>
+ <div class="row"><div class="field"><label>Scholar (for Parental: any scholar in the household)</label><select onchange="F.id=this.value;draw()">${SC.map(x=>`<option value="${x.id}" ${x.id===F.id?'selected':''}>${esc(lab(x))}</option>`).join('')}</select></div>
+ <div class="field"><label>Area</label><select onchange="F.a=this.value;F.i=0;F.raw=ACT[F.a][0][1]==='tier'?100:ACT[F.a][0][1];draw()">${Object.entries(AREAS).map(([k,v])=>`<option value="${k}" ${k===F.a?'selected':''}>${v}</option>`).join('')}</select></div>
+ <div class="field"><label>Activity</label><select onchange="F.i=+this.value;const v=ACT[F.a][F.i][1];F.raw=v==='tier'?100:v;draw()">${A.map((x,i)=>`<option value="${i}" ${i===F.i?'selected':''}>${x[0]}</option>`).join('')}</select></div></div>
+ <div class="row">${it[1]==='tier'?`<div class="field"><label>Report card tier</label><select onchange="F.raw=+this.value;prev();liveUpdate()">${Object.entries(TIERS).map(([k,v])=>`<option value="${v}" ${v===F.raw?'selected':''}>${k} → ${v}</option>`).join('')}</select></div>`:`<div class="field"><label>Raw points</label><input type="number" min="0" value="${F.raw}" oninput="F.raw=+this.value;prev();liveUpdate()"></div>`}
+ <div class="field"><label>Date</label><input type="date" value="${F.date}" onchange="F.date=this.value"></div>
+ <div class="field"><label>Note</label><input id="nt" value="${esc(F.note)}" placeholder="e.g. test — check with adviser" oninput="F.note=this.value"></div></div>
+ <div class="prev" id="prev"></div><button class="btn" onclick="saveAward()">Award points</button></div>
+ <div class="card" id="live">${liveV()}</div>
+ </div>
+ <h2>Recent logs · ${F.id} <span class="mut" style="font-size:13px">newest first · void any mistake</span></h2><div class="card scroll">${recentV()}</div>`;
+}
+function liveV(){
+ const s=SC.find(x=>x.id===F.id);if(!s)return'<p class="mut">Pick a scholar to see live points.</p>';
+ const t=calc(s),g=gIn(s,S.year),r=t.rows.find(x=>x.y===S.year),by=r?r.by:{};
+ const it=ACT[F.a][F.i]||ACT[F.a][0],raw=Math.max(0,+F.raw||0),tg=targets();
+ const nt=calc(s,tg.map(x=>({sid:x.id,y:S.year,area:F.a,raw,p3:it[2]==='p3'})));
+ const bmax=a=>a==='academic'?REF.academic:(a==='bonus'?40:CAP[a]);
+ const bars=Object.keys(AREAS).map(a=>{
+  const cap=a==='bonus'?40:CAP[a],v=by[a]||0,pen=a===F.a?Math.min(raw,Math.max(0,cap-v)):0;
+  const base=Math.min(100,v/bmax(a)*100),add=Math.min(100-base,pen/bmax(a)*100);
+  return`<div style="margin:7px 0"><div class="row" style="justify-content:space-between;font-size:13px"><span>${AREAS[a]}</span><span class="mut">${v}/${cap}${pen?` · <b style="color:var(--p)">+${pen}</b>`:''}</span></div>
+  <div style="position:relative;background:var(--s2);height:8px;border-radius:6px;overflow:hidden;margin-top:3px"><div style="position:absolute;left:0;top:0;bottom:0;width:${base}%;background:var(--p)"></div>${pen?`<div style="position:absolute;top:0;bottom:0;left:${base}%;width:${add}%;background:#b388ff66"></div>`:''}</div></div>`}).join('');
+ return`<h2 style="margin-top:0">Live points · ${s.id}</h2>
+ <div class="mut">${g>12?'Graduated':'Grade '+g+' (×'+wt(g)+')'} · ${yl(S.year)}</div>
+ <div class="row" style="justify-content:space-between;align-items:flex-end;margin-top:8px">
+  <div><div class="mut">Cumulative</div><div class="big" style="font-size:38px">${t.cum}</div></div>
+  <div style="text-align:right"><div class="mut">Counted</div><div class="big" style="font-size:38px">${t.gt}</div></div>
+ </div>
+ <div class="row" style="margin-top:6px"><span class="chip ${cc(t.c[1])}">${rate(t.c)}</span>${t.held?'<span class="chip w">gate held</span>':t.gate&&!t.p3?'<span class="chip c1">Phase 3 pending</span>':t.p3?'<span class="chip c4">Phase 3 cleared</span>':'<span class="chip c1">gate N/A</span>'}</div>
+ ${raw>0?`<div class="prev" style="margin:12px 0"><div class="mut">Award this now${tg.length>1?` · ${tg.length} siblings`:''}</div>
+  <div>${t.cum} → <b>${nt.cum}</b> (+${f1(nt.cum-t.cum)}) · counted ${nt.gt} · <span class="chip ${cc(nt.c[1])}">${rate(nt.c)}</span>${t.held&&!nt.held?' <span class="chip c4">gate cleared</span>':''}${!t.held&&nt.held?' <span class="chip w">would be held</span>':''}</div></div>`:''}
+ <div style="margin-top:12px">${bars}</div>
+ <p class="mut" style="margin-bottom:0">Bars: ${yl(S.year)} points against each annual cap. The lighter part is the pending award.</p>`;
+}
+function liveUpdate(){const e=document.getElementById('live');if(e)e.innerHTML=liveV()}
+function recentV(){
+ const rows=S.logs.filter(l=>l.sid===F.id).slice().sort((a,b)=>(b.date||'')>(a.date||'')?1:-1).slice(0,15);
+ if(!rows.length)return`<p class="mut">No logs for ${F.id} yet.</p>`;
+ return`<table><thead><tr><th>Date</th><th>Year</th><th>Area</th><th>Activity</th><th>Note</th><th class="num">Raw</th><th></th></tr></thead><tbody>
+ ${rows.map(l=>`<tr style="${l.v?'opacity:.45;text-decoration:line-through':''}"><td>${l.date}</td><td>${yl(l.y)}</td><td>${AREAS[l.area]}</td><td>${esc(l.act)}${l.hh?' <span class="chip">household</span>':''}${l.p3?' <span class="chip c3">P3</span>':''}</td><td>${esc(l.note)||'—'}</td><td class="num">${l.raw}</td><td>${l.v?'<span class="chip c1">voided</span>':`<button class="btn o" onclick="voidLog('${l.id}')">Void</button>`}</td></tr>`).join('')}</tbody></table>`;
+}
+function targets(){const s=SC.find(x=>x.id===F.id);return!s?[]:F.a==='parental'?SC.filter(x=>x.hh===s.hh&&gIn(x,S.year)<=12):[s]}
+function prev(){const e=document.getElementById('prev');if(!e)return;const a=F.a,cap=a==='bonus'?40:CAP[a];e.innerHTML=targets().map(s=>{const w=wt(gIn(s,S.year)),c=Math.min(F.raw,cap);return`<div><b>${s.id}</b> · raw ${F.raw} → capped ${c} → ×${w} → <b>${f1(c*w)}</b> weighted${F.raw>cap?' <span class="chip w">over annual cap</span>':''}</div>`}).join('')+(a==='parental'?'<div class="mut">One log per active sibling, each weighted to that sibling’s grade.</div>':'')+(a==='bonus'?'<div class="mut">Annual cap 40 and lifetime cap 120 apply to the total, not each entry.</div>':'')}
+function saveAward(){
+ const A=ACT[F.a],it=A[F.i]||A[0],raw=+F.raw;
+ if(!(raw>=0)){toast('Enter points of 0 or more.');return}
+ const tg=targets();if(!tg.length){toast('Pick a scholar first.');return}
+ const arr=tg.map(s=>({sid:s.id,y:S.year,area:F.a,act:it[0],raw,date:F.date||today(),note:(F.note||'').trim(),hh:F.a==='parental',p3:it[2]==='p3',v:false}));
+ FB.addLogs(arr).then(()=>{F.note='';const n=document.getElementById('nt');if(n)n.value='';toast(arr.length>1?`Points awarded to ${arr.length} siblings`:'Points awarded')}).catch(fbErr)}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3200)}
 function infoV(s){const i=INFO[s.id]||{};
  if(hide.checked)return`<h2>Scholar information</h2><div class="card mut">Hidden. Untick “Hide names” to view.</div>`;
  if(editing)return`<h2>Edit scholar</h2><div class="card"><div class="row">${FLD.map(([k,l])=>`<div class="field"><label>${l}</label><input id="e_${k}" value="${esc(i[k])}"></div>`).join('')}
@@ -141,21 +229,10 @@ function saveEdit(){const info={};FLD.forEach(([k])=>info[k]=document.getElement
  FB.saveScholar(sel,{hh:e_hh.value.trim(),g0,y0},info).then(()=>{editing=false;toast('Saved')}).catch(fbErr)}
 function nextId(){return'S'+String(Math.max(0,...SC.map(s=>+s.id.slice(1)))+1).padStart(3,'0')}
 function nextHH(){return'H'+String(Math.max(0,...SC.map(s=>+s.hh.slice(1)||0))+1).padStart(2,'0')}
-function newScholar(){const id=nextId();FB.saveScholar(id,{hh:nextHH(),g0:7,y0:S.year},{first:'',last:''}).then(()=>{sel=id;editing=true;W.add=0;W.p3=false;toast('Fill in the details and save')}).catch(fbErr)}
-function voidLog(id){if(confirm('Void this log? It stays on record but stops counting.'))FB.voidLog(id).then(()=>toast('Log voided')).catch(fbErr)}
-function award(){const A=ACT[F.a],it=A[F.i]||A[0];if(!SC.length)return empty();if(!F.id)F.id=SC[0].id;
- return`<div class="card"><div class="row"><div class="field"><label>Scholar (for Parental: any scholar in the household)</label><select onchange="F.id=this.value;draw()">${SC.map(x=>`<option value="${x.id}" ${x.id===F.id?'selected':''}>${esc(lab(x))}</option>`).join('')}</select></div>
- <div class="field"><label>Area</label><select onchange="F.a=this.value;F.i=0;F.raw=ACT[F.a][0][1]==='tier'?100:ACT[F.a][0][1];draw()">${Object.entries(AREAS).map(([k,v])=>`<option value="${k}" ${k===F.a?'selected':''}>${v}</option>`).join('')}</select></div>
- <div class="field"><label>Activity</label><select onchange="F.i=+this.value;const v=ACT[F.a][F.i][1];F.raw=v==='tier'?100:v;draw()">${A.map((x,i)=>`<option value="${i}" ${i===F.i?'selected':''}>${x[0]}</option>`).join('')}</select></div></div>
- <div class="row">${it[1]==='tier'?`<div class="field"><label>Report card tier</label><select onchange="F.raw=+this.value;draw()">${Object.entries(TIERS).map(([k,v])=>`<option value="${v}" ${v===F.raw?'selected':''}>${k} → ${v}</option>`).join('')}</select></div>`:`<div class="field"><label>Raw points</label><input type="number" min="0" value="${F.raw}" oninput="F.raw=+this.value;prev()"></div>`}
- <div class="field"><label>Date</label><input type="date" id="dt" value="${new Date().toISOString().slice(0,10)}"></div><div class="field"><label>Note</label><input id="nt"></div></div>
- <div class="prev" id="prev"></div><button class="btn" onclick="saveAward()">Award points</button></div>`}
-function targets(){const s=SC.find(x=>x.id===F.id);return!s?[]:F.a==='parental'?SC.filter(x=>x.hh===s.hh&&gIn(x,S.year)<=12):[s]}
-function prev(){const e=document.getElementById('prev');if(!e)return;const a=F.a,cap=a==='bonus'?40:CAP[a];e.innerHTML=targets().map(s=>{const w=wt(gIn(s,S.year)),c=Math.min(F.raw,cap);return`<div><b>${s.id}</b> · raw ${F.raw} → capped ${c} → ×${w} → <b>${f1(c*w)}</b> weighted${F.raw>cap?' <span class="chip w">over annual cap</span>':''}</div>`}).join('')+(a==='parental'?'<div class="mut">One log per active sibling, each weighted to that sibling’s grade.</div>':'')+(a==='bonus'?'<div class="mut">Annual cap 40 and lifetime cap 120 apply to the total, not each entry.</div>':'')}
-function saveAward(){const it=ACT[F.a][F.i];if(!(F.raw>=0)){toast('Enter points of 0 or more.');return}
- const arr=targets().map(s=>({sid:s.id,y:S.year,area:F.a,act:it[0],raw:F.raw,date:dt.value,note:nt.value,hh:F.a==='parental',p3:it[2]==='p3',v:false}));
- FB.addLogs(arr).then(()=>toast('Points awarded')).catch(fbErr)}
-function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3200)}
+function newScholar(){const id=nextId();FB.saveScholar(id,{hh:nextHH(),g0:7,y0:S.year},{first:'',last:''}).then(()=>{sel=id;F.id=id;editing=true;W.add=0;W.p3=false;toast('Fill in the details and save')}).catch(fbErr)}
+function voidLog(id){const l=S.logs.find(x=>x.id===id);
+ const d=l?`${l.date||''} · ${AREAS[l.area]} · ${l.act}${l.note?' · “'+l.note+'”':''} · ${l.raw} pts`:'this log';
+ if(confirm(`Void ${d}?\nIt stays on record but stops counting.`))FB.voidLog(id).then(()=>toast('Log voided')).catch(fbErr)}
 function data(){return`<div class="grid"><div class="card"><h2 style="margin-top:0">Import scholars from Excel</h2><p class="mut">Reads the columns by name, so extra or reordered columns are fine. Scholars already in the database are matched by Scholar ID, or by name, and updated. New names are added.</p>
  <div class="field"><label>School year of this file</label><select id="iy">${S.years.map(y=>`<option value="${y}" ${y===S.year?'selected':''}>${yl(y)}</option>`).join('')}</select></div>
  <div class="field"><label>Excel file (.xlsx)</label><input type="file" accept=".xlsx,.xls" onchange="readXlsx(this.files[0])"></div></div>
