@@ -44,6 +44,24 @@ dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0}dt{c
 .tick{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:2px solid var(--line);border-radius:5px;color:var(--p);font-weight:700;font-size:12px;line-height:1}
 tr.on .tick{border-color:var(--p)}
 @media(max-width:600px){main{padding:12px}.big{font-size:36px}}
+[hidden]{display:none!important}
+button.btn,button.chip,nav button,input,select{min-height:48px}
+header{padding-top:calc(12px + env(safe-area-inset-top))}
+@media(max-width:700px){
+ nav{position:fixed;bottom:0;left:0;right:0;margin:0;background:var(--bg);border-top:1px solid var(--line);justify-content:space-around;padding-bottom:env(safe-area-inset-bottom);z-index:6}
+ nav button{flex:1;min-height:60px;border-bottom:0;border-top:3px solid transparent;padding:8px 4px;font-size:12px}
+ nav button.on{border-top-color:var(--p)}
+ main{padding-bottom:calc(84px + env(safe-area-inset-bottom))}.toast{bottom:84px}td,th{padding:12px 10px}
+ table.rc thead{display:none}table.rc,table.rc tbody,table.rc tr,table.rc td{display:block;width:100%}
+ table.rc tr{border:1px solid var(--line);border-radius:12px;margin:0 0 10px;padding:6px 12px;background:var(--s1)}
+ table.rc td{border:0;display:flex;justify-content:space-between;gap:12px;text-align:right;padding:6px 0}
+ table.rc td::before{content:attr(data-l);color:var(--mut);font-size:12px;text-align:left;flex:none}table.rc td:empty{display:none}}
+@media(prefers-color-scheme:light){
+ :root{--bg:#faf7ff;--s1:#fff;--s2:#f1eaff;--line:#d9ccf0;--p:#6a1b9a;--pc:#e1d1f7;--on:#1d1230;--mut:#5d4f78;--warn:#6d5400;--bad:#b3261e;color-scheme:light}
+ header{background:#fff}.yr,button.btn,.toast,.chip.c3{background:#6a1b9a;color:#fff}button.btn.o{background:none;color:#6a1b9a}
+ .card{box-shadow:0 1px 4px #4a148c22}.card.hero{background:linear-gradient(135deg,#6a1b9a,#38006b);color:#fff}
+ .chip.c4{background:#c8e6c9;color:#1b5e20}.chip.c2{background:#d1c4e9;color:#311b92}.chip.c1{background:#ece6f5}.chip.w{background:#fff3c4;color:#6d5400}.step.hit{background:#e1d1f7}}
+.bdg{background:var(--bad);color:#fff;border-radius:10px;font-size:11px;padding:1px 6px;margin-left:4px}
 </style></head><body>
 <header><div class="bar"><h1>Sweat Equity Tracker</h1><span class="yr" id="yr"></span>
 <label class="row" id="hl" hidden><input type="checkbox" id="hide" onchange="draw()" style="width:auto"> Hide names</label>
@@ -59,16 +77,16 @@ const LAD=[[800,1,30000],[600,.75,22500],[400,.5,15000],[200,.25,7500],[0,0,0]];
 // Personal fields (database only). Parent skills is stored but never shown.
 const FLD=[['last','Last name'],['first','First name'],['middle','Middle name'],['barangay','Barangay'],['address','Address'],['gender','Gender'],['citizenship','Citizenship'],['religion','Religion'],['fatherName',"Father's name"],['fatherJob',"Father's occupation"],['motherName',"Mother's name"],['motherJob',"Mother's occupation"],['email','Email'],['contact','Contact number']];
 const HMAP={scholarid:'id',id:'id',householdid:'hh',household:'hh',entrygrade:'g0',entryyear:'y0',gradelevel:'grade',grade:'grade',lastname:'last',firstname:'first',middlename:'middle',barangay:'barangay',address:'address',gender:'gender',citizenship:'citizenship',religion:'religion',fathersname:'fatherName',fathersoccupation:'fatherJob',mothersname:'motherName',mothersoccupation:'motherJob',emailaddress:'email',email:'email',contactnumber:'contact',contact:'contact',parentskills:'parentSkills'};
-let ME=null,SC=[],INFO={},S={years:[2026],year:2026,logs:[]},tab='scholars',sel=null,q='',editing=false,PEND=null,RM='cap',F={a:'academic',i:0,raw:100,id:null,date:'',note:''},W={add:0,p3:false,pts:450,g:7};
-const isA=()=>ME==='admin',peso=n=>'₱'+n.toLocaleString('en-PH'),P=n=>isA()?peso(n):'',wt=g=>g<=8?.75:1,cem=p=>LAD.find(r=>p>=r[0]),f1=n=>Math.round(n*100)/100;
+let AUTHUSER=null,UDOC=null,US=[],LOADED=false,ME=null,SC=[],INFO={},S={years:[2026],year:2026,logs:[]},tab='scholars',sel=null,q='',editing=false,PEND=null,RM='cap',F={a:'academic',i:0,raw:100,id:null,date:'',note:'',att:'',ev:''},W={add:0,p3:false,pts:450,g:7};
+const isA=()=>ME==='admin',isT=()=>ME==='teacher',isS=()=>isA()||isT(),peso=n=>'₱'+n.toLocaleString('en-PH'),P=n=>isA()?peso(n):'',wt=g=>g<=8?.75:1,cem=p=>LAD.find(r=>p>=r[0]),f1=n=>Math.round(n*100)/100;
 const today=()=>new Date().toISOString().slice(0,10);
 const gIn=(s,y)=>s.g0+(y-s.y0),yl=y=>`SY${y}-${y+1}`,rate=c=>c[1]*100+'%'+(isA()?' · '+peso(c[2]):''),norm=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]/g,''),esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const nm=s=>{const i=INFO[s.id];return isA()&&!hide.checked&&i&&(i.first||i.last)?`${i.first||''} ${i.last||''}`.trim():''};
 const gl=s=>{const g=gIn(s,S.year);return g>12?'Grad':'G'+g};
 const lab=s=>[s.id,nm(s),gl(s)].filter(Boolean).join(' · ');
-const authMsg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/invalid-email':'Enter a valid email.','auth/admin-restricted-operation':'Viewer sign-in is turned off. In Firebase, open Authentication → Sign-in method and enable Anonymous.','auth/operation-not-allowed':'This sign-in method is off. Enable it in Firebase Authentication → Sign-in method.','auth/unauthorized-domain':'Add this site’s domain under Authentication → Settings → Authorized domains.','auth/too-many-requests':'Too many tries. Wait a few minutes.'}[e.code]||e.message);
-const fbErr=e=>toast(e.code==='permission-denied'?'Not allowed. Only the admin can do that.':e.message);
-function setMe(r){ME=r;if(!r){S.logs=[];SC=[];INFO={};sel=null;PEND=null}else tab=r==='admin'?'dash':'scholars';draw()}
+const authMsg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/invalid-email':'Enter a valid email.','auth/popup-blocked':'Your browser blocked the Google window. Allow pop-ups for this site and try again.','auth/operation-not-allowed':'This sign-in method is off. Enable it in Firebase Authentication → Sign-in method.','auth/unauthorized-domain':'Add this site’s domain under Authentication → Settings → Authorized domains.','auth/too-many-requests':'Too many tries. Wait a few minutes.'}[e.code]||e.message);
+const fbErr=e=>toast(e.code==='permission-denied'?'Not allowed for your account.':e.message);
+function setMe(r){ME=r;if(!r){S.logs=[];SC=[];INFO={};sel=null;PEND=null;LOADED=false}else tab=r==='admin'?'dash':'scholars';draw()}
 function calc(s,extra){
  const lg=extra&&extra.length?S.logs.concat(extra):S.logs;
  let base=0,bon=0,rows=[],byAll={};
@@ -85,18 +103,19 @@ const all=()=>SC.map(s=>({s,t:calc(s)}));
 function pick(id){sel=id||null;editing=false;W.add=0;const s=SC.find(x=>x.id===id);W.p3=s?calc(s).p3:false;if(id)F.id=id;draw()}
 function draw(){yr.textContent=yl(S.year);out.hidden=!ME;hl.hidden=!isA();
  if(!ME){nav.innerHTML='';main.innerHTML=loginV();return}
- const T=isA()?{dash:'Dashboard',scholars:'Scholars',calc:'Calculator',award:'Award points',data:'Data & years'}:{scholars:'Scholars',calc:'Calculator'};
+ if(ME==='new'||ME==='wait'){nav.innerHTML='';main.innerHTML=ME==='new'?newV():waitV();return}
+ const T=isA()?{dash:'Dashboard',scholars:'Scholars',calc:'Calculator',award:'Award points',access:'Access',data:'Data & years',program:'Program'}:isT()?{scholars:'Scholars',calc:'Calculator',award:'Award points',access:'Access',program:'Program'}:{scholars:'Scholars',program:'Program'};
  if(!T[tab])tab='scholars';
- nav.innerHTML=Object.entries(T).map(([k,v])=>`<button class="${k===tab?'on':''}" onclick="tab='${k}';draw()">${v}</button>`).join('');
- main.innerHTML=({dash,scholars:scholarsTab,calc:calcTab,award,data})[tab]();
- if(tab==='award')prev()}
-function loginV(){return`<div class="login grid"><div class="card"><h2 style="margin-top:0">Admin</h2><p class="mut">Full access with your password.</p>
- <div class="field"><label>Email</label><input id="lem" type="email" value="admin@lla.edu" autocomplete="username"></div><div class="field"><label>Password</label><input id="lpw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdmin()"></div>
+ nav.innerHTML=Object.entries(T).map(([k,v])=>`<button class="${k===tab?'on':''}" onclick="tab='${k}';draw()">${v}${k==='access'&&US.some(u=>u.status==='pending')?`<span class="bdg">${US.filter(u=>u.status==='pending').length}</span>`:''}</button>`).join('');
+ main.innerHTML=({dash,scholars:scholarsTab,calc:calcTab,award,data,program:programV,access:accessV})[tab]();
+ if(tab==='award')prev();cardify()}
+function loginV(){return`<div class="login grid"><div class="card"><h2 style="margin-top:0">Staff</h2><p class="mut">Admin and teacher accounts. Sign in with your password.</p>
+ <div class="field"><label>Email</label><input id="lem" type="email" placeholder="you@lla.edu" autocomplete="username"></div><div class="field"><label>Password</label><input id="lpw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdmin()"></div>
  <button class="btn" onclick="doAdmin()">Sign in</button></div>
- <div class="card"><h2 style="margin-top:0">Viewer</h2><p class="mut">No password. Look up a scholar by ID to see points and grant rate. Names are not shown.</p><button class="btn o" onclick="doViewer()">Continue as viewer</button></div></div><div class="err" id="err" style="text-align:center"></div>`}
+ <div class="card"><h2 style="margin-top:0">Parents and scholars</h2><p class="mut">Sign in with Google. A teacher or admin connects your account to your scholar, and you only see your own records.</p><button class="btn o" onclick="doGoogle()">Sign in with Google</button></div></div><div class="err" id="err" style="text-align:center"></div>`}
 function doAdmin(){err.textContent='';FB.login(lem.value.trim(),lpw.value).catch(e=>err.textContent=authMsg(e))}
-function doViewer(){err.textContent='';FB.viewer().catch(e=>err.textContent=authMsg(e))}
-const empty=()=>`<div class="card">${isA()?'No scholars in the database yet. Open <b>Data & years</b> and import your scholars Excel file.':'No scholar data yet. Ask the admin to load it.'}</div>`;
+function doGoogle(){err.textContent='';FB.google().catch(e=>{if(e.code!=='auth/popup-closed-by-user')err.textContent=authMsg(e)})}
+const empty=()=>!LOADED?`<div class="card mut">Loading…</div>`:`<div class="card">${isA()?'No scholars in the database yet. Open <b>Data & years</b> and import your scholars Excel file.':'No scholar data yet. Ask the admin to load it.'}</div>`;
 function dash(){if(!SC.length)return empty();const a=all().sort((x,y)=>y.t.gt-x.t.gt),tot=a.reduce((n,x)=>n+x.t.cum,0),t100=a.filter(x=>x.t.c[1]>=1).length,held=a.filter(x=>x.t.held).length,pay=a.reduce((n,x)=>n+x.t.c[2],0),hh=new Set(SC.map(s=>s.hh)).size,lo=SC.filter(s=>gIn(s,S.year)<=8).length;
  return`<div class="grid"><div class="card hero"><div class="mut" style="color:#d1c4e9">Cumulative points awarded</div><div class="big">${f1(tot).toLocaleString()}</div></div>
  <div class="card"><div class="mut">Scholars · households</div><div class="big">${SC.length} · ${hh}</div></div>
@@ -144,7 +163,7 @@ function pickerRows(list){
  <td style="width:32px"><span class="tick">${on?'✓':''}</span></td>
  <td><b>${x.id}</b>${nm(x)?' · '+esc(nm(x)):''}</td>
  <td>${gl(x)}</td>
- <td class="num"><span class="chip ${cc(t.c[1])}">${t.gt} · ${t.c[1]*100}%</span></td>
+ <td class="num"><span class="chip ${isS()?cc(t.c[1]):''}">${t.gt}${isS()?' · '+t.c[1]*100+'%':''}</span></td>
  </tr>`}).join('')}</tbody></table>${list.length>80?`<p class="mut" style="padding:8px;margin:0">Showing 80 of ${list.length}. Type more to narrow.</p>`:''}`;
 }
 function refreshPicker(){const e=document.getElementById('plist');if(e)e.innerHTML=pickerRows(searchList())}
@@ -155,7 +174,7 @@ function pickerV(kind){
   <div class="field" style="margin:0;flex:1;min-width:200px"><label>Search &amp; tick a scholar</label>
    <input value="${esc(q)}" placeholder="Type an ID${isA()?' or name':''}…" oninput="q=this.value;refreshPicker()"></div>
   ${kind==='scholars'&&isA()?`<button class="btn o" onclick="newScholar()">Add scholar</button>`:''}
-  ${kind==='calc'&&isA()?`<button class="btn o" onclick="pick('')">Manual what-if</button>`:''}
+  ${kind==='calc'&&isS()?`<button class="btn o" onclick="pick('')">Manual what-if</button>`:''}
  </div>
  ${sel0?`<p class="mut" style="margin:8px 0 0">Selected <span class="chip c3">${esc(lab(sel0))}</span></p>`:''}
  <div class="scroll" id="plist" style="max-height:260px;margin-top:8px">${pickerRows(searchList())}</div>
@@ -164,14 +183,14 @@ function pickerV(kind){
 function scholarsTab(){
  if(!SC.length)return empty();
  const s=SC.find(x=>x.id===sel),t=s&&calc(s),top=pickerV('scholars');
- if(!s)return top+`<div class="card mut" style="margin-top:14px">${isA()?'Tick a scholar above to open their record.':'Tick a scholar above to see points and grant rate.'}</div>`;
+ if(!s)return top+`<div class="card mut" style="margin-top:14px">${isS()?'Tick a scholar above to open their record.':'Tick a scholar above to see their points.'}</div>`;
  const g=gIn(s,S.year),r=t.rows.find(x=>x.y===S.year),by=r?r.by:{},logs=S.logs.filter(l=>l.sid===s.id&&l.y===S.year).slice().sort((a,b)=>(b.date||'')>(a.date||'')?1:-1);
- const hero=`<div class="card hero"><div class="mut" style="color:#d1c4e9">${s.id}${nm(s)?' · '+esc(nm(s)):''}${isA()?' · '+s.hh:''}</div><div class="big">${t.gt}<span style="font-size:20px">/800</span></div><div>${g>12?'Graduated':'Grade '+g+' (×'+wt(g)+')'} · entered at Grade ${s.g0} in ${yl(s.y0)}</div>
+ const hero=`<div class="card hero"><div class="mut" style="color:#d1c4e9">${s.id}${nm(s)?' · '+esc(nm(s)):''}${isS()?' · '+s.hh:''}</div><div class="big">${t.gt}<span style="font-size:20px">/800</span></div><div>${g>12?'Graduated':'Grade '+g+' (×'+wt(g)+')'} · entered at Grade ${s.g0} in ${yl(s.y0)}</div>
  <div style="margin-top:10px"><span class="chip ${t.held?'w':'c4'}">${!t.gate?'Gate not applicable (entry Grade 9+)':t.p3?'Gate cleared · Phase 3 on record':t.held?'Held at 799 · needs Phase 3':'Needs Phase 3 before 800'}</span></div></div>`;
  return top+`<div class="grid" style="margin-top:14px">${hero}</div>`+cumCard(t)
  +`<h2>${yl(S.year)} stat graph</h2>`+radarCard(by)
  +`<h2>Year by year</h2><div class="card scroll"><table><thead><tr><th>Year</th><th>Grade</th><th class="num">Base</th><th class="num">Talent bonus</th><th class="num">Year total</th></tr></thead><tbody>${t.rows.map(x=>`<tr><td>${yl(x.y)}</td><td>${x.g} (×${x.w})</td><td class="num">${f1(x.base)}</td><td class="num">${f1(x.bonus)}</td><td class="num">${f1(x.base+x.bonus)}</td></tr>`).join('')}</tbody></table><p class="mut">Talent bonus lifetime cap is 120. Counted: ${f1(t.bc)}.</p></div>`
- +`<h2>Log history · ${yl(S.year)}</h2><div class="card scroll">${logs.length?`<table><thead><tr><th>Date</th><th>Area</th><th>Activity</th><th>Note</th><th class="num">Raw</th>${isA()?'<th></th>':''}</tr></thead><tbody>${logs.map(l=>`<tr style="${l.v?'opacity:.4;text-decoration:line-through':''}"><td>${l.date}</td><td>${AREAS[l.area]}</td><td>${esc(l.act)}${l.hh?' <span class="chip">household</span>':''}${l.p3?' <span class="chip c3">P3</span>':''}</td><td>${esc(l.note)||'—'}</td><td class="num">${l.raw}</td>${isA()?`<td>${l.v?'<span class="chip c1">voided</span>':`<button class="btn o" onclick="voidLog('${l.id}')">Void</button>`}</td>`:''}</tr>`).join('')}</tbody></table>`:`<p class="mut">No logs for ${s.id} yet this year.${isA()?' Award points from the Award points tab.':''}</p>`}</div>`
+ +`<h2>Log history · ${yl(S.year)}</h2><div class="card scroll">${logs.length?`<table><thead><tr><th>Date</th><th>Area</th><th>Activity</th><th>Note</th><th class="num">Raw</th>${isS()?'<th></th>':''}</tr></thead><tbody>${logs.map(l=>`<tr style="${l.v?'opacity:.4;text-decoration:line-through':''}"><td>${l.date}</td><td>${AREAS[l.area]}</td><td>${esc(l.act)}${l.hh?' <span class="chip">household</span>':''}${l.p3?' <span class="chip c3">P3</span>':''}</td><td>${esc(l.note)||'—'}${isS()&&l.att?`<div class="mut">Attested by ${esc(l.att)} · ${esc(l.ev)}</div>`:''}</td><td class="num">${l.raw}</td>${isS()?`<td>${logBtns(l)}</td>`:''}</tr>`).join('')}</tbody></table>`:`<p class="mut">No logs for ${s.id} yet this year.${isS()?' Award points from the Award points tab.':''}</p>`}</div>`
  +(isA()?infoV(s):'')}
 function cumCard(t){
  const rows=Object.keys(AREAS).map(k=>({k,v:k==='bonus'?Math.min(t.byAll[k]||0,120):(t.byAll[k]||0)}));
@@ -181,7 +200,7 @@ function cumCard(t){
  <div class="row" style="justify-content:space-between;align-items:flex-end">
   <div><div class="mut">Points earned (caps and ×0.75 applied)</div><div class="big" style="font-size:36px">${f1(t.cum)}</div></div>
   <div style="text-align:right"><div class="mut">Counted toward grant</div><div class="big" style="font-size:36px">${t.gt}</div></div>
-  <div style="text-align:right"><span class="chip ${cc(t.c[1])}">${rate(t.c)}</span>${t.held?' <span class="chip w">gate</span>':''}${t.bc>=120?' <span class="chip c2">bonus capped</span>':''}</div>
+  <div style="text-align:right">${isS()?`<span class="chip ${cc(t.c[1])}">${rate(t.c)}</span>${paceChip(t)}${t.held?' <span class="chip w">gate</span>':''}${t.bc>=120?' <span class="chip c2">bonus capped</span>':''}`:''}</div>
  </div>
  <div class="scroll" style="margin-top:12px"><table><thead><tr><th>Area</th><th class="num">Points</th><th style="width:45%">Share</th></tr></thead><tbody>
  ${rows.map(r=>`<tr><td>${AREAS[r.k]}</td><td class="num">${f1(r.v)}</td><td>${bar(r.v)}</td></tr>`).join('')}
@@ -211,6 +230,7 @@ function award(){
  <div class="row">${it[1]==='tier'?`<div class="field"><label>Report card tier</label><select onchange="F.raw=+this.value;prev();liveUpdate()">${Object.entries(TIERS).map(([k,v])=>`<option value="${v}" ${v===F.raw?'selected':''}>${k} → ${v}</option>`).join('')}</select></div>`:`<div class="field"><label>Raw points</label><input type="number" min="0" value="${F.raw}" oninput="F.raw=+this.value;prev();liveUpdate()"></div>`}
  <div class="field"><label>Date</label><input type="date" value="${F.date}" onchange="F.date=this.value"></div>
  <div class="field"><label>Note</label><input id="nt" value="${esc(F.note)}" placeholder="e.g. test — check with adviser" oninput="F.note=this.value"></div></div>
+ <div class="row"><div class="field"><label>Attester (not a relative) *</label><input id="at" value="${esc(F.att)}" placeholder="Name and role, e.g. Ms. Cruz, adviser" oninput="F.att=this.value"></div><div class="field"><label>Evidence *</label><input id="ev" value="${esc(F.ev)}" placeholder="e.g. signed log, certificate, report card" oninput="F.ev=this.value"></div></div>
  <div class="prev" id="prev"></div><button class="btn" onclick="saveAward()">Award points</button></div>
  <div class="card" id="live">${liveV()}</div>
  </div>
@@ -244,7 +264,7 @@ function recentV(){
  const rows=S.logs.filter(l=>l.sid===F.id).slice().sort((a,b)=>(b.date||'')>(a.date||'')?1:-1).slice(0,15);
  if(!rows.length)return`<p class="mut">No logs for ${F.id} yet.</p>`;
  return`<table><thead><tr><th>Date</th><th>Year</th><th>Area</th><th>Activity</th><th>Note</th><th class="num">Raw</th><th></th></tr></thead><tbody>
- ${rows.map(l=>`<tr style="${l.v?'opacity:.45;text-decoration:line-through':''}"><td>${l.date}</td><td>${yl(l.y)}</td><td>${AREAS[l.area]}</td><td>${esc(l.act)}${l.hh?' <span class="chip">household</span>':''}${l.p3?' <span class="chip c3">P3</span>':''}</td><td>${esc(l.note)||'—'}</td><td class="num">${l.raw}</td><td>${l.v?'<span class="chip c1">voided</span>':`<button class="btn o" onclick="voidLog('${l.id}')">Void</button>`}</td></tr>`).join('')}</tbody></table>`;
+ ${rows.map(l=>`<tr style="${l.v?'opacity:.45;text-decoration:line-through':''}"><td>${l.date}</td><td>${yl(l.y)}</td><td>${AREAS[l.area]}</td><td>${esc(l.act)}${l.hh?' <span class="chip">household</span>':''}${l.p3?' <span class="chip c3">P3</span>':''}</td><td>${esc(l.note)||'—'}${isS()&&l.att?`<div class="mut">Attested by ${esc(l.att)} · ${esc(l.ev)}</div>`:''}</td><td class="num">${l.raw}</td><td>${logBtns(l)}</td></tr>`).join('')}</tbody></table>`;
 }
 function targets(){const s=SC.find(x=>x.id===F.id);return!s?[]:F.a==='parental'?SC.filter(x=>x.hh===s.hh&&gIn(x,S.year)<=12):[s]}
 function prev(){const e=document.getElementById('prev');if(!e)return;const a=F.a,cap=a==='bonus'?40:CAP[a];e.innerHTML=targets().map(s=>{const w=wt(gIn(s,S.year)),c=Math.min(F.raw,cap);return`<div><b>${s.id}</b> · raw ${F.raw} → capped ${c} → ×${w} → <b>${f1(c*w)}</b> weighted${F.raw>cap?' <span class="chip w">over annual cap</span>':''}</div>`}).join('')+(a==='parental'?'<div class="mut">One log per active sibling, each weighted to that sibling’s grade.</div>':'')+(a==='bonus'?'<div class="mut">Annual cap 40 and lifetime cap 120 apply to the total, not each entry.</div>':'')}
@@ -252,8 +272,9 @@ function saveAward(){
  const A=ACT[F.a],it=A[F.i]||A[0],raw=+F.raw;
  if(!(raw>=0)){toast('Enter points of 0 or more.');return}
  const tg=targets();if(!tg.length){toast('Pick a scholar first.');return}
- const arr=tg.map(s=>({sid:s.id,y:S.year,area:F.a,act:it[0],raw,date:F.date||today(),note:(F.note||'').trim(),hh:F.a==='parental',p3:it[2]==='p3',v:false}));
- FB.addLogs(arr).then(()=>{F.note='';const n=document.getElementById('nt');if(n)n.value='';toast(arr.length>1?`Points awarded to ${arr.length} siblings`:'Points awarded')}).catch(fbErr)}
+ if(!(F.att||'').trim()||!(F.ev||'').trim()){toast('Add the attester and the evidence.');return}
+ const arr=tg.map(s=>({sid:s.id,y:S.year,area:F.a,act:it[0],raw,date:F.date||today(),note:(F.note||'').trim(),att:F.att.trim(),ev:F.ev.trim(),hh:F.a==='parental',p3:it[2]==='p3',v:false}));
+ FB.addLogs(arr).then(()=>{F.note='';F.ev='';const n=document.getElementById('nt');if(n)n.value='';const e=document.getElementById('ev');if(e)e.value='';toast(arr.length>1?`Points awarded to ${arr.length} siblings`:'Points awarded')}).catch(fbErr)}
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),3200)}
 function infoV(s){const i=INFO[s.id]||{};
  if(hide.checked)return`<h2>Scholar information</h2><div class="card mut">Hidden. Untick “Hide names” to view.</div>`;
@@ -269,10 +290,43 @@ function saveEdit(){const info={};FLD.forEach(([k])=>info[k]=document.getElement
 function nextId(){return'S'+String(Math.max(0,...SC.map(s=>+s.id.slice(1)))+1).padStart(3,'0')}
 function nextHH(){return'H'+String(Math.max(0,...SC.map(s=>+s.hh.slice(1)||0))+1).padStart(2,'0')}
 function newScholar(){const id=nextId();FB.saveScholar(id,{hh:nextHH(),g0:7,y0:S.year},{first:'',last:''}).then(()=>{sel=id;F.id=id;editing=true;W.add=0;W.p3=false;toast('Fill in the details and save')}).catch(fbErr)}
+function newV(){return`<div class="login"><div class="card"><h2 style="margin-top:0">Request access</h2><p class="mut">Signed in as ${esc(AUTHUSER?.email||'')}. Tell us which scholar this account is for. A teacher or admin will confirm and connect it.</p><div class="field"><label>Scholar ID (ask the school if you don't know it)</label><input id="clm" placeholder="e.g. S012" onkeydown="if(event.key==='Enter')sendReq()"></div><button class="btn" onclick="sendReq()">Send request</button></div></div>`}
+function waitV(){return`<div class="login"><div class="card" style="text-align:center"><h2 style="margin-top:0">Waiting for approval</h2><p class="mut">Your request${UDOC&&UDOC.claim?' for '+esc(UDOC.claim):''} was sent. This page updates by itself once a teacher or admin approves it.</p></div></div>`}
+function sendReq(){const c=clm.value.trim();if(!c)return toast('Enter the scholar ID');FB.sendRequest(c).catch(fbErr)}
+function accessV(){const P=US.filter(u=>u.status==='pending'),A=US.filter(u=>u.status==='active');
+ const row=(u,act)=>`<div class="card" style="margin-bottom:10px"><div class="row" style="justify-content:space-between"><b>${esc(u.email)}</b><span class="chip ${u.status==='active'?'c4':'w'}">${u.status}</span></div><div class="mut">${esc(u.name||'')}${u.claim?' · asked for: '+esc(u.claim):''}</div>${(u.scholarIds||[]).length?`<div style="margin-top:6px">Linked: ${u.scholarIds.map(i=>`<span class="chip c3">${esc(i)}</span>`).join(' ')}</div>`:''}<div class="row" style="margin-top:10px">${act}</div></div>`;
+ return`<h2 style="margin-top:0">Waiting for approval (${P.length})</h2>`+(P.map(u=>row(u,`<button class="btn" onclick="matchUser('${u.id}')">Match &amp; approve</button><button class="btn o" onclick="rejectUser('${u.id}')">Reject</button>`)).join('')||'<div class="card mut">No requests.</div>')+`<h2>Active accounts (${A.length})</h2>`+(A.map(u=>row(u,`<button class="btn o" onclick="matchUser('${u.id}')">Change linked scholars</button><button class="btn o" onclick="rejectUser('${u.id}')">Remove access</button>`)).join('')||'<div class="card mut">None yet.</div>')}
+function rejectUser(id){if(confirm('Remove this account\'s access?'))FB.removeUser(id).then(()=>toast('Removed')).catch(fbErr)}
+function matchUser(id){const u=US.find(x=>x.id===id);if(!u)return;
+ const sel2=new Set(u.scholarIds||[]),cl=norm(u.claim);SC.forEach(x=>{if(norm(x.id)===cl)sel2.add(x.id)});
+ const d=document.createElement('dialog');d.style.cssText='background:var(--s1);color:var(--on);border:1px solid var(--line);border-radius:16px;max-width:460px;width:94%';
+ d.innerHTML=`<h2 style="margin-top:0">Match ${esc(u.email)}</h2><p class="mut">Asked for: ${esc(u.claim||'—')}. Tick every scholar this account may see (tick siblings too).</p><div class="field"><label>Search</label><input id="mq" placeholder="ID${isA()?' or name':''}"></div><div id="ml" style="max-height:240px;overflow:auto"></div><div class="row" style="margin-top:12px"><button class="btn" id="mS">Approve</button><button class="btn o" id="mC">Cancel</button></div>`;
+ document.body.appendChild(d);d.showModal();
+ const paint=()=>{const q2=norm(d.querySelector('#mq').value),L=SC.filter(x=>!q2||norm(lab(x)+' '+x.hh).includes(q2)).slice(0,60);
+  d.querySelector('#ml').innerHTML=L.map(x=>`<label class="row" style="color:var(--on);font-size:15px;padding:6px 0;flex-wrap:nowrap"><input type="checkbox" style="width:24px;min-height:24px;flex:none" data-id="${x.id}" ${sel2.has(x.id)?'checked':''}> ${esc(lab(x))} · HH ${esc(x.hh)}</label>`).join('')||'<p class="mut">No matches.</p>';
+  d.querySelectorAll('#ml input').forEach(i=>i.onchange=()=>i.checked?sel2.add(i.dataset.id):sel2.delete(i.dataset.id))};paint();
+ d.querySelector('#mq').oninput=paint;const done=()=>{d.close();d.remove()};d.querySelector('#mC').onclick=done;
+ d.querySelector('#mS').onclick=()=>{if(!sel2.size)return toast('Pick at least one scholar');FB.approveUser(id,[...sel2]).then(()=>{toast('Approved');done()}).catch(fbErr)}}
+function cardify(){main.querySelectorAll('table').forEach(t=>{const h=[...t.querySelectorAll('thead th')].map(x=>x.textContent);if(!h.length)return;t.classList.add('rc');t.querySelectorAll('tbody tr').forEach(r=>[...r.children].forEach((c,i)=>{if(h[i])c.dataset.l=h[i]}))})}
+function logBtns(l){return l.v?'<span class="chip c1">voided</span> <button class="btn o" onclick="restoreLog(\''+l.id+'\')">Restore</button>':'<button class="btn o" onclick="editLog(\''+l.id+'\')">Edit</button> <button class="btn o" onclick="voidLog(\''+l.id+'\')">Void</button>'}
+function restoreLog(id){if(confirm('Restore this log so it counts again?'))FB.restoreLog(id).then(()=>toast('Log restored')).catch(fbErr)}
+function editLog(id){const l=S.logs.find(x=>x.id===id);if(!l||!isS())return;
+ const d=document.createElement('dialog');d.style.cssText='background:var(--s1);color:var(--on);border:1px solid var(--line);border-radius:16px;max-width:420px;width:92%';
+ d.innerHTML=`<h2 style="margin-top:0">Edit log</h2><div class="field"><label>Points (raw)</label><input id="eR" type="number" value="${l.raw}"></div><div class="field"><label>Date</label><input id="eD" type="date" value="${esc(l.date)}"></div><div class="field"><label>Note</label><input id="eN" value="${esc(l.note)}"></div><div class="field"><label>Attester</label><input id="eA" value="${esc(l.att)}"></div><div class="field"><label>Evidence</label><input id="eE" value="${esc(l.ev)}"></div><div class="row" style="margin-top:12px"><button class="btn" id="eS">Save</button><button class="btn o" id="eC">Cancel</button></div>`;
+ document.body.appendChild(d);d.showModal();const done=()=>{d.close();d.remove()};
+ d.querySelector('#eC').onclick=done;
+ d.querySelector('#eS').onclick=()=>{const raw=+d.querySelector('#eR').value;if(!(raw>=0))return toast('Enter the points');
+  FB.editLog(id,{raw,date:d.querySelector('#eD').value,note:d.querySelector('#eN').value.trim(),att:d.querySelector('#eA').value.trim(),ev:d.querySelector('#eE').value.trim()},{raw:l.raw,date:l.date||'',note:l.note||'',att:l.att||'',ev:l.ev||''}).then(()=>{toast('Log updated');done()}).catch(fbErr)}}
+function paceChip(t){const s=SC.find(x=>x.id===sel);if(!s)return'';const ys=S.yearStart;if(!ys||today()<ys)return' <span class="chip c1">Not started</span>';
+ const g=gIn(s,S.year),n=Math.max(1,13-s.g0),el=Math.min(1,Math.max(0,(Date.now()-new Date(ys))/315576e5)),exp=(S.paceGoal||800)*((g-s.g0)+el)/n,r=t.cum/exp;
+ return r>=.95?' <span class="chip c4">On pace</span>':r>=.75?' <span class="chip c2">Close</span>':' <span class="chip w">Behind</span>'}
+function savePrg(){FB.setConfig({yearStart:yst.value,paceGoal:+pgl.value||800,slidesUrl:sll.value.trim()}).then(()=>toast('Saved')).catch(fbErr)}
+const slideEmbed=u=>{const m=String(u||'').match(/presentation\/d\/(e\/)?([\w-]+)/);return m?`https://docs.google.com/presentation/d/${m[1]||''}${m[2]}/embed?start=false&loop=false`:''};
+function programV(){const u=slideEmbed(S.slidesUrl);return`<div class="card"><h2 style="margin-top:0">About the program</h2>${u?`<div style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden"><iframe src="${esc(u)}" style="position:absolute;inset:0;width:100%;height:100%;border:0" allowfullscreen title="Program presentation"></iframe></div><p><a href="${esc(S.slidesUrl)}" target="_blank" rel="noopener" style="color:var(--p)">Open in Google Slides</a></p>`:`<p class="mut">${isA()?'Add a Google Slides link under Data & years.':'The presentation has not been added yet.'}</p>`}</div>`}
 function voidLog(id){const l=S.logs.find(x=>x.id===id);
  const d=l?`${l.date||''} · ${AREAS[l.area]} · ${l.act}${l.note?' · “'+l.note+'”':''} · ${l.raw} pts`:'this log';
  if(confirm(`Void ${d}?\nIt stays on record but stops counting.`))FB.voidLog(id).then(()=>toast('Log voided')).catch(fbErr)}
-function data(){return`<div class="grid"><div class="card"><h2 style="margin-top:0">Import scholars from Excel</h2><p class="mut">Reads the columns by name, so extra or reordered columns are fine. Scholars already in the database are matched by Scholar ID, or by name, and updated. New names are added.</p>
+function data(){return`<div class="grid"><div class="card"><h2 style="margin-top:0">Program settings</h2><div class="field"><label>Program year starts</label><input id="yst" type="date" value="${esc(S.yearStart||'')}"></div><div class="field"><label>Pace goal (points by graduation)</label><input id="pgl" type="number" value="${S.paceGoal||800}"></div><div class="field"><label>Google Slides link (Program tab)</label><input id="sll" value="${esc(S.slidesUrl||'')}" placeholder="https://docs.google.com/presentation/d/..."></div><button class="btn" onclick="savePrg()">Save</button></div><div class="card"><h2 style="margin-top:0">Import scholars from Excel</h2><p class="mut">Reads the columns by name, so extra or reordered columns are fine. Scholars already in the database are matched by Scholar ID, or by name, and updated. New names are added.</p>
  <div class="field"><label>School year of this file</label><select id="iy">${S.years.map(y=>`<option value="${y}" ${y===S.year?'selected':''}>${yl(y)}</option>`).join('')}</select></div>
  <div class="field"><label>Excel file (.xlsx)</label><input type="file" accept=".xlsx,.xls" onchange="readXlsx(this.files[0])"></div></div>
  <div class="card"><h2 style="margin-top:0">Export to Excel</h2><p class="mut">One file with three sheets: Scholars (all saved information), Points and Logs. The Scholars sheet can be imported again.</p><button class="btn" onclick="exportXlsx()">Download Excel</button></div>
@@ -314,27 +368,51 @@ draw();
 </script>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import{getAuth,signInAnonymously,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import{getFirestore,collection,doc,onSnapshot,updateDoc,setDoc,writeBatch}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import{getAuth,signInWithPopup,GoogleAuthProvider,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import{getFirestore,collection,doc,onSnapshot,updateDoc,setDoc,writeBatch,arrayUnion,query,where,deleteDoc}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyCHASICndfzOKOoP2FA9b9N-tv21Y2CXHo",authDomain:"sweatequity-dac96.firebaseapp.com",projectId:"sweatequity-dac96",storageBucket:"sweatequity-dac96.firebasestorage.app",messagingSenderId:"618283070090",appId:"1:618283070090:web:4c11812b5c3525af9af373"});
 const auth=getAuth(app),db=getFirestore(app);let unsubs=[];
 const put=(b,it)=>{if(Object.keys(it.pub).length)b.set(doc(db,'scholars',it.id),it.pub,{merge:true});b.set(doc(db,'scholarInfo',it.id),it.info,{merge:true})};
 window.FB={
  login:(e,p)=>signInWithEmailAndPassword(auth,e,p),
- viewer:()=>signInAnonymously(auth),
+ google:()=>signInWithPopup(auth,new GoogleAuthProvider()),
+ sendRequest:claim=>setDoc(doc(db,'users',auth.currentUser.uid),{email:(auth.currentUser.email||'').toLowerCase(),name:auth.currentUser.displayName||'',claim,role:'viewer',status:'pending',scholarIds:[]}),
+ approveUser:(id,ids)=>updateDoc(doc(db,'users',id),{status:'active',scholarIds:ids,approvedBy:auth.currentUser?.email||'',approvedAt:Date.now()}),
+ removeUser:id=>deleteDoc(doc(db,'users',id)),
  logout:()=>signOut(auth),
- voidLog:id=>updateDoc(doc(db,'logs',id),{v:true}),
+ voidLog:id=>updateDoc(doc(db,'logs',id),{v:true,history:arrayUnion({at:Date.now(),by:auth.currentUser?.email||'',act:'void'})}),
+ restoreLog:id=>updateDoc(doc(db,'logs',id),{v:false,history:arrayUnion({at:Date.now(),by:auth.currentUser?.email||'',act:'restore'})}),
+ editLog:(id,f,prev)=>updateDoc(doc(db,'logs',id),{...f,editedAt:Date.now(),editedBy:auth.currentUser?.email||'',history:arrayUnion({at:Date.now(),by:auth.currentUser?.email||'',act:'edit',from:prev})}),
  setConfig:c=>setDoc(doc(db,'config','program'),c,{merge:true}),
- addLogs:arr=>{const b=writeBatch(db);arr.forEach(l=>b.set(doc(collection(db,'logs')),l));return b.commit()},
+ addLogs:arr=>{const b=writeBatch(db);arr.forEach(l=>b.set(doc(collection(db,'logs')),{...l,by:auth.currentUser?.email||'',at:Date.now()}));return b.commit()},
  saveScholar:(id,pub,info)=>{const b=writeBatch(db);put(b,{id,pub,info});return b.commit()},
  saveScholars:async items=>{for(let i=0;i<items.length;i+=200){const b=writeBatch(db);items.slice(i,i+200).forEach(it=>put(b,it));await b.commit()}}
 };
-onAuthStateChanged(auth,u=>{unsubs.forEach(f=>f());unsubs=[];
+const no=()=>Promise.reject({code:'permission-denied'});
+['setConfig','saveScholar','saveScholars'].forEach(k=>{const fn=FB[k];FB[k]=(...a)=>ME==='admin'?fn(...a):no()});
+['voidLog','restoreLog','editLog','addLogs','approveUser','removeUser'].forEach(k=>{const fn=FB[k];FB[k]=(...a)=>ME==='admin'||ME==='teacher'?fn(...a):no()});
+let vsubs=[],VS={},VL={};
+const cfgH=s=>{if(s.exists()){const d=s.data();if(d.years)S.years=d.years;if(d.year)S.year=d.year;S.yearStart=d.yearStart||'';S.paceGoal=d.paceGoal||800;S.slidesUrl=d.slidesUrl||'';draw()}};
+const rebuild=()=>{SC=Object.values(VS).sort((a,b)=>a.id<b.id?-1:1);S.logs=Object.values(VL).flat();LOADED=true;if(sel&&!SC.find(x=>x.id===sel))sel=null;if(!sel&&SC.length===1)sel=SC[0].id;draw()};
+onAuthStateChanged(auth,u=>{unsubs.forEach(f=>f());unsubs=[];vsubs.forEach(f=>f());vsubs=[];VS={};VL={};US=[];UDOC=null;AUTHUSER=u;
  if(!u){setMe(null);return}
- const admin=!u.isAnonymous;setMe(admin?'admin':'viewer');
- unsubs.push(onSnapshot(collection(db,'logs'),s=>{S.logs=s.docs.map(d=>({id:d.id,...d.data()}));draw()},fbErr));
- unsubs.push(onSnapshot(doc(db,'config','program'),s=>{if(s.exists()){const d=s.data();if(d.years)S.years=d.years;if(d.year)S.year=d.year;draw()}},fbErr));
- unsubs.push(onSnapshot(collection(db,'scholars'),s=>{SC=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.id<b.id?-1:1);if(sel&&!SC.find(x=>x.id===sel))sel=null;draw()},fbErr));
- if(admin)unsubs.push(onSnapshot(collection(db,'scholarInfo'),s=>{INFO={};s.docs.forEach(d=>INFO[d.id]=d.data());draw()},fbErr));
+ const em=(u.email||'').toLowerCase(),pw=u.providerData.some(p=>p.providerId==='password'),role=pw&&em==='admin@lla.edu'?'admin':pw&&em==='teacher@lla.edu'?'teacher':'viewer';
+ if(role!=='viewer'){setMe(role);
+  unsubs.push(onSnapshot(collection(db,'logs'),s=>{S.logs=s.docs.map(d=>({id:d.id,...d.data()}));draw()},fbErr));
+  unsubs.push(onSnapshot(doc(db,'config','program'),cfgH,fbErr));
+  unsubs.push(onSnapshot(collection(db,'scholars'),s=>{LOADED=true;SC=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.id<b.id?-1:1);if(sel&&!SC.find(x=>x.id===sel))sel=null;draw()},fbErr));
+  unsubs.push(onSnapshot(collection(db,'users'),s=>{US=s.docs.map(d=>({id:d.id,...d.data()}));draw()},fbErr));
+  if(role==='admin')unsubs.push(onSnapshot(collection(db,'scholarInfo'),s=>{INFO={};s.docs.forEach(d=>INFO[d.id]=d.data());draw()},fbErr));
+  return}
+ unsubs.push(onSnapshot(doc(db,'users',u.uid),s=>{
+  vsubs.forEach(f=>f());vsubs=[];UDOC=s.exists()?s.data():null;
+  if(!UDOC){setMe('new');return}
+  if(UDOC.status!=='active'){setMe('wait');return}
+  if(ME!=='viewer')setMe('viewer');VS={};VL={};
+  vsubs.push(onSnapshot(doc(db,'config','program'),cfgH,fbErr));
+  (UDOC.scholarIds||[]).forEach(id=>{
+   vsubs.push(onSnapshot(doc(db,'scholars',id),x=>{if(x.exists())VS[id]={id,...x.data()};else delete VS[id];rebuild()},fbErr));
+   vsubs.push(onSnapshot(query(collection(db,'logs'),where('sid','==',id)),x=>{VL[id]=x.docs.map(d=>({id:d.id,...d.data()}));rebuild()},fbErr))})
+ },fbErr));
 });
 </script></body></html>
