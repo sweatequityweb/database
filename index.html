@@ -62,6 +62,9 @@ header{padding-top:calc(12px + env(safe-area-inset-top))}
  .card{box-shadow:0 1px 4px #4a148c22}.card.hero{background:linear-gradient(135deg,#6a1b9a,#38006b);color:#fff}
  .chip.c4{background:#c8e6c9;color:#1b5e20}.chip.c2{background:#d1c4e9;color:#311b92}.chip.c1{background:#ece6f5}.chip.w{background:#fff3c4;color:#6d5400}.step.hit{background:#e1d1f7}}
 .bdg{background:var(--bad);color:#fff;border-radius:10px;font-size:11px;padding:1px 6px;margin-left:4px}
+.pb{background:var(--s2);height:10px;border-radius:6px;overflow:hidden;margin-top:6px}.pb>i{display:block;height:100%;background:var(--p);border-radius:6px}
+.ir .rt{font:500 15px Roboto,system-ui,sans-serif}.ir .rv{font:13px Roboto,system-ui,sans-serif}
+.pb.tot{height:18px;border:1px solid var(--p)}.pb.tot>i{background:linear-gradient(90deg,var(--p),#ff80ab)}
 </style></head><body>
 <header><div class="bar"><h1>Sweat Equity Tracker</h1><span class="yr" id="yr"></span>
 <label class="row" id="hl" hidden><input type="checkbox" id="hide" onchange="draw()" style="width:auto"> Hide names</label>
@@ -77,7 +80,7 @@ const LAD=[[800,1,30000],[600,.75,22500],[400,.5,15000],[200,.25,7500],[0,0,0]];
 // Personal fields (database only). Parent skills is stored but never shown.
 const FLD=[['last','Last name'],['first','First name'],['middle','Middle name'],['barangay','Barangay'],['address','Address'],['gender','Gender'],['citizenship','Citizenship'],['religion','Religion'],['fatherName',"Father's name"],['fatherJob',"Father's occupation"],['motherName',"Mother's name"],['motherJob',"Mother's occupation"],['email','Email'],['contact','Contact number']];
 const HMAP={scholarid:'id',id:'id',householdid:'hh',household:'hh',entrygrade:'g0',entryyear:'y0',gradelevel:'grade',grade:'grade',lastname:'last',firstname:'first',middlename:'middle',barangay:'barangay',address:'address',gender:'gender',citizenship:'citizenship',religion:'religion',fathersname:'fatherName',fathersoccupation:'fatherJob',mothersname:'motherName',mothersoccupation:'motherJob',emailaddress:'email',email:'email',contactnumber:'contact',contact:'contact',parentskills:'parentSkills'};
-let AUTHUSER=null,UDOC=null,US=[],LOADED=false,ME=null,SC=[],INFO={},S={years:[2026],year:2026,logs:[]},tab='scholars',sel=null,q='',editing=false,PEND=null,RM='cap',F={a:'academic',i:0,raw:100,id:null,date:'',note:'',att:'',ev:''},W={add:0,p3:false,pts:450,g:7};
+let AUTHUSER=null,UDOC=null,IN={},INL={},US=[],LOADED=false,ME=null,SC=[],INFO={},S={years:[2026],year:2026,logs:[]},tab='scholars',sel=null,q='',editing=false,PEND=null,RM='cap',F={a:'academic',i:0,raw:100,id:null,date:'',note:'',att:'',ev:''},W={add:0,p3:false,pts:450,g:7};
 const isA=()=>ME==='admin',isT=()=>ME==='teacher',isS=()=>isA()||isT(),peso=n=>'₱'+n.toLocaleString('en-PH'),P=n=>isA()?peso(n):'',wt=g=>g<=8?.75:1,cem=p=>LAD.find(r=>p>=r[0]),f1=n=>Math.round(n*100)/100;
 const today=()=>new Date().toISOString().slice(0,10);
 const gIn=(s,y)=>s.g0+(y-s.y0),yl=y=>`SY${y}-${y+1}`,rate=c=>c[1]*100+'%'+(isA()?' · '+peso(c[2]):''),norm=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]/g,''),esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -86,7 +89,7 @@ const gl=s=>{const g=gIn(s,S.year);return g>12?'Grad':'G'+g};
 const lab=s=>[s.id,nm(s),gl(s)].filter(Boolean).join(' · ');
 const authMsg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/invalid-email':'Enter a valid email.','auth/popup-blocked':'Your browser blocked the Google window. Allow pop-ups for this site and try again.','auth/operation-not-allowed':'This sign-in method is off. Enable it in Firebase Authentication → Sign-in method.','auth/unauthorized-domain':'Add this site’s domain under Authentication → Settings → Authorized domains.','auth/too-many-requests':'Too many tries. Wait a few minutes.'}[e.code]||e.message);
 const fbErr=e=>toast(e.code==='permission-denied'?'Not allowed for your account.':e.message);
-function setMe(r){ME=r;if(!r){S.logs=[];SC=[];INFO={};sel=null;PEND=null;LOADED=false}else tab=r==='admin'?'dash':'scholars';draw()}
+function setMe(r){ME=r;if(!r){S.logs=[];SC=[];INFO={};IN={};INL={};sel=null;PEND=null;LOADED=false}else tab=r==='admin'?'dash':'scholars';draw()}
 function calc(s,extra){
  const lg=extra&&extra.length?S.logs.concat(extra):S.logs;
  let base=0,bon=0,rows=[],byAll={};
@@ -104,10 +107,10 @@ function pick(id){sel=id||null;editing=false;W.add=0;const s=SC.find(x=>x.id===i
 function draw(){yr.textContent=yl(S.year);out.hidden=!ME;hl.hidden=!isS();
  if(!ME){nav.innerHTML='';main.innerHTML=loginV();return}
  if(ME==='new'||ME==='wait'){nav.innerHTML='';main.innerHTML=ME==='new'?newV():waitV();return}
- const T=isA()?{dash:'Dashboard',scholars:'Scholars',calc:'Calculator',award:'Award points',access:'Access',data:'Data & years',program:'Program'}:isT()?{scholars:'Scholars',calc:'Calculator',award:'Award points',access:'Access',program:'Program'}:{scholars:'Scholars',program:'Program'};
+ const T=isA()?{dash:'Dashboard',scholars:'Scholars',calc:'Calculator',award:'Award points',access:'Access',data:'Data & years',program:'Program'}:isT()?{scholars:'Scholars',calc:'Calculator',award:'Award points',access:'Access',program:'Program'}:{scholars:'Scholars',profile:'Profile',program:'Program'};
  if(!T[tab])tab='scholars';
  nav.innerHTML=Object.entries(T).map(([k,v])=>`<button class="${k===tab?'on':''}" onclick="tab='${k}';draw()">${v}${k==='access'&&US.some(u=>u.status==='pending')?`<span class="bdg">${US.filter(u=>u.status==='pending').length}</span>`:''}</button>`).join('');
- main.innerHTML=({dash,scholars:scholarsTab,calc:calcTab,award,data,program:programV,access:accessV})[tab]();
+ main.innerHTML=({dash,scholars:scholarsTab,profile:profileV,calc:calcTab,award,data,program:programV,access:accessV})[tab]();
  if(tab==='award')prev();cardify()}
 function loginV(){return`<div class="login grid"><div class="card"><h2 style="margin-top:0">Staff</h2><p class="mut">Admin and teacher accounts. Sign in with your password.</p>
  <div class="field"><label>Email</label><input id="lem" type="email" placeholder="you@lla.edu" autocomplete="username"></div><div class="field"><label>Password</label><input id="lpw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdmin()"></div>
@@ -192,6 +195,51 @@ function scholarsTab(){
  +`<h2>Year by year</h2><div class="card scroll"><table><thead><tr><th>Year</th><th>Grade</th><th class="num">Base</th><th class="num">Talent bonus</th><th class="num">Year total</th></tr></thead><tbody>${t.rows.map(x=>`<tr><td>${yl(x.y)}</td><td>${x.g} (×${x.w})</td><td class="num">${f1(x.base)}</td><td class="num">${f1(x.bonus)}</td><td class="num">${f1(x.base+x.bonus)}</td></tr>`).join('')}</tbody></table><p class="mut">Talent bonus lifetime cap is 120. Counted: ${f1(t.bc)}.</p></div>`
  +`<h2>Log history · ${yl(S.year)}</h2><div class="card scroll">${logs.length?`<table><thead><tr><th>Date</th><th>Area</th><th>Activity</th><th>Note</th><th class="num">Raw</th>${isS()?'<th></th>':''}</tr></thead><tbody>${logs.map(l=>`<tr style="${l.v?'opacity:.4;text-decoration:line-through':''}"><td>${l.date}</td><td>${AREAS[l.area]}</td><td>${esc(l.act)}${l.hh?' <span class="chip">household</span>':''}${l.p3?' <span class="chip c3">P3</span>':''}</td><td>${esc(l.note)||'—'}${isS()&&l.att?`<div class="mut">Attested by ${esc(l.att)} · ${esc(l.ev)}</div>`:''}</td><td class="num">${l.raw}</td>${isS()?`<td>${logBtns(l)}</td>`:''}</tr>`).join('')}</tbody></table>`:`<p class="mut">No logs for ${s.id} yet this year.${isS()?' Award points from the Award points tab.':''}</p>`}</div>`
  +(isA()?infoV(s):'')}
+/* ---- Scholar profile intake (EPOCH / CYRM-R / CES). Visible only to the linked scholar's account. ---- */
+const IPD=[['Engagement',[5,7,11,12],'Getting absorbed in what you do'],['Perseverance',[2,9,17,19],'Sticking with things until they are done'],['Optimism',[3,13,15,18],'Expecting good things ahead'],['Connectedness',[1,10,14,16],'Having people you can count on and share with'],['Happiness',[4,6,8,20],'Enjoying life and feeling cheerful']];
+const CYP=[1,2,3,7,9,10,12,13,14,16],CYG=[4,5,6,8,11,15,17],rng=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
+const iMean=(a,ix)=>{const v=ix.map(i=>a[i-1]).filter(x=>x!=null);return v.length?v.reduce((p,c)=>p+c,0)/v.length:null};
+const iSum=(a,ix,mx)=>{const v=ix.map(i=>a[i-1]).filter(x=>x!=null),n=v.length,s=v.reduce((p,c)=>p+c,0);return{s,n,t:ix.length,max:n*mx,pct:n?Math.round(s/(n*mx)*100):null}};
+function intakeScores(d){
+ if(!d)return null;const e=d.epoch||[],c=d.cyrm||[],A=d.cesA||[],B=d.cesB||[];
+ if(![...e,...c,...A,...B].some(x=>x!=null))return null;
+ return{ep:IPD.map(([k,ix,ds])=>({k,ds,v:iMean(e,ix)})),pe:iSum(c,CYP,5),cg:iSum(c,CYG,5),ct:iSum(c,rng(1,17),5),at:iSum(A,rng(1,8),7),bh:iSum(B,rng(1,6),7)}}
+const fmtD=iso=>{const t=/^\d{4}-\d{2}-\d{2}$/.test(iso||'')?new Date(iso+'T00:00:00Z'):null;return t?t.toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric',timeZone:'UTC'}):''};
+function iRadar(ep){
+ const cx=250,cy=180,R=104,LR=132,ang=i=>(-90+72*i)*Math.PI/180,P=n=>n.toFixed(1);
+ const pt=(i,f,r=R)=>[cx+r*f*Math.cos(ang(i)),cy+r*f*Math.sin(ang(i))],fr=v=>v==null?0:Math.max(0,Math.min(1,(v-1)/4));
+ const lab=i=>{const[x,y]=pt(i,1,LR),an=x<cx-6?'end':x>cx+6?'start':'middle',v=ep[i].v;return`<text class="rt" x="${P(x)}" y="${P(y)}" text-anchor="${an}">${ep[i].k}</text><text class="rv" x="${P(x)}" y="${P(y+17)}" text-anchor="${an}">${v==null?'—':v.toFixed(1)+' / 5.0'}</text>`};
+ return`<svg class="ir" viewBox="0 0 500 366" role="img" aria-label="Radar chart of your five well-being areas, each scored from 1 to 5" style="width:100%;max-width:500px;display:block;margin:auto">
+ ${[.25,.5,.75,1].map(f=>`<polygon class="rg" points="${ep.map((_,i)=>pt(i,f).map(P).join(',')).join(' ')}"/>`).join('')}
+ ${ep.map((_,i)=>{const[x,y]=pt(i,1);return`<line class="rg" x1="${cx}" y1="${cy}" x2="${P(x)}" y2="${P(y)}"/>`}).join('')}
+ ${[2,3,4,5].map(n=>`<text class="rv" x="${cx+5}" y="${P(cy-R*(n-1)/4+4)}">${n}</text>`).join('')}
+ <polygon class="rp" points="${ep.map((d,i)=>pt(i,fr(d.v)).map(P).join(',')).join(' ')}"/>
+ ${ep.map((d,i)=>{const[x,y]=pt(i,fr(d.v));return`<circle class="rd" cx="${P(x)}" cy="${P(y)}" r="4"><title>${d.k}: ${d.v==null?'not answered':d.v.toFixed(1)+' / 5.0'}</title></circle>`}).join('')}
+ ${ep.map((_,i)=>lab(i)).join('')}</svg>`}
+function pBar(label,note,v,cls){
+ if(!v.n)return`<div style="margin:14px 0"><b>${label}</b><div class="mut">Not answered yet</div></div>`;
+ return`<div style="margin:16px 0"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><b>${label}</b><span style="white-space:nowrap">${v.pct}% <span class="mut">· ${v.s} / ${v.max}</span></span></div>
+ <div class="pb ${cls||''}" role="progressbar" aria-label="${label}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v.pct}"><i style="width:${v.pct}%"></i></div>
+ <div class="mut" style="margin-top:4px">${note}${v.n<v.t?` · ${v.t-v.n} item${v.t-v.n>1?'s':''} unanswered, score shown out of ${v.max}`:''}</div></div>`}
+function profileV(){
+ if(!SC.length)return empty();
+ const pk=SC.length>1?`<div class="card row" style="margin-bottom:14px"><span class="mut">Scholar</span>${SC.map(x=>`<button class="chip ${x.id===sel?'c3':'c1'}" onclick="pick('${x.id}')">${x.id} · ${gl(x)}</button>`).join('')}</div>`:'';
+ const s=SC.find(x=>x.id===sel);
+ if(!s)return pk+`<div class="card mut">Tick a scholar above to see their profile.</div>`;
+ if(!INL[s.id])return pk+`<div class="card mut">Loading…</div>`;
+ const d=IN[s.id],sc=intakeScores(d);
+ if(!sc)return pk+`<div class="card" style="text-align:center"><h2 style="margin-top:0">Profile assessment pending</h2><p class="mut">${s.id}’s intake profile has not been entered yet. It will appear here once the school has recorded the answers.</p></div>`;
+ const hero=`<div class="card hero"><div class="mut" style="color:#d1c4e9">${s.id} · Scholar profile</div><div style="font:800 28px/1.2 'Roboto Flex',Roboto,sans-serif;margin:6px 0">Your strengths snapshot</div><div>${d.type?esc(d.type)+' scholar · ':''}Answered ${fmtD(d.date)||'at intake'}</div></div>`;
+ const intro=`<div class="card" style="margin-top:14px"><p style="margin:0">This is a picture of the strengths and supports in your life on the day you answered the intake questions. There are no right or wrong answers, and it is not a grade. Only the account linked to you can see this page.</p></div>`;
+ const epc=`<h2>Well-being profile</h2><div class="card">${iRadar(sc.ep)}
+  <div style="margin-top:12px">${sc.ep.map(x=>`<div class="row" style="justify-content:space-between;flex-wrap:nowrap;padding:8px 0;border-top:1px solid var(--line)"><span><b>${x.k}</b><div class="mut">${x.ds}</div></span><span style="font-variant-numeric:tabular-nums;white-space:nowrap">${x.v==null?'—':x.v.toFixed(1)+' / 5.0'}</span></div>`).join('')}</div>
+  <p class="mut" style="margin-bottom:0">Each point is your average from 1 to 5 in that area. The five areas stay separate, so there is no single overall score.</p></div>`;
+ const cy=`<h2>Resilience</h2><div class="card"><p class="mut" style="margin-top:0">Access to internal and relational support resources.</p>
+  ${pBar('Personal resilience','Strengths and supports within you',sc.pe)}${pBar('Caregiver and relational resilience','Support from family, caregivers and people around you',sc.cg)}
+  <div style="border-top:1px solid var(--line);margin-top:18px;padding-top:2px">${pBar('Total resilience','All 17 items together',sc.ct,'tot')}</div></div>`;
+ const ce=`<h2>Civic engagement</h2><div class="card"><p class="mut" style="margin-top:0">Your beliefs about helping your community, next to the actions you take. Seeing them side by side can show where you may want to grow.</p>
+  ${pBar('Civic beliefs (attitudes)','What you believe about your role in your community',sc.at)}${pBar('Civic actions (behaviors)','What you do to make a difference',sc.bh)}</div>`;
+ return pk+`<div class="grid">${hero}</div>`+intro+epc+cy+ce}
 function cumCard(t){
  const rows=Object.keys(AREAS).map(k=>({k,v:k==='bonus'?Math.min(t.byAll[k]||0,120):(t.byAll[k]||0)}));
  const tot=rows.reduce((n,r)=>n+r.v,0);
@@ -330,7 +378,27 @@ function data(){return`<div class="grid"><div class="card"><h2 style="margin-top
  <div class="field"><label>School year of this file</label><select id="iy">${S.years.map(y=>`<option value="${y}" ${y===S.year?'selected':''}>${yl(y)}</option>`).join('')}</select></div>
  <div class="field"><label>Excel file (.xlsx)</label><input type="file" accept=".xlsx,.xls" onchange="readXlsx(this.files[0])"></div></div>
  <div class="card"><h2 style="margin-top:0">Export to Excel</h2><p class="mut">One file with three sheets: Scholars (all saved information), Points and Logs. The Scholars sheet can be imported again.</p><button class="btn" onclick="exportXlsx()">Download Excel</button></div>
+ <div class="card"><h2 style="margin-top:0">Import scholar profile intake</h2><p class="mut">Reads the Jamovi template (Sheet1) by column name. Saves each scholar’s answers privately: only the account linked to that scholar can read them. Staff accounts, including this one, cannot view them in the portal.</p><div class="field"><label>Intake file (.xlsx)</label><input type="file" accept=".xlsx,.xls" onchange="readIntake(this.files[0]);this.value=''"></div></div>
  <div class="card"><h2 style="margin-top:0">School years</h2><p>Active: <b>${yl(S.year)}</b>. Scholars advance one grade each year; grades above 12 graduate and keep their points.</p><div class="field"><label>Switch year</label><select onchange="FB.setConfig({years:S.years,year:+this.value}).catch(fbErr)">${S.years.map(y=>`<option value="${y}" ${y===S.year?'selected':''}>${yl(y)}</option>`).join('')}</select></div><button class="btn" onclick="newYear()">Start ${yl(Math.max(...S.years)+1)}</button></div></div>${pendV()}`}
+function readIntake(f){if(!f)return;if(!window.XLSX){toast('The Excel library did not load. Check your connection and reload.');return}
+ f.arrayBuffer().then(b=>{const wb=XLSX.read(b);let rows=null,H=null,hi=-1;
+  for(const n of wb.SheetNames){const r=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:null,raw:true}),i=r.findIndex(x=>x.some(c=>norm(c)==='scholarid'));if(i>=0){rows=r;hi=i;break}}
+  if(!rows){toast('No sheet with a Scholar_ID column was found.');return}
+  H=rows[hi].map(norm);const col=n=>H.indexOf(norm(n)),names=[...rng(1,20).map(i=>'Epoch_'+i),...rng(1,17).map(i=>'CYRM_'+i),...rng(1,8).map(i=>'CES_A'+i),...rng(9,14).map(i=>'CES_B'+i)],miss=names.filter(n=>col(n)<0);
+  if(miss.length){toast('Missing columns: '+miss.slice(0,4).join(', ')+(miss.length>4?'…':''));return}
+  const items=[];let pend=0,part=0,bad=0,unk=0;
+  const get=(r,n,mx)=>{const v=r[col(n)];if(v==null||String(v).trim()==='')return null;const x=Number(v);if(!Number.isInteger(x)||x<1||x>mx){bad++;return null}return x};
+  const dt=v=>{if(typeof v==='number'){const p=XLSX.SSF.parse_date_code(v);return p?`${p.y}-${String(p.m).padStart(2,'0')}-${String(p.d).padStart(2,'0')}`:''}
+   const m=String(v||'').match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);return m?`${m[3].length===2?'20'+m[3]:m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`:''};
+  const txt=(r,n)=>{const i=col(n);return i<0||r[i]==null?'':String(r[i]).trim()},num=(r,n)=>{const i=col(n),x=i<0?NaN:Number(r[i]);return Number.isFinite(x)?x:null};
+  for(const r of rows.slice(hi+1)){const id=String(r[col('Scholar_ID')]||'').trim().toUpperCase();if(!/^S\d+$/.test(id))continue;
+   const epoch=rng(1,20).map(i=>get(r,'Epoch_'+i,5)),cyrm=rng(1,17).map(i=>get(r,'CYRM_'+i,5)),cesA=rng(1,8).map(i=>get(r,'CES_A'+i,7)),cesB=rng(9,14).map(i=>get(r,'CES_B'+i,7)),n=[...epoch,...cyrm,...cesA,...cesB].filter(x=>x!=null).length;
+   if(!n){pend++;continue}if(n<51)part++;if(!SC.find(s=>s.id===id))unk++;
+   items.push({id,data:{grade:num(r,'Grade'),age:num(r,'Age'),sex:txt(r,'Sex'),type:txt(r,'Scholar_Type'),date:dt(r[col('Date')]),epoch,cyrm,cesA,cesB,importedAt:Date.now()}})}
+  if(!items.length){toast('No completed profiles found in that file.');return}
+  const msg=`Save ${items.length} scholar profiles?\n\n• ${pend} scholars have no answers yet and are skipped.\n• ${part} have unanswered items (scored on the items answered).`+(bad?`\n• ${bad} answers outside the allowed range were left blank.`:'')+(unk?`\n• ${unk} IDs are not in the scholars list.`:'')+`\n\nThis replaces any profile already saved for those IDs.`;
+  if(!confirm(msg))return;
+  FB.saveIntake(items).then(()=>toast(items.length+' profiles saved')).catch(fbErr)}).catch(e=>toast('Could not read that file: '+e.message))}
 function newYear(){const y=Math.max(...S.years)+1;if(confirm(`Start ${yl(y)}? Every scholar advances one grade. All logs stay on record.`))FB.setConfig({years:[...S.years,y],year:y}).then(()=>toast(yl(y)+' started')).catch(fbErr)}
 function readXlsx(f){if(!f)return;if(!window.XLSX){toast('The Excel library did not load. Check your connection and reload.');return}
  const yr0=+iy.value;f.arrayBuffer().then(b=>{const wb=XLSX.read(b);let rows=null;
@@ -374,6 +442,7 @@ const app=initializeApp({apiKey:"AIzaSyCHASICndfzOKOoP2FA9b9N-tv21Y2CXHo",authDo
 const auth=getAuth(app),db=getFirestore(app);let unsubs=[];
 const put=(b,it)=>{if(Object.keys(it.pub).length)b.set(doc(db,'scholars',it.id),it.pub,{merge:true});b.set(doc(db,'scholarInfo',it.id),it.info,{merge:true})};
 window.FB={
+ saveIntake:async items=>{for(let i=0;i<items.length;i+=200){const b=writeBatch(db);items.slice(i,i+200).forEach(it=>b.set(doc(db,'intake',it.id),it.data));await b.commit()}},
  login:(e,p)=>signInWithEmailAndPassword(auth,e,p),
  google:()=>signInWithPopup(auth,new GoogleAuthProvider()),
  sendRequest:claim=>setDoc(doc(db,'users',auth.currentUser.uid),{email:(auth.currentUser.email||'').toLowerCase(),name:auth.currentUser.displayName||'',claim,role:'viewer',status:'pending',scholarIds:[]}),
@@ -389,12 +458,12 @@ window.FB={
  saveScholars:async items=>{for(let i=0;i<items.length;i+=200){const b=writeBatch(db);items.slice(i,i+200).forEach(it=>put(b,it));await b.commit()}}
 };
 const no=()=>Promise.reject({code:'permission-denied'});
-['setConfig','saveScholar','saveScholars'].forEach(k=>{const fn=FB[k];FB[k]=(...a)=>ME==='admin'?fn(...a):no()});
+['setConfig','saveScholar','saveScholars','saveIntake'].forEach(k=>{const fn=FB[k];FB[k]=(...a)=>ME==='admin'?fn(...a):no()});
 ['voidLog','restoreLog','editLog','addLogs','approveUser','removeUser'].forEach(k=>{const fn=FB[k];FB[k]=(...a)=>ME==='admin'||ME==='teacher'?fn(...a):no()});
 let vsubs=[],VS={},VL={};
 const cfgH=s=>{if(s.exists()){const d=s.data();if(d.years)S.years=d.years;if(d.year)S.year=d.year;S.yearStart=d.yearStart||'';S.paceGoal=d.paceGoal||800;S.slidesUrl=d.slidesUrl||'';draw()}};
 const rebuild=()=>{SC=Object.values(VS).sort((a,b)=>a.id<b.id?-1:1);S.logs=Object.values(VL).flat();LOADED=true;if(sel&&!SC.find(x=>x.id===sel))sel=null;if(!sel&&SC.length===1)sel=SC[0].id;draw()};
-onAuthStateChanged(auth,u=>{unsubs.forEach(f=>f());unsubs=[];vsubs.forEach(f=>f());vsubs=[];VS={};VL={};US=[];UDOC=null;AUTHUSER=u;
+onAuthStateChanged(auth,u=>{unsubs.forEach(f=>f());unsubs=[];vsubs.forEach(f=>f());vsubs=[];VS={};VL={};IN={};INL={};US=[];UDOC=null;AUTHUSER=u;
  if(!u){setMe(null);return}
  if(!u.email){signOut(auth);return}
  const em=(u.email||'').toLowerCase(),pw=u.providerData.some(p=>p.providerId==='password'),role=pw&&em==='admin@lla.edu'?'admin':pw&&em==='teacher@lla.edu'?'teacher':'viewer';
@@ -409,10 +478,11 @@ onAuthStateChanged(auth,u=>{unsubs.forEach(f=>f());unsubs=[];vsubs.forEach(f=>f(
   vsubs.forEach(f=>f());vsubs=[];UDOC=s.exists()?s.data():null;
   if(!UDOC){setMe('new');return}
   if(UDOC.status!=='active'){setMe('wait');return}
-  if(ME!=='viewer')setMe('viewer');VS={};VL={};
+  if(ME!=='viewer')setMe('viewer');VS={};VL={};IN={};INL={};
   vsubs.push(onSnapshot(doc(db,'config','program'),cfgH,fbErr));
   (UDOC.scholarIds||[]).forEach(id=>{
    vsubs.push(onSnapshot(doc(db,'scholars',id),x=>{if(x.exists())VS[id]={id,...x.data()};else delete VS[id];rebuild()},fbErr));
+   vsubs.push(onSnapshot(doc(db,'intake',id),x=>{if(x.exists())IN[id]=x.data();else delete IN[id];INL[id]=true;draw()},fbErr));
    vsubs.push(onSnapshot(query(collection(db,'logs'),where('sid','==',id)),x=>{VL[id]=x.docs.map(d=>({id:d.id,...d.data()}));rebuild()},fbErr))})
  },fbErr));
 });
