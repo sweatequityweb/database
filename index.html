@@ -81,7 +81,7 @@ let AUTHUSER=null,UDOC=null,US=[],LOADED=false,ME=null,SC=[],INFO={},S={years:[2
 const isA=()=>ME==='admin',isT=()=>ME==='teacher',isS=()=>isA()||isT(),peso=n=>'₱'+n.toLocaleString('en-PH'),P=n=>isA()?peso(n):'',wt=g=>g<=8?.75:1,cem=p=>LAD.find(r=>p>=r[0]),f1=n=>Math.round(n*100)/100;
 const today=()=>new Date().toISOString().slice(0,10);
 const gIn=(s,y)=>s.g0+(y-s.y0),yl=y=>`SY${y}-${y+1}`,rate=c=>c[1]*100+'%'+(isA()?' · '+peso(c[2]):''),norm=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]/g,''),esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const nm=s=>{const i=INFO[s.id];return isA()&&!hide.checked&&i&&(i.first||i.last)?`${i.first||''} ${i.last||''}`.trim():''};
+const nm=s=>{const i=INFO[s.id];return isS()&&!hide.checked&&i&&(i.first||i.last)?`${i.first||''} ${i.last||''}`.trim():''};
 const gl=s=>{const g=gIn(s,S.year);return g>12?'Grad':'G'+g};
 const lab=s=>[s.id,nm(s),gl(s)].filter(Boolean).join(' · ');
 const authMsg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/invalid-email':'Enter a valid email.','auth/popup-blocked':'Your browser blocked the Google window. Allow pop-ups for this site and try again.','auth/operation-not-allowed':'This sign-in method is off. Enable it in Firebase Authentication → Sign-in method.','auth/unauthorized-domain':'Add this site’s domain under Authentication → Settings → Authorized domains.','auth/too-many-requests':'Too many tries. Wait a few minutes.'}[e.code]||e.message);
@@ -101,7 +101,7 @@ function calc(s,extra){
 const cc=c=>c>=1?'c4':c>=.75?'c3':c>=.5?'c2':c>0?'c1':'';
 const all=()=>SC.map(s=>({s,t:calc(s)}));
 function pick(id){sel=id||null;editing=false;W.add=0;const s=SC.find(x=>x.id===id);W.p3=s?calc(s).p3:false;if(id)F.id=id;draw()}
-function draw(){yr.textContent=yl(S.year);out.hidden=!ME;hl.hidden=!isA();
+function draw(){yr.textContent=yl(S.year);out.hidden=!ME;hl.hidden=!isS();
  if(!ME){nav.innerHTML='';main.innerHTML=loginV();return}
  if(ME==='new'||ME==='wait'){nav.innerHTML='';main.innerHTML=ME==='new'?newV():waitV();return}
  const T=isA()?{dash:'Dashboard',scholars:'Scholars',calc:'Calculator',award:'Award points',access:'Access',data:'Data & years',program:'Program'}:isT()?{scholars:'Scholars',calc:'Calculator',award:'Award points',access:'Access',program:'Program'}:{scholars:'Scholars',program:'Program'};
@@ -396,13 +396,14 @@ const cfgH=s=>{if(s.exists()){const d=s.data();if(d.years)S.years=d.years;if(d.y
 const rebuild=()=>{SC=Object.values(VS).sort((a,b)=>a.id<b.id?-1:1);S.logs=Object.values(VL).flat();LOADED=true;if(sel&&!SC.find(x=>x.id===sel))sel=null;if(!sel&&SC.length===1)sel=SC[0].id;draw()};
 onAuthStateChanged(auth,u=>{unsubs.forEach(f=>f());unsubs=[];vsubs.forEach(f=>f());vsubs=[];VS={};VL={};US=[];UDOC=null;AUTHUSER=u;
  if(!u){setMe(null);return}
+ if(!u.email){signOut(auth);return}
  const em=(u.email||'').toLowerCase(),pw=u.providerData.some(p=>p.providerId==='password'),role=pw&&em==='admin@lla.edu'?'admin':pw&&em==='teacher@lla.edu'?'teacher':'viewer';
  if(role!=='viewer'){setMe(role);
   unsubs.push(onSnapshot(collection(db,'logs'),s=>{S.logs=s.docs.map(d=>({id:d.id,...d.data()}));draw()},fbErr));
   unsubs.push(onSnapshot(doc(db,'config','program'),cfgH,fbErr));
   unsubs.push(onSnapshot(collection(db,'scholars'),s=>{LOADED=true;SC=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.id<b.id?-1:1);if(sel&&!SC.find(x=>x.id===sel))sel=null;draw()},fbErr));
   unsubs.push(onSnapshot(collection(db,'users'),s=>{US=s.docs.map(d=>({id:d.id,...d.data()}));draw()},fbErr));
-  if(role==='admin')unsubs.push(onSnapshot(collection(db,'scholarInfo'),s=>{INFO={};s.docs.forEach(d=>INFO[d.id]=d.data());draw()},fbErr));
+  unsubs.push(onSnapshot(collection(db,'scholarInfo'),s=>{INFO={};s.docs.forEach(d=>INFO[d.id]=d.data());draw()},fbErr));
   return}
  unsubs.push(onSnapshot(doc(db,'users',u.uid),s=>{
   vsubs.forEach(f=>f());vsubs=[];UDOC=s.exists()?s.data():null;
