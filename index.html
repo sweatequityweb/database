@@ -86,7 +86,7 @@ const LAD=[[800,1,30000],[600,.75,22500],[400,.5,15000],[200,.25,7500],[0,0,0]];
 // Personal fields (database only). Parent skills is stored but never shown.
 const FLD=[['last','Last name'],['first','First name'],['middle','Middle name'],['barangay','Barangay'],['address','Address'],['gender','Gender'],['citizenship','Citizenship'],['religion','Religion'],['fatherName',"Father's name"],['fatherJob',"Father's occupation"],['motherName',"Mother's name"],['motherJob',"Mother's occupation"],['email','Email'],['contact','Contact number']];
 const HMAP={scholarid:'id',id:'id',householdid:'hh',household:'hh',entrygrade:'g0',entryyear:'y0',gradelevel:'grade',grade:'grade',lastname:'last',firstname:'first',middlename:'middle',barangay:'barangay',address:'address',gender:'gender',citizenship:'citizenship',religion:'religion',fathersname:'fatherName',fathersoccupation:'fatherJob',mothersname:'motherName',mothersoccupation:'motherJob',emailaddress:'email',email:'email',contactnumber:'contact',contact:'contact',parentskills:'parentSkills'};
-let AUTHUSER=null,UDOC=null,IN={},INL={},INLA=false,wtab='points',st='access',US=[],LOADED=false,ME=null,SC=[],INFO={},S={years:[2026],year:2026,logs:[]},tab='scholars',sel=null,q='',editing=false,PEND=null,RM='cap',F={a:'academic',i:0,raw:100,id:null,date:'',note:'',att:'',ev:''},W={add:0,p3:false,pts:450,g:7};
+let AUTHUSER=null,UDOC=null,IN={},INL={},INLA=false,dsb='points',ig='type',wtab='points',st='access',US=[],LOADED=false,ME=null,SC=[],INFO={},S={years:[2026],year:2026,logs:[]},tab='scholars',sel=null,q='',editing=false,PEND=null,RM='cap',F={a:'academic',i:0,raw:100,id:null,date:'',note:'',att:'',ev:''},W={add:0,p3:false,pts:450,g:7};
 const isA=()=>ME==='admin',isT=()=>ME==='teacher',isS=()=>isA()||isT(),peso=n=>'₱'+n.toLocaleString('en-PH'),P=n=>isA()?peso(n):'',wt=g=>g<=8?.75:1,cem=p=>LAD.find(r=>p>=r[0]),f1=n=>Math.round(n*100)/100;
 const today=()=>new Date().toISOString().slice(0,10);
 const gIn=(s,y)=>s.g0+(y-s.y0),yl=y=>`SY${y}-${y+1}`,rate=c=>c[1]*100+'%'+(isA()?' · '+peso(c[2]):''),norm=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]/g,''),esc=x=>String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -113,10 +113,10 @@ function pick(id){sel=id||null;editing=false;W.add=0;const s=SC.find(x=>x.id===i
 function draw(){yr.textContent=yl(S.year);out.hidden=!ME;hl.hidden=!isS();
  if(!ME){nav.innerHTML='';main.innerHTML=loginV();return}
  if(ME==='new'||ME==='wait'){nav.innerHTML='';main.innerHTML=ME==='new'?newV():waitV();return}
- const T=isA()?{dash:'Dashboard',scholars:'Scholars',program:'Program',settings:'Settings'}:isT()?{scholars:'Scholars',program:'Program',settings:'Access'}:{scholars:SC.length>1?'My scholars':'My scholar',program:'Program'};
+ const T=isA()?{dash:'Dashboard',scholars:'Scholars',program:'Program',settings:'Settings'}:isT()?{dash:'Dashboard',scholars:'Scholars',program:'Program',settings:'Access'}:{scholars:SC.length>1?'My scholars':'My scholar',program:'Program'};
  if(!T[tab])tab='scholars';
  nav.innerHTML=Object.entries(T).map(([k,v])=>`<button class="${k===tab?'on':''}" onclick="tab='${k}';draw()">${v}${k==='settings'&&US.some(u=>u.status==='pending')?`<span class="bdg">${US.filter(u=>u.status==='pending').length}</span>`:''}</button>`).join('');
- main.innerHTML=({dash,scholars:workspace,settings:settingsV,program:programV})[tab]();
+ main.innerHTML=({dash:dashV,scholars:workspace,settings:settingsV,program:programV})[tab]();
  if(tab==='scholars'&&wtab==='award')prev();cardify()}
 function loginV(){return`<div class="login grid"><div class="card"><h2 style="margin-top:0">Staff</h2><p class="mut">Admin and teacher accounts. Sign in with your password.</p>
  <div class="field"><label>Email</label><input id="lem" type="email" placeholder="you@lla.edu" autocomplete="username"></div><div class="field"><label>Password</label><input id="lpw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdmin()"></div>
@@ -215,6 +215,38 @@ function settingsV(){
  if(!SS.some(x=>x[0]===st))st='access';const C=setCards();
  const body=st==='access'?accessV():st==='program'?`<div class="grid">${C.prog}${C.year}</div>`:`<div class="grid">${C.imp}${C.intake}${C.exp}</div>${pendV()}`;
  return(SS.length>1?`<div class="sub">${SS.map(([k,v])=>`<button class="${k===st?'on':''}" onclick="st='${k}';draw()">${v}</button>`).join('')}</div>`:'')+body}
+/* ---- Population view of the intake profiles (staff only) ---- */
+const avg=a=>{a=a.filter(x=>x!=null);return a.length?a.reduce((p,c)=>p+c,0)/a.length:null},sdv=a=>{a=a.filter(x=>x!=null);if(a.length<2)return null;const m=avg(a);return Math.sqrt(a.reduce((p,c)=>p+(c-m)**2,0)/(a.length-1))};
+const mm=a=>{a=a.filter(x=>x!=null);return a.length?[Math.min(...a),Math.max(...a)]:null};
+const up=o=>o.n?o.s/o.max*100:null;
+function popAgg(rs){const col=f=>rs.map(f);return{n:rs.length,ep:IPD.map((_,i)=>col(r=>r.sc.ep[i].v)),pe:col(r=>up(r.sc.pe)),cg:col(r=>up(r.sc.cg)),ct:col(r=>up(r.sc.ct)),at:col(r=>up(r.sc.at)),bh:col(r=>up(r.sc.bh))}}
+const f0=v=>v==null?'—':Math.round(v)+'%',f2=v=>v==null?'—':v.toFixed(1);
+function popBar(label,note,v,cls){return v==null?'':`<div style="margin:16px 0"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><b>${label}</b><span style="white-space:nowrap">${Math.round(v)}% <span class="mut">· group average</span></span></div><div class="pb ${cls||''}" role="progressbar" aria-label="${label}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(v)}"><i style="width:${Math.round(v)}%"></i></div><div class="mut" style="margin-top:4px">${note}</div></div>`}
+function intakeDash(){
+ if(!INLA)return`<div class="card mut">Loading…</div>`;
+ const ids=new Set(SC.map(s=>s.id)),rs=Object.entries(IN).filter(([id])=>!SC.length||ids.has(id)).map(([id,d])=>({id,d,sc:intakeScores(d)})).filter(r=>r.sc);
+ if(!rs.length)return`<div class="card" style="text-align:center"><h2 style="margin-top:0">No profiles yet</h2><p class="mut">${isA()?'Import the intake spreadsheet under Settings → Import & export.':'The admin has not imported the intake profiles yet.'}</p></div>`;
+ const A=popAgg(rs),N=SC.length||rs.length,ds=rs.map(r=>r.d.date).filter(Boolean).sort();
+ const hdr=`<div class="grid"><div class="card hero"><div class="mut" style="color:#d1c4e9">Profiles completed</div><div class="big">${rs.length}<span style="font-size:20px"> / ${N}</span></div></div>
+  <div class="card"><div class="mut">Still pending</div><div class="big">${Math.max(0,N-rs.length)}</div></div>
+  <div class="card"><div class="mut">Assessed</div><div style="font:500 18px Roboto,system-ui,sans-serif;margin-top:6px">${ds.length?(fmtD(ds[0])===fmtD(ds[ds.length-1])?fmtD(ds[0]):fmtD(ds[0])+' to '+fmtD(ds[ds.length-1])):'—'}</div></div></div>`;
+ const ep=IPD.map(([k,,ds2],i)=>({k,ds:ds2,v:avg(A.ep[i]),sd:sdv(A.ep[i]),r:mm(A.ep[i])}));
+ const epc=`<h2>Well-being (EPOCH) · group average</h2><div class="card">${iRadar(ep)}<div style="margin-top:12px">${ep.map(x=>`<div class="row" style="justify-content:space-between;flex-wrap:nowrap;padding:8px 0;border-top:1px solid var(--line)"><span><b>${x.k}</b><div class="mut">${x.ds}</div></span><span style="text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums">${f2(x.v)} / 5.0<div class="mut">${x.sd==null?'':'spread ±'+x.sd.toFixed(2)+' · '}${x.r?x.r[0].toFixed(1)+' to '+x.r[1].toFixed(1):''}</div></span></div>`).join('')}</div>
+  <p class="mut" style="margin-bottom:0">Averages of each scholar’s domain score. Spread is the standard deviation; the range is the lowest to highest score in the group.</p></div>`;
+ const gap=avg(A.at)-avg(A.bh);
+ const cy=`<h2>Resilience (CYRM-R) · group average</h2><div class="card">${popBar('Personal resilience','Average share of the maximum score',avg(A.pe))}${popBar('Caregiver and relational resilience','Average share of the maximum score',avg(A.cg))}<div style="border-top:1px solid var(--line);margin-top:18px;padding-top:2px">${popBar('Total resilience','All 17 items',avg(A.ct),'tot')}</div></div>`;
+ const ce=`<h2>Civic engagement (CES) · group average</h2><div class="card">${popBar('Civic beliefs (attitudes)','What scholars believe about their role in the community',avg(A.at))}${popBar('Civic actions (behaviors)','What scholars do to make a difference',avg(A.bh))}<p class="mut" style="margin-bottom:0">Beliefs average ${Math.abs(gap).toFixed(0)} percentage points ${gap>=0?'above':'below'} actions.</p></div>`;
+ const keyf=ig==='grade'?r=>r.d.grade==null?'Unknown':'Grade '+r.d.grade:r=>r.d.type||'Unspecified',G={};rs.forEach(r=>(G[keyf(r)]=G[keyf(r)]||[]).push(r));
+ const keys=Object.keys(G).sort((a,b)=>ig==='grade'?(parseInt(a.replace(/\D/g,''))||99)-(parseInt(b.replace(/\D/g,''))||99):a<b?-1:1);
+ const tb=`<h2>Compare groups</h2><div class="card"><div class="row" style="margin-bottom:10px"><span class="mut">Group by</span><button class="chip ${ig==='type'?'c3':'c1'}" onclick="ig='type';draw()">Scholar type</button><button class="chip ${ig==='grade'?'c3':'c1'}" onclick="ig='grade';draw()">Grade</button></div>
+  <div class="scroll"><table><thead><tr><th>Group</th><th class="num">n</th>${IPD.map(([k])=>`<th class="num">${k}</th>`).join('')}<th class="num">Personal</th><th class="num">Caregiver</th><th class="num">Total</th><th class="num">Beliefs</th><th class="num">Actions</th></tr></thead><tbody>
+  ${keys.concat(['All']).map(k=>{const a=k==='All'?A:popAgg(G[k]),b=k==='All'?'b':'';return`<tr><td>${k==='All'?'<b>All scholars</b>':esc(k)}</td><td class="num">${a.n}</td>${a.ep.map(v=>`<td class="num">${f2(avg(v))}</td>`).join('')}${[a.pe,a.cg,a.ct,a.at,a.bh].map(v=>`<td class="num">${f0(avg(v))}</td>`).join('')}</tr>`}).join('')}</tbody></table></div>
+  <p class="mut" style="margin-bottom:0">EPOCH columns are averages out of 5.0; the rest are average percentages. Groups with only a few scholars can swing a lot, so read small groups with care.</p></div>`;
+ return hdr+epc+cy+ce+tb}
+function dashV(){
+ const D=isA()?[['points','Points & grants'],['intake','Profile intake']]:[['intake','Profile intake']];
+ if(!D.some(x=>x[0]===dsb))dsb=D[0][0];
+ return(D.length>1?`<div class="sub">${D.map(([k,v])=>`<button class="${k===dsb?'on':''}" onclick="dsb='${k}';draw()">${v}</button>`).join('')}</div>`:'')+(dsb==='points'?dash():intakeDash())}
 /* ---- Scholar profile intake (EPOCH / CYRM-R / CES). Visible only to the linked scholar's account. ---- */
 const IPD=[['Engagement',[5,7,11,12],'Getting absorbed in what you do'],['Perseverance',[2,9,17,19],'Sticking with things until they are done'],['Optimism',[3,13,15,18],'Expecting good things ahead'],['Connectedness',[1,10,14,16],'Having people you can count on and share with'],['Happiness',[4,6,8,20],'Enjoying life and feeling cheerful']];
 const CYP=[1,2,3,7,9,10,12,13,14,16],CYG=[4,5,6,8,11,15,17],rng=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
