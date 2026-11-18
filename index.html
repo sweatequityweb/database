@@ -130,7 +130,6 @@ function dash(){if(!SC.length)return empty();const a=all().sort((x,y)=>y.t.gt-x.
  <div class="card"><div class="mut">Scholars · households</div><div class="big">${SC.length} · ${hh}</div></div>
  <div class="card"><div class="mut">At 100% grant</div><div class="big">${t100}</div></div>
  <div class="card"><div class="mut">Held by project gate</div><div class="big">${held}</div></div>
- <div class="card"><div class="mut">Grant value at current points</div><div class="big" style="font-size:30px">${peso(pay)}</div></div></div>
  <div class="card" style="margin-top:14px"><b>Grades 7–8 carry a ×0.75 weight.</b> <span class="mut">${lo} of ${SC.length} scholars are in these grades this year, so their totals run lower than their raw points. That is the program rule, not a bug.</span></div>
  <h2>Leaderboard</h2><div class="card scroll"><table><thead><tr><th>ID</th><th>Name</th><th>Grade</th><th class="num">Cumulative</th><th>Grant</th></tr></thead><tbody>
  ${a.map(({s,t})=>{const g=gIn(s,S.year);return`<tr class="cl" onclick="tab='scholars';wtab='points';pick('${s.id}')"><td>${s.id}</td><td>${esc(nm(s))||'—'}</td><td>${g>12?'Graduated':g+` (×${wt(g)})`}</td><td class="num">${t.gt}${t.held?' <span class="chip w">gate</span>':''}</td><td><span class="chip ${cc(t.c[1])}">${rate(t.c)}</span></td></tr>`}).join('')}</tbody></table></div>`}
