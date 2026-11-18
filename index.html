@@ -71,6 +71,7 @@ header{padding-top:calc(12px + env(safe-area-inset-top))}
 .sub button{background:none;border:0;color:var(--mut);font:500 14px Roboto,system-ui,sans-serif;padding:8px 16px;border-radius:10px;cursor:pointer;white-space:nowrap;min-height:40px}.sub button.on{background:var(--pc);color:var(--on)}
 .back{display:none}
 @media(max-width:900px){.ws{grid-template-columns:1fr}.ws.has .side{display:none}.ws.has .back{display:inline-block}.side{position:static}}
+@media print{.ws{display:block!important}header,nav,aside,.sub,.back,button,.row button{display:none!important}body{background:#fff}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}.card{box-shadow:none;break-inside:avoid}.hero{background:#fff!important;color:#000!important;border:1px solid #999}.hero .mut{color:#444!important}}
 </style></head><body>
 <header><div class="bar"><h1>Sweat Equity Tracker</h1><span class="yr" id="yr"></span>
 <label class="row" id="hl" hidden><input type="checkbox" id="hide" onchange="draw()" style="width:auto"> Hide names</label>
@@ -95,7 +96,9 @@ const gl=s=>{const g=gIn(s,S.year);return g>12?'Grad':'G'+g};
 const lab=s=>[s.id,nm(s),gl(s)].filter(Boolean).join(' · ');
 const authMsg=e=>({'auth/invalid-credential':'Wrong email or password.','auth/invalid-email':'Enter a valid email.','auth/popup-blocked':'Your browser blocked the Google window. Allow pop-ups for this site and try again.','auth/operation-not-allowed':'This sign-in method is off. Enable it in Firebase Authentication → Sign-in method.','auth/unauthorized-domain':'Add this site’s domain under Authentication → Settings → Authorized domains.','auth/too-many-requests':'Too many tries. Wait a few minutes.'}[e.code]||e.message);
 const fbErr=e=>toast(e.code==='permission-denied'?'Not allowed for your account.':e.message);
-function setMe(r){ME=r;if(!r){S.logs=[];SC=[];INFO={};IN={};INL={};INLA=false;sel=null;PEND=null;LOADED=false}else tab=r==='admin'?'dash':'scholars';draw()}
+function uiLoad(){try{const o=JSON.parse(localStorage.getItem('lla.ui')||'null');if(o&&AUTHUSER&&o.u===AUTHUSER.uid){tab=o.tab||tab;wtab=o.wtab||wtab;st=o.st||st;dsb=o.dsb||dsb;ig=o.ig||ig;sel=o.sel||null}}catch(e){}}
+function uiSave(){try{if(ME&&ME!=='new'&&ME!=='wait'&&AUTHUSER)localStorage.setItem('lla.ui',JSON.stringify({u:AUTHUSER.uid,tab,wtab,st,dsb,ig,sel}))}catch(e){}}
+function setMe(r){ME=r;if(!r){S.logs=[];SC=[];INFO={};IN={};INL={};INLA=false;sel=null;PEND=null;LOADED=false}else{tab=r==='admin'?'dash':'scholars';uiLoad()}draw()}
 function calc(s,extra){
  const lg=extra&&extra.length?S.logs.concat(extra):S.logs;
  let base=0,bon=0,rows=[],byAll={};
@@ -117,7 +120,7 @@ function draw(){yr.textContent=yl(S.year);out.hidden=!ME;hl.hidden=!isS();
  if(!T[tab])tab='scholars';
  nav.innerHTML=Object.entries(T).map(([k,v])=>`<button class="${k===tab?'on':''}" onclick="tab='${k}';draw()">${v}${k==='settings'&&US.some(u=>u.status==='pending')?`<span class="bdg">${US.filter(u=>u.status==='pending').length}</span>`:''}</button>`).join('');
  main.innerHTML=({dash:dashV,scholars:workspace,settings:settingsV,program:programV})[tab]();
- if(tab==='scholars'&&wtab==='award')prev();cardify()}
+ if(tab==='scholars'&&wtab==='award')prev();cardify();uiSave()}
 function loginV(){return`<div class="login grid"><div class="card"><h2 style="margin-top:0">Staff</h2><p class="mut">Admin and teacher accounts. Sign in with your password.</p>
  <div class="field"><label>Email</label><input id="lem" type="email" placeholder="you@lla.edu" autocomplete="username"></div><div class="field"><label>Password</label><input id="lpw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdmin()"></div>
  <button class="btn" onclick="doAdmin()">Sign in</button></div>
@@ -125,14 +128,14 @@ function loginV(){return`<div class="login grid"><div class="card"><h2 style="ma
 function doAdmin(){err.textContent='';FB.login(lem.value.trim(),lpw.value).catch(e=>err.textContent=authMsg(e))}
 function doGoogle(){err.textContent='';FB.google().catch(e=>{if(e.code!=='auth/popup-closed-by-user')err.textContent=authMsg(e)})}
 const empty=()=>!LOADED?`<div class="card mut">Loading…</div>`:`<div class="card">${isA()?'No scholars in the database yet. Open <b>Data & years</b> and import your scholars Excel file.':'No scholar data yet. Ask the admin to load it.'}</div>`;
-function dash(){if(!SC.length)return empty();const a=all().sort((x,y)=>y.t.gt-x.t.gt),tot=a.reduce((n,x)=>n+x.t.cum,0),t100=a.filter(x=>x.t.c[1]>=1).length,held=a.filter(x=>x.t.held).length,pay=a.reduce((n,x)=>n+x.t.c[2],0),hh=new Set(SC.map(s=>s.hh)).size,lo=SC.filter(s=>gIn(s,S.year)<=8).length;
+function dash(){if(!SC.length)return empty();const a=all().sort((x,y)=>y.t.gt-x.t.gt),tot=a.reduce((n,x)=>n+x.t.cum,0),t100=a.filter(x=>x.t.c[1]>=1).length,held=a.filter(x=>x.t.held).length,hh=new Set(SC.map(s=>s.hh)).size,lo=SC.filter(s=>gIn(s,S.year)<=8).length;
  return`<div class="grid"><div class="card hero"><div class="mut" style="color:#d1c4e9">Cumulative points awarded</div><div class="big">${f1(tot).toLocaleString()}</div></div>
  <div class="card"><div class="mut">Scholars · households</div><div class="big">${SC.length} · ${hh}</div></div>
  <div class="card"><div class="mut">At 100% grant</div><div class="big">${t100}</div></div>
- <div class="card"><div class="mut">Held by project gate</div><div class="big">${held}</div></div>
+ <div class="card"><div class="mut">Held by project gate</div><div class="big">${held}</div></div></div>
  <div class="card" style="margin-top:14px"><b>Grades 7–8 carry a ×0.75 weight.</b> <span class="mut">${lo} of ${SC.length} scholars are in these grades this year, so their totals run lower than their raw points. That is the program rule, not a bug.</span></div>
  <h2>Leaderboard</h2><div class="card scroll"><table><thead><tr><th>ID</th><th>Name</th><th>Grade</th><th class="num">Cumulative</th><th>Grant</th></tr></thead><tbody>
- ${a.map(({s,t})=>{const g=gIn(s,S.year);return`<tr class="cl" onclick="tab='scholars';wtab='points';pick('${s.id}')"><td>${s.id}</td><td>${esc(nm(s))||'—'}</td><td>${g>12?'Graduated':g+` (×${wt(g)})`}</td><td class="num">${t.gt}${t.held?' <span class="chip w">gate</span>':''}</td><td><span class="chip ${cc(t.c[1])}">${rate(t.c)}</span></td></tr>`}).join('')}</tbody></table></div>`}
+ ${a.map(({s,t})=>{const g=gIn(s,S.year);return`<tr class="cl" onclick="tab='scholars';wtab='points';pick('${s.id}')"><td>${s.id}</td><td>${esc(nm(s))||'—'}</td><td>${g>12?'Graduated':g+` (×${wt(g)})`}</td><td class="num">${t.gt}${t.held?' <span class="chip w">gate</span>':''}</td><td><span class="chip ${cc(t.c[1])}">${t.c[1]*100}%</span></td></tr>`}).join('')}</tbody></table></div>`}
 /* ---- Radar: 5 spokes, Talent bonus folded into Skills ---- */
 const R5=[['academic','Academic',340],['skills','Skills + bonus',85],['leadership','Leadership',90],['community','Community',75],['parental','Parental',50]];
 function radar(by){
@@ -229,6 +232,7 @@ function intakeDash(){
  const hdr=`<div class="grid"><div class="card hero"><div class="mut" style="color:#d1c4e9">Profiles completed</div><div class="big">${rs.length}<span style="font-size:20px"> / ${N}</span></div></div>
   <div class="card"><div class="mut">Still pending</div><div class="big">${Math.max(0,N-rs.length)}</div></div>
   <div class="card"><div class="mut">Assessed</div><div style="font:500 18px Roboto,system-ui,sans-serif;margin-top:6px">${ds.length?(fmtD(ds[0])===fmtD(ds[ds.length-1])?fmtD(ds[0]):fmtD(ds[0])+' to '+fmtD(ds[ds.length-1])):'—'}</div></div></div>`;
+ const have=new Set(rs.map(r=>r.id)),pl=SC.filter(x=>!have.has(x.id)),pnd=pl.length?`<div class="card" style="margin-top:14px"><b>Pending profiles</b> <span class="mut">Tap a scholar to open their record.</span><div class="row" style="margin-top:8px">${pl.map(x=>`<button class="chip c1" onclick="tab='scholars';wtab='profile';pick('${x.id}')">${x.id}${nm(x)?' · '+esc(nm(x)):''}</button>`).join('')}</div></div>`:'';
  const ep=IPD.map(([k,,ds2],i)=>({k,ds:ds2,v:avg(A.ep[i]),sd:sdv(A.ep[i]),r:mm(A.ep[i])}));
  const epc=`<h2>Well-being (EPOCH) · group average</h2><div class="card">${iRadar(ep)}<div style="margin-top:12px">${ep.map(x=>`<div class="row" style="justify-content:space-between;flex-wrap:nowrap;padding:8px 0;border-top:1px solid var(--line)"><span><b>${x.k}</b><div class="mut">${x.ds}</div></span><span style="text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums">${f2(x.v)} / 5.0<div class="mut">${x.sd==null?'':'spread ±'+x.sd.toFixed(2)+' · '}${x.r?x.r[0].toFixed(1)+' to '+x.r[1].toFixed(1):''}</div></span></div>`).join('')}</div>
   <p class="mut" style="margin-bottom:0">Averages of each scholar’s domain score. Spread is the standard deviation; the range is the lowest to highest score in the group.</p></div>`;
@@ -241,7 +245,7 @@ function intakeDash(){
   <div class="scroll"><table><thead><tr><th>Group</th><th class="num">n</th>${IPD.map(([k])=>`<th class="num">${k}</th>`).join('')}<th class="num">Personal</th><th class="num">Caregiver</th><th class="num">Total</th><th class="num">Beliefs</th><th class="num">Actions</th></tr></thead><tbody>
   ${keys.concat(['All']).map(k=>{const a=k==='All'?A:popAgg(G[k]),b=k==='All'?'b':'';return`<tr><td>${k==='All'?'<b>All scholars</b>':esc(k)}</td><td class="num">${a.n}</td>${a.ep.map(v=>`<td class="num">${f2(avg(v))}</td>`).join('')}${[a.pe,a.cg,a.ct,a.at,a.bh].map(v=>`<td class="num">${f0(avg(v))}</td>`).join('')}</tr>`}).join('')}</tbody></table></div>
   <p class="mut" style="margin-bottom:0">EPOCH columns are averages out of 5.0; the rest are average percentages. Groups with only a few scholars can swing a lot, so read small groups with care.</p></div>`;
- return hdr+epc+cy+ce+tb}
+ return hdr+pnd+epc+cy+ce+tb}
 function dashV(){
  const D=isA()?[['points','Points & grants'],['intake','Profile intake']]:[['intake','Profile intake']];
  if(!D.some(x=>x[0]===dsb))dsb=D[0][0];
@@ -290,7 +294,7 @@ function profileV(){
   <div style="border-top:1px solid var(--line);margin-top:18px;padding-top:2px">${pBar('Total resilience','All 17 items together',sc.ct,'tot')}</div></div>`;
  const ce=`<h2>Civic engagement</h2><div class="card"><p class="mut" style="margin-top:0">Your beliefs about helping your community, next to the actions you take. Seeing them side by side can show where you may want to grow.</p>
   ${pBar('Civic beliefs (attitudes)','What you believe about your role in your community',sc.at)}${pBar('Civic actions (behaviors)','What you do to make a difference',sc.bh)}</div>`;
- return pk+`<div class="grid">${hero}</div>`+intro+epc+cy+ce}
+ return pk+`<div class="grid">${hero}</div>`+intro+epc+cy+ce+`<div class="row" style="margin-top:14px"><button class="btn o" onclick="window.print()">Print or save as PDF</button></div>`}
 function cumCard(t){
  const rows=Object.keys(AREAS).map(k=>({k,v:k==='bonus'?Math.min(t.byAll[k]||0,120):(t.byAll[k]||0)}));
  const tot=rows.reduce((n,r)=>n+r.v,0);
